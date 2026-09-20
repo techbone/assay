@@ -1,0 +1,55 @@
+# Assay
+
+**The real price of a tokenized stock.**
+
+BNB Hack: Tokenized Stocks Edition · submissions lock 11 Oct 2026, 12:00 UTC.
+
+---
+
+On BNB Smart Chain there are **667 tokenized equity tokens covering 512 unique tickers**. Thirty-seven
+mega-caps — NVDA, TSLA, AAPL, MSFT, SPY, QQQ, MSTR, COIN — carry three different wrappers at once,
+from three issuers, at three different prices.
+
+None of those prices are comparable, because each token carries a `sharesMultiplier`: how many
+underlying shares one token represents. It drifts upward as dividends reinvest, and jumps on splits
+and fractionalisation. Observed range on BSC: **0.0667 to 10.03**.
+
+So the obvious product — compare the prices, show the cheapest — is wrong. Sometimes by 10x.
+
+Assay computes one dividend-adjusted reference price per ticker, scores how much each wrapper can be
+trusted, and says which part of an apparent premium is real:
+
+> *NVDAon looks 18 bp rich. 17 bp of that is accrued distribution. 1 bp is real.*
+
+Measured across 84 live tickers, the adjustment takes worst-case basis error from **533 bp to 5.3 bp**.
+
+## Status
+
+| Milestone | State |
+|-----------|-------|
+| M0 Foundation | **done** |
+| M1 Reference engine | in progress — core complete, 38 tests green |
+| M2 Collector (24/7) | next |
+| M3 Web reports · M4 Off-hours scorecard · M5 Execution · M6 Agent · M7 Submission | queued |
+
+See [MILESTONES.md](MILESTONES.md) for the live tracker and [ARCHITECTURE.md](ARCHITECTURE.md) for design.
+[DEVEX.md](DEVEX.md) is the Developer Experience Report, written continuously.
+
+## Run
+
+```bash
+npm install
+npm test          # 38 regression tests against live-captured fixtures
+npm run typecheck
+npx tsx scripts/snapshot.ts   # capture a fresh market snapshot
+npx tsx scripts/analyze.ts    # corpus statistics
+```
+
+## Layout
+
+```
+src/binance/     typed client for the Binance Web3 RWA API (public, no key)
+src/reference/   the engine: normalize, validate, trust, assay, decompose
+scripts/         snapshot capture + corpus analysis
+tests/           28 golden cases (pinned live values) + 10 corpus invariants
+```

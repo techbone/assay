@@ -1,0 +1,1198 @@
+{
+ "AAPL": [
+  {
+   "sym": "AAPLon",
+   "fam": "Ondo",
+   "price": 335.3132332028758,
+   "mult": 1.003376073740221,
+   "ref": 334.245,
+   "status": "TRADING",
+   "open": true,
+   "holders": "33665",
+   "vol": "28941673986.19943808"
+  },
+  {
+   "sym": "AAPLx",
+   "fam": "xStock",
+   "price": 332.3268021757694,
+   "mult": 1.0032690125398187,
+   "ref": 334.245,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "28941673986.19943808"
+  },
+  {
+   "sym": "AAPLB",
+   "fam": "bStock",
+   "price": 333.9715657308638,
+   "mult": 1.0006039060756324,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "15409123824"
+  }
+ ],
+ "AMD": [
+  {
+   "sym": "AMDon",
+   "fam": "Ondo",
+   "price": 555.795,
+   "mult": 1.0,
+   "ref": 555.735,
+   "status": "TRADING",
+   "open": true,
+   "holders": "2282",
+   "vol": "17709765963.022145385"
+  },
+  {
+   "sym": "AMDx",
+   "fam": "xStock",
+   "price": 3979.7399992210317,
+   "mult": 1.0,
+   "ref": 555.735,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "17709765963.022145385"
+  },
+  {
+   "sym": "AMDB",
+   "fam": "bStock",
+   "price": 555.03,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "12493768915"
+  }
+ ],
+ "AMZN": [
+  {
+   "sym": "AMZNon",
+   "fam": "Ondo",
+   "price": 253.36,
+   "mult": 1.0,
+   "ref": 253.395,
+   "status": "TRADING",
+   "open": true,
+   "holders": "2979",
+   "vol": "13246151148.72036117"
+  },
+  {
+   "sym": "AMZNx",
+   "fam": "xStock",
+   "price": 252.3120761529155,
+   "mult": 1.0,
+   "ref": 253.395,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "13246151148.72036117"
+  },
+  {
+   "sym": "AMZNB",
+   "fam": "bStock",
+   "price": 253.36,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "9007709475"
+  }
+ ],
+ "ASML": [
+  {
+   "sym": "ASMLon",
+   "fam": "Ondo",
+   "price": 1679.946488160247,
+   "mult": 1.0053429426738953,
+   "ref": 1671.018333,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "764",
+   "vol": "4222989239.31397890405"
+  },
+  {
+   "sym": "ASMLB",
+   "fam": "bStock",
+   "price": 1666.18,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "2158216138"
+  }
+ ],
+ "ASTS": [
+  {
+   "sym": "ASTSon",
+   "fam": "Ondo",
+   "price": 58.739394,
+   "mult": 1.0,
+   "ref": 58.739394,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "446",
+   "vol": "1162666272.33374215206"
+  },
+  {
+   "sym": "ASTSB",
+   "fam": "bStock",
+   "price": 58.66,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "807393122"
+  }
+ ],
+ "AVGO": [
+  {
+   "sym": "AVGOon",
+   "fam": "Ondo",
+   "price": 358.10556399025137,
+   "mult": 1.0051380646698516,
+   "ref": 356.04,
+   "status": "TRADING",
+   "open": true,
+   "holders": "1086",
+   "vol": "15677439176.61727848"
+  },
+  {
+   "sym": "AVGOx",
+   "fam": "xStock",
+   "price": 361.4974299752271,
+   "mult": 1.0048837684862768,
+   "ref": 356.04,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "15677439176.61727848"
+  },
+  {
+   "sym": "AVGOB",
+   "fam": "bStock",
+   "price": 355.62,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "8638884337"
+  }
+ ],
+ "BMNR": [
+  {
+   "sym": "BMNRon",
+   "fam": "Ondo",
+   "price": 25.835,
+   "mult": 1.0,
+   "ref": 25.835,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "632",
+   "vol": "1687289247.615533295"
+  },
+  {
+   "sym": "BMNRB",
+   "fam": "bStock",
+   "price": 25.43,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "1368644447"
+  }
+ ],
+ "COIN": [
+  {
+   "sym": "COINon",
+   "fam": "Ondo",
+   "price": 192.245,
+   "mult": 1.0,
+   "ref": 192.275,
+   "status": "TRADING",
+   "open": true,
+   "holders": "1485",
+   "vol": "4214662586.620431"
+  },
+  {
+   "sym": "COINx",
+   "fam": "xStock",
+   "price": 175.4867061110081,
+   "mult": 1.0,
+   "ref": 192.275,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "4214662586.620431"
+  },
+  {
+   "sym": "COINB",
+   "fam": "bStock",
+   "price": 192.1,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3673276431"
+  }
+ ],
+ "CRCL": [
+  {
+   "sym": "CRCLon",
+   "fam": "Ondo",
+   "price": 89.685,
+   "mult": 1.0,
+   "ref": 89.705,
+   "status": "TRADING",
+   "open": true,
+   "holders": "4821",
+   "vol": "2739321324.16764206"
+  },
+  {
+   "sym": "CRCLx",
+   "fam": "xStock",
+   "price": 92.30913975528503,
+   "mult": 1.0,
+   "ref": 89.705,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "2739321324.16764206"
+  },
+  {
+   "sym": "CRCLB",
+   "fam": "bStock",
+   "price": 89.39,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "1737470117"
+  }
+ ],
+ "CRM": [
+  {
+   "sym": "CRMon",
+   "fam": "Ondo",
+   "price": 240.3434670864262,
+   "mult": 1.0071241633489345,
+   "ref": 238.643333,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "258",
+   "vol": "5241176904.743223400342"
+  },
+  {
+   "sym": "CRMB",
+   "fam": "bStock",
+   "price": 241.7568773346618,
+   "mult": 1.0012295093790349,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3030380078"
+  }
+ ],
+ "CRWD": [
+  {
+   "sym": "CRWDon",
+   "fam": "Ondo",
+   "price": 948.310768,
+   "mult": 4.0,
+   "ref": 237.077692,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "182",
+   "vol": "4615672757.730919966936"
+  },
+  {
+   "sym": "CRWDx",
+   "fam": "xStock",
+   "price": 225.9370602046391,
+   "mult": 4.0,
+   "ref": 237.077692,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "4615672757.730919966936"
+  },
+  {
+   "sym": "CRWDB",
+   "fam": "bStock",
+   "price": 237.64,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "2675950080"
+  }
+ ],
+ "EWY": [
+  {
+   "sym": "EWYon",
+   "fam": "Ondo",
+   "price": 180.991667,
+   "mult": 1.0,
+   "ref": 180.991667,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "271",
+   "vol": "1646320161.338949707322"
+  },
+  {
+   "sym": "EWYB",
+   "fam": "bStock",
+   "price": 180.48,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "1414325625"
+  }
+ ],
+ "GME": [
+  {
+   "sym": "GMEon",
+   "fam": "Ondo",
+   "price": 22.964440271216194,
+   "mult": 1.0171383134189433,
+   "ref": 22.5775,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "2870",
+   "vol": "216773958.1145748775"
+  },
+  {
+   "sym": "GMEx",
+   "fam": "xStock",
+   "price": 216.69400129095263,
+   "mult": 1.005309167384,
+   "ref": 22.5775,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "216773958.1145748775"
+  },
+  {
+   "sym": "GMEB",
+   "fam": "bStock",
+   "price": 22.33,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "146286587"
+  }
+ ],
+ "GOOGL": [
+  {
+   "sym": "GOOGLon",
+   "fam": "Ondo",
+   "price": 351.0565940867966,
+   "mult": 1.0024603266374352,
+   "ref": 350.175,
+   "status": "TRADING",
+   "open": true,
+   "holders": "26111",
+   "vol": "16679449790.345664525"
+  },
+  {
+   "sym": "GOOGLx",
+   "fam": "xStock",
+   "price": 344.3895020149371,
+   "mult": 1.001926722393864,
+   "ref": 350.175,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "16679449790.345664525"
+  },
+  {
+   "sym": "GOOGLB",
+   "fam": "bStock",
+   "price": 349.9772298111318,
+   "mult": 1.0004780589781075,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "11777582164"
+  }
+ ],
+ "GS": [
+  {
+   "sym": "GSon",
+   "fam": "Ondo",
+   "price": 956.5069070603338,
+   "mult": 1.0137643156057463,
+   "ref": 943.52,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "157",
+   "vol": "3758971838.29468528"
+  },
+  {
+   "sym": "GSB",
+   "fam": "bStock",
+   "price": 953.5470208451536,
+   "mult": 1.0034062788407505,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "2101492257"
+  }
+ ],
+ "HIMS": [
+  {
+   "sym": "HIMSon",
+   "fam": "Ondo",
+   "price": 28.045455,
+   "mult": 1.0,
+   "ref": 28.045455,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "499",
+   "vol": "263514095.857251939885"
+  },
+  {
+   "sym": "HIMSB",
+   "fam": "bStock",
+   "price": 27.84,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "207886749"
+  }
+ ],
+ "HOOD": [
+  {
+   "sym": "HOODon",
+   "fam": "Ondo",
+   "price": 119.93,
+   "mult": 1.0,
+   "ref": 119.93,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "743",
+   "vol": "4720303503.56538829"
+  },
+  {
+   "sym": "HOODx",
+   "fam": "xStock",
+   "price": 108.7352060552621,
+   "mult": 1.0,
+   "ref": 119.93,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3946689370"
+  },
+  {
+   "sym": "HOODB",
+   "fam": "bStock",
+   "price": 117.04,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3946689370"
+  }
+ ],
+ "IBM": [
+  {
+   "sym": "IBMon",
+   "fam": "Ondo",
+   "price": 235.39907440572173,
+   "mult": 1.0227923764446276,
+   "ref": 230.153333,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "563",
+   "vol": "3087235933.447547606931"
+  },
+  {
+   "sym": "IBMx",
+   "fam": "xStock",
+   "price": 33.875931976948856,
+   "mult": 1.0204029187943977,
+   "ref": 230.153333,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "1453945264"
+  },
+  {
+   "sym": "IBMB",
+   "fam": "bStock",
+   "price": 231.98548918867735,
+   "mult": 1.0050058016231744,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "1453945264"
+  }
+ ],
+ "INTC": [
+  {
+   "sym": "INTCon",
+   "fam": "Ondo",
+   "price": 110.005,
+   "mult": 1.0,
+   "ref": 110.005,
+   "status": "TRADING",
+   "open": true,
+   "holders": "2716",
+   "vol": "19250507008.539165695"
+  },
+  {
+   "sym": "INTCx",
+   "fam": "xStock",
+   "price": 102.47540502816305,
+   "mult": 1.0,
+   "ref": 110.005,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "11283677495"
+  },
+  {
+   "sym": "INTCB",
+   "fam": "bStock",
+   "price": 109.92,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "11283677495"
+  }
+ ],
+ "IREN": [
+  {
+   "sym": "IRENon",
+   "fam": "Ondo",
+   "price": 46.49,
+   "mult": 1.0,
+   "ref": 46.49,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "489",
+   "vol": "2115121844.99286176"
+  },
+  {
+   "sym": "IRENB",
+   "fam": "bStock",
+   "price": 45.92,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "1749198657"
+  }
+ ],
+ "META": [
+  {
+   "sym": "METAon",
+   "fam": "Ondo",
+   "price": 670.3242665564792,
+   "mult": 1.0022791066933001,
+   "ref": 668.755,
+   "status": "TRADING",
+   "open": true,
+   "holders": "2178",
+   "vol": "18455251438.742666005"
+  },
+  {
+   "sym": "METAx",
+   "fam": "xStock",
+   "price": 573.7537971023057,
+   "mult": 1.002298265651938,
+   "ref": 668.755,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "13863782409"
+  },
+  {
+   "sym": "METAB",
+   "fam": "bStock",
+   "price": 668.39,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "13863782409"
+  }
+ ],
+ "MRVL": [
+  {
+   "sym": "MRVLon",
+   "fam": "Ondo",
+   "price": 242.21387060831046,
+   "mult": 1.0014838254669554,
+   "ref": 241.845,
+   "status": "TRADING",
+   "open": true,
+   "holders": "2260",
+   "vol": "5716157503.39730541"
+  },
+  {
+   "sym": "MRVLx",
+   "fam": "xStock",
+   "price": 32.491633946853405,
+   "mult": 1.0016650410248724,
+   "ref": 241.845,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3542502944"
+  },
+  {
+   "sym": "MRVLB",
+   "fam": "bStock",
+   "price": 241.47,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3542502944"
+  }
+ ],
+ "MSFT": [
+  {
+   "sym": "MSFTon",
+   "fam": "Ondo",
+   "price": 496.8360719593197,
+   "mult": 1.0057308568927839,
+   "ref": 494.01,
+   "status": "TRADING",
+   "open": true,
+   "holders": "19410",
+   "vol": "19573806907.66685184"
+  },
+  {
+   "sym": "MSFTx",
+   "fam": "xStock",
+   "price": 491.85606822997886,
+   "mult": 1.0045820905025638,
+   "ref": 494.01,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "19573806907.66685184"
+  },
+  {
+   "sym": "MSFTB",
+   "fam": "bStock",
+   "price": 494.74923002416654,
+   "mult": 1.0013139648333669,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "9917708930"
+  }
+ ],
+ "MSTR": [
+  {
+   "sym": "MSTRon",
+   "fam": "Ondo",
+   "price": 153.655,
+   "mult": 1.0,
+   "ref": 153.595,
+   "status": "TRADING",
+   "open": true,
+   "holders": "1772",
+   "vol": "8397671884.210325795"
+  },
+  {
+   "sym": "MSTRx",
+   "fam": "xStock",
+   "price": 138.8563937459189,
+   "mult": 1.0,
+   "ref": 153.595,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "8397671884.210325795"
+  },
+  {
+   "sym": "MSTRB",
+   "fam": "bStock",
+   "price": 153.35,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "6614908940"
+  }
+ ],
+ "MU": [
+  {
+   "sym": "MUon",
+   "fam": "Ondo",
+   "price": 1007.3031611675668,
+   "mult": 1.0011212375258447,
+   "ref": 1006.135,
+   "status": "TRADING",
+   "open": true,
+   "holders": "4241",
+   "vol": "36023158176.13927856"
+  },
+  {
+   "sym": "MUx",
+   "fam": "xStock",
+   "price": 980.4846621062144,
+   "mult": 1.0004015986353854,
+   "ref": 1006.135,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "36023158176.13927856"
+  },
+  {
+   "sym": "MUB",
+   "fam": "bStock",
+   "price": 1005.3080716341634,
+   "mult": 1.0001075125688057,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "28685659601"
+  }
+ ],
+ "NFLX": [
+  {
+   "sym": "NFLXon",
+   "fam": "Ondo",
+   "price": 719.26667,
+   "mult": 10.0,
+   "ref": 71.926667,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "1195",
+   "vol": "8229384688.430716500824"
+  },
+  {
+   "sym": "NFLXx",
+   "fam": "xStock",
+   "price": 77.18982664892837,
+   "mult": 10.0,
+   "ref": 71.926667,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "8229384688.430716500824"
+  },
+  {
+   "sym": "NFLXB",
+   "fam": "bStock",
+   "price": 72.32,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "5075525747"
+  }
+ ],
+ "NVDA": [
+  {
+   "sym": "NVDAon",
+   "fam": "Ondo",
+   "price": 221.2638727303022,
+   "mult": 1.0017152487959897,
+   "ref": 220.865,
+   "status": "TRADING",
+   "open": true,
+   "holders": "57105",
+   "vol": "42027832920.62438036"
+  },
+  {
+   "sym": "NVDAx",
+   "fam": "xStock",
+   "price": 221.74041071959007,
+   "mult": 1.0009180758490996,
+   "ref": 220.865,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "42027832920.62438036"
+  },
+  {
+   "sym": "NVDAB",
+   "fam": "bStock",
+   "price": 220.79169172434447,
+   "mult": 1.0007782237528078,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "25100509904"
+  }
+ ],
+ "ORCL": [
+  {
+   "sym": "ORCLon",
+   "fam": "Ondo",
+   "price": 147.5764943029192,
+   "mult": 1.0079328914586565,
+   "ref": 146.375,
+   "status": "TRADING",
+   "open": true,
+   "holders": "1298",
+   "vol": "5756183020.350825625"
+  },
+  {
+   "sym": "ORCLx",
+   "fam": "xStock",
+   "price": 164.0815273796227,
+   "mult": 1.009318667481834,
+   "ref": 146.375,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "5756183020.350825625"
+  },
+  {
+   "sym": "ORCLB",
+   "fam": "bStock",
+   "price": 146.24,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3740172050"
+  }
+ ],
+ "PLTR": [
+  {
+   "sym": "PLTRon",
+   "fam": "Ondo",
+   "price": 177.439655,
+   "mult": 1.0,
+   "ref": 177.439655,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "1019",
+   "vol": "6973855607.93257417658"
+  },
+  {
+   "sym": "PLTRx",
+   "fam": "xStock",
+   "price": 171.72500579504944,
+   "mult": 1.0,
+   "ref": 177.439655,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "6973855607.93257417658"
+  },
+  {
+   "sym": "PLTRB",
+   "fam": "bStock",
+   "price": 176.9,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "4354059899"
+  }
+ ],
+ "PYPL": [
+  {
+   "sym": "PYPLon",
+   "fam": "Ondo",
+   "price": 52.94257466251797,
+   "mult": 1.007790133219188,
+   "ref": 52.533333,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "308",
+   "vol": "1527857694.056168756235"
+  },
+  {
+   "sym": "PYPLB",
+   "fam": "bStock",
+   "price": 52.683177847773784,
+   "mult": 1.0017717788129643,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "739690116"
+  }
+ ],
+ "QQQ": [
+  {
+   "sym": "QQQon",
+   "fam": "Ondo",
+   "price": 722.4391388130142,
+   "mult": 1.0033528541550838,
+   "ref": 720.295,
+   "status": "TRADING",
+   "open": true,
+   "holders": "22714",
+   "vol": "34918975180.31624497"
+  },
+  {
+   "sym": "QQQx",
+   "fam": "xStock",
+   "price": 721.0352333957467,
+   "mult": 1.0027250296551051,
+   "ref": 720.295,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "34918975180.31624497"
+  },
+  {
+   "sym": "QQQB",
+   "fam": "bStock",
+   "price": 719.54,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "32646450077"
+  }
+ ],
+ "SOXL": [
+  {
+   "sym": "SOXLon",
+   "fam": "Ondo",
+   "price": 123.026667,
+   "mult": 1.0,
+   "ref": 123.026667,
+   "status": "MARKET_CLOSED",
+   "open": false,
+   "holders": "256",
+   "vol": "5592757703.806444952958"
+  },
+  {
+   "sym": "SOXLB",
+   "fam": "bStock",
+   "price": 121.16,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "5010428805"
+  }
+ ],
+ "SPCX": [
+  {
+   "sym": "SPCXx",
+   "fam": "xStock",
+   "price": 154.98759695888495,
+   "mult": 1.0,
+   "ref": 152.545,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "51204853928.59762647"
+  },
+  {
+   "sym": "SPCXon",
+   "fam": "Ondo",
+   "price": 152.545,
+   "mult": 1.0,
+   "ref": 152.545,
+   "status": "TRADING",
+   "open": true,
+   "holders": "33386",
+   "vol": "51204853928.59762647"
+  },
+  {
+   "sym": "SPCXB",
+   "fam": "bStock",
+   "price": 152.5,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "20840127308"
+  },
+  {
+   "sym": "xSPCX",
+   "fam": "?",
+   "price": 105.67739676820388,
+   "mult": 1.0,
+   "ref": null,
+   "status": null,
+   "open": null,
+   "holders": null,
+   "vol": "135.09408323640721640575"
+  }
+ ],
+ "SPY": [
+  {
+   "sym": "SPYon",
+   "fam": "Ondo",
+   "price": 769.5162760179119,
+   "mult": 1.0094730727840426,
+   "ref": 762.295,
+   "status": "TRADING",
+   "open": true,
+   "holders": "24276",
+   "vol": "49850394575.24051619"
+  },
+  {
+   "sym": "SPYx",
+   "fam": "xStock",
+   "price": 758.2004135685518,
+   "mult": 1.005714560286254,
+   "ref": 762.295,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "50592064409"
+  },
+  {
+   "sym": "SPYB",
+   "fam": "bStock",
+   "price": 762.0759565899427,
+   "mult": 1.0017297920368353,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "50592064409"
+  }
+ ],
+ "TQQQ": [
+  {
+   "sym": "TQQQon",
+   "fam": "Ondo",
+   "price": 72.29801390185382,
+   "mult": 1.0026768449047059,
+   "ref": 72.145,
+   "status": "TRADING",
+   "open": true,
+   "holders": "1144",
+   "vol": "2958515582.843359"
+  },
+  {
+   "sym": "TQQQx",
+   "fam": "xStock",
+   "price": 72.41399234453158,
+   "mult": 2.008976295242212,
+   "ref": 72.145,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "2853297967"
+  },
+  {
+   "sym": "TQQQB",
+   "fam": "bStock",
+   "price": 72.11,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "2853297967"
+  }
+ ],
+ "TSLA": [
+  {
+   "sym": "TSLAon",
+   "fam": "Ondo",
+   "price": 363.125,
+   "mult": 1.0,
+   "ref": 363.095,
+   "status": "TRADING",
+   "open": true,
+   "holders": "29734",
+   "vol": "18852711763.557777545"
+  },
+  {
+   "sym": "TSLAx",
+   "fam": "xStock",
+   "price": 368.5739848019096,
+   "mult": 1.0,
+   "ref": 363.095,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "16098621078"
+  },
+  {
+   "sym": "TSLAB",
+   "fam": "bStock",
+   "price": 362.9,
+   "mult": 1.0,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "16098621078"
+  }
+ ],
+ "TSM": [
+  {
+   "sym": "TSMon",
+   "fam": "Ondo",
+   "price": 436.6472947074931,
+   "mult": 1.0093207464084535,
+   "ref": 432.575,
+   "status": "TRADING",
+   "open": true,
+   "holders": "1582",
+   "vol": "5582420772.26132585"
+  },
+  {
+   "sym": "TSMx",
+   "fam": "xStock",
+   "price": 391.28115213975343,
+   "mult": 1.004065035082054,
+   "ref": 432.575,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3213114922"
+  },
+  {
+   "sym": "TSMB",
+   "fam": "bStock",
+   "price": 432.9718471367825,
+   "mult": 1.002110464141051,
+   "ref": null,
+   "status": "TRADING",
+   "open": true,
+   "holders": null,
+   "vol": "3213114922"
+  }
+ ]
+}

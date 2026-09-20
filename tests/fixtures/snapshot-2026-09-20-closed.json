@@ -1,0 +1,2537 @@
+{
+ "capturedAt": "2026-09-20T07:21:30.265Z",
+ "regime": "closed",
+ "marketStatus": {
+  "marketStatus": "closed",
+  "openState": false,
+  "reasonCode": "MARKET_CLOSED",
+  "reasonMsg": "Weekend or Holiday",
+  "nextOpen": "2026-09-21T00:05:00Z",
+  "nextClose": "2026-09-21T07:55:00Z",
+  "nextOpenTime": 1789949100000,
+  "nextCloseTime": 1789977300000,
+  "offhours": {
+   "openState": true,
+   "nextOpenTime": 1790381100000,
+   "nextCloseTime": 1789948500000
+  }
+ },
+ "snapshot": {
+  "MRNA": [
+   {
+    "symbol": "MRNAon",
+    "ticker": "MRNA",
+    "family": "Ondo",
+    "price": 153.910976,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 153.910976,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 2230,
+    "bnTrader": 2091,
+    "volume24h": 3114934220.113053
+   },
+   {
+    "symbol": "MRNAB",
+    "ticker": "MRNA",
+    "family": "bStock",
+    "price": 153.93,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 597,
+    "volume24h": 1512727639
+   }
+  ],
+  "ORCL": [
+   {
+    "symbol": "ORCLon",
+    "ticker": "ORCL",
+    "family": "Ondo",
+    "price": 147.5865736318338,
+    "multiplier": 1.0079328914586565,
+    "listMultiplier": 1.0079328914586565,
+    "referencePrice": 146.43,
+    "statusCode": "TRADING",
+    "holders": 1298,
+    "bnTrader": 2237,
+    "volume24h": 5758345890.1449795
+   },
+   {
+    "symbol": "ORCLx",
+    "ticker": "ORCL",
+    "family": "xStock",
+    "price": 164.0815273796227,
+    "multiplier": 1.009318667481834,
+    "listMultiplier": 1,
+    "referencePrice": 146.43,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 3740172050
+   },
+   {
+    "symbol": "ORCLB",
+    "ticker": "ORCL",
+    "family": "bStock",
+    "price": 146.24,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 141,
+    "volume24h": 3740172050
+   }
+  ],
+  "NVO": [
+   {
+    "symbol": "NVOon",
+    "ticker": "NVO",
+    "family": "Ondo",
+    "price": 44.62859475601839,
+    "multiplier": 1.0302670919609485,
+    "listMultiplier": 1.0302670919609485,
+    "referencePrice": 43.3175,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 337,
+    "bnTrader": 480,
+    "volume24h": 449233205.2857322
+   },
+   {
+    "symbol": "NVOx",
+    "ticker": "NVO",
+    "family": "xStock",
+    "price": 50.79912280213837,
+    "multiplier": 1.0306506859428242,
+    "listMultiplier": 1,
+    "referencePrice": 43.3175,
+    "statusCode": "TRADING",
+    "volume24h": 361244719
+   }
+  ],
+  "GOOGL": [
+   {
+    "symbol": "GOOGLon",
+    "ticker": "GOOGL",
+    "family": "Ondo",
+    "price": 351.0966924998621,
+    "multiplier": 1.0024603266374352,
+    "listMultiplier": 1.0024603266374352,
+    "referencePrice": 350.225,
+    "statusCode": "TRADING",
+    "holders": 26111,
+    "bnTrader": 6546,
+    "volume24h": 16681831378.09327
+   },
+   {
+    "symbol": "GOOGLx",
+    "ticker": "GOOGL",
+    "family": "xStock",
+    "price": 344.3895020149371,
+    "multiplier": 1.001926722393864,
+    "listMultiplier": 1,
+    "referencePrice": 350.225,
+    "statusCode": "TRADING",
+    "bnTrader": 11,
+    "volume24h": 16681831378.09327
+   },
+   {
+    "symbol": "GOOGLB",
+    "ticker": "GOOGL",
+    "family": "bStock",
+    "price": 349.99723937231136,
+    "multiplier": 1.0004780589781075,
+    "listMultiplier": 1.0004780589781075,
+    "statusCode": "TRADING",
+    "bnTrader": 4110,
+    "volume24h": 11777582164
+   }
+  ],
+  "QQQ": [
+   {
+    "symbol": "QQQon",
+    "ticker": "QQQ",
+    "family": "Ondo",
+    "price": 722.4291052844727,
+    "multiplier": 1.0033528541550838,
+    "listMultiplier": 1.0033528541550838,
+    "referencePrice": 720.015,
+    "statusCode": "TRADING",
+    "holders": 22714,
+    "bnTrader": 5446,
+    "volume24h": 34905401140.443016
+   },
+   {
+    "symbol": "QQQx",
+    "ticker": "QQQ",
+    "family": "xStock",
+    "price": 721.0352333957467,
+    "multiplier": 1.0027250296551051,
+    "listMultiplier": 1,
+    "referencePrice": 720.015,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 34905401140.443016
+   },
+   {
+    "symbol": "QQQB",
+    "ticker": "QQQ",
+    "family": "bStock",
+    "price": 719.48,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 66819,
+    "volume24h": 32646450077
+   }
+  ],
+  "GS": [
+   {
+    "symbol": "GSon",
+    "ticker": "GS",
+    "family": "Ondo",
+    "price": 956.5069070603338,
+    "multiplier": 1.0137643156057463,
+    "listMultiplier": 1.0137643156057463,
+    "referencePrice": 943.52,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 157,
+    "bnTrader": 107,
+    "volume24h": 3758971838.2946854
+   },
+   {
+    "symbol": "GSB",
+    "ticker": "GS",
+    "family": "bStock",
+    "price": 954.4500864961103,
+    "multiplier": 1.0034062788407505,
+    "listMultiplier": 1.0034062788407505,
+    "statusCode": "TRADING",
+    "bnTrader": 52,
+    "volume24h": 2101492257
+   }
+  ],
+  "AVGO": [
+   {
+    "symbol": "AVGOon",
+    "ticker": "AVGO",
+    "family": "Ondo",
+    "price": 358.0603327773412,
+    "multiplier": 1.0051380646698516,
+    "listMultiplier": 1.0051380646698516,
+    "referencePrice": 356.23,
+    "statusCode": "TRADING",
+    "holders": 1086,
+    "bnTrader": 1253,
+    "volume24h": 15685805409.18541
+   },
+   {
+    "symbol": "AVGOx",
+    "ticker": "AVGO",
+    "family": "xStock",
+    "price": 361.4974299752271,
+    "multiplier": 1.0048837684862768,
+    "listMultiplier": 1,
+    "referencePrice": 356.23,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 8638884337
+   },
+   {
+    "symbol": "AVGOB",
+    "ticker": "AVGO",
+    "family": "bStock",
+    "price": 355.62,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 176,
+    "volume24h": 8638884337
+   }
+  ],
+  "MRVL": [
+   {
+    "symbol": "MRVLon",
+    "ticker": "MRVL",
+    "family": "Ondo",
+    "price": 242.16379641703713,
+    "multiplier": 1.0014838254669554,
+    "listMultiplier": 1.0014838254669554,
+    "referencePrice": 241.855,
+    "statusCode": "TRADING",
+    "holders": 2260,
+    "bnTrader": 3453,
+    "volume24h": 5716393859.638013
+   },
+   {
+    "symbol": "MRVLx",
+    "ticker": "MRVL",
+    "family": "xStock",
+    "price": 32.491633946853405,
+    "multiplier": 1.0016650410248724,
+    "listMultiplier": 1,
+    "referencePrice": 241.855,
+    "statusCode": "TRADING",
+    "bnTrader": 2,
+    "volume24h": 3542502944
+   },
+   {
+    "symbol": "MRVLB",
+    "ticker": "MRVL",
+    "family": "bStock",
+    "price": 241.46,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 214,
+    "volume24h": 3542502944
+   }
+  ],
+  "VTI": [
+   {
+    "symbol": "VTIon",
+    "ticker": "VTI",
+    "family": "Ondo",
+    "price": 378.35600844401773,
+    "multiplier": 1.006178054392778,
+    "listMultiplier": 1.006178054392778,
+    "referencePrice": 376.032857,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 266,
+    "bnTrader": 299,
+    "volume24h": 861642917.9139491
+   },
+   {
+    "symbol": "VTIx",
+    "ticker": "VTI",
+    "family": "xStock",
+    "price": 374.9887751625197,
+    "multiplier": 1.0100563088016958,
+    "listMultiplier": 1,
+    "referencePrice": 376.032857,
+    "statusCode": "TRADING",
+    "volume24h": 800365326
+   }
+  ],
+  "SQQQ": [
+   {
+    "symbol": "SQQQon",
+    "ticker": "SQQQ",
+    "family": "Ondo",
+    "price": 38.4374514299406,
+    "multiplier": 1.0175739156683075,
+    "listMultiplier": 1.0175739156683075,
+    "referencePrice": 37.773621,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 444,
+    "bnTrader": 1917,
+    "volume24h": 1236897367.0970116
+   },
+   {
+    "symbol": "SQQQB",
+    "ticker": "SQQQ",
+    "family": "bStock",
+    "price": 38.23,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 46,
+    "volume24h": 1208406107
+   }
+  ],
+  "HOOD": [
+   {
+    "symbol": "HOODon",
+    "ticker": "HOOD",
+    "family": "Ondo",
+    "price": 119.93,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 119.93,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 743,
+    "bnTrader": 934,
+    "volume24h": 4720303503.565389
+   },
+   {
+    "symbol": "HOODx",
+    "ticker": "HOOD",
+    "family": "xStock",
+    "price": 108.7352060552621,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 119.93,
+    "statusCode": "TRADING",
+    "bnTrader": 2,
+    "volume24h": 3946689370
+   },
+   {
+    "symbol": "HOODB",
+    "ticker": "HOOD",
+    "family": "bStock",
+    "price": 116.93,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 1000,
+    "volume24h": 3946689370
+   }
+  ],
+  "TSLA": [
+   {
+    "symbol": "TSLAon",
+    "ticker": "TSLA",
+    "family": "Ondo",
+    "price": 363.155,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 363.175,
+    "statusCode": "TRADING",
+    "holders": 29742,
+    "bnTrader": 14533,
+    "volume24h": 18856865544.08652
+   },
+   {
+    "symbol": "TSLAx",
+    "ticker": "TSLA",
+    "family": "xStock",
+    "price": 368.5739848019096,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 363.175,
+    "statusCode": "TRADING",
+    "bnTrader": 17,
+    "volume24h": 16098621078
+   },
+   {
+    "symbol": "TSLAB",
+    "ticker": "TSLA",
+    "family": "bStock",
+    "price": 362.9,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 5445,
+    "volume24h": 16098621078
+   }
+  ],
+  "UNH": [
+   {
+    "symbol": "UNHon",
+    "ticker": "UNH",
+    "family": "Ondo",
+    "price": 385.918870130852,
+    "multiplier": 1.023046908690707,
+    "listMultiplier": 1.023046908690707,
+    "referencePrice": 377.225,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 265,
+    "bnTrader": 736,
+    "volume24h": 3250255787.449747
+   },
+   {
+    "symbol": "UNHx",
+    "ticker": "UNH",
+    "family": "xStock",
+    "price": 401.49657876086104,
+    "multiplier": 1.0229655423325776,
+    "listMultiplier": 1,
+    "referencePrice": 377.225,
+    "statusCode": "TRADING",
+    "volume24h": 1307903862
+   }
+  ],
+  "LLY": [
+   {
+    "symbol": "LLYon",
+    "ticker": "LLY",
+    "family": "Ondo",
+    "price": 1157.2450916219811,
+    "multiplier": 1.0044077170147652,
+    "listMultiplier": 1.0044077170147652,
+    "referencePrice": 1152.166667,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 1416,
+    "bnTrader": 294,
+    "volume24h": 5242304618.95504
+   },
+   {
+    "symbol": "LLYx",
+    "ticker": "LLY",
+    "family": "xStock",
+    "price": 1181.1740615149706,
+    "multiplier": 1.0042886247952578,
+    "listMultiplier": 1,
+    "referencePrice": 1152.166667,
+    "statusCode": "TRADING",
+    "volume24h": 2426103370
+   }
+  ],
+  "CSCO": [
+   {
+    "symbol": "CSCOon",
+    "ticker": "CSCO",
+    "family": "Ondo",
+    "price": 111.1259965699106,
+    "multiplier": 1.0142703623038047,
+    "listMultiplier": 1.0142703623038047,
+    "referencePrice": 109.5625,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 253,
+    "bnTrader": 335,
+    "volume24h": 4524484371.751859
+   },
+   {
+    "symbol": "CSCOx",
+    "ticker": "CSCO",
+    "family": "xStock",
+    "price": 13.724190629360752,
+    "multiplier": 1.0180864518101183,
+    "listMultiplier": 1,
+    "referencePrice": 109.5625,
+    "statusCode": "TRADING",
+    "volume24h": 2232167475
+   }
+  ],
+  "PYPL": [
+   {
+    "symbol": "PYPLon",
+    "ticker": "PYPL",
+    "family": "Ondo",
+    "price": 52.94257466251797,
+    "multiplier": 1.007790133219188,
+    "listMultiplier": 1.007790133219188,
+    "referencePrice": 52.533333,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 308,
+    "bnTrader": 220,
+    "volume24h": 1527857694.0561688
+   },
+   {
+    "symbol": "PYPLB",
+    "ticker": "PYPL",
+    "family": "bStock",
+    "price": 52.683177847773784,
+    "multiplier": 1.0017717788129643,
+    "listMultiplier": 1.0017717788129643,
+    "statusCode": "TRADING",
+    "bnTrader": 50,
+    "volume24h": 739690116
+   }
+  ],
+  "AAPL": [
+   {
+    "symbol": "AAPLon",
+    "ticker": "AAPL",
+    "family": "Ondo",
+    "price": 335.24299687771395,
+    "multiplier": 1.003376073740221,
+    "listMultiplier": 1.003376073740221,
+    "referencePrice": 334.115,
+    "statusCode": "TRADING",
+    "holders": 33671,
+    "bnTrader": 19563,
+    "volume24h": 28930417519.780476
+   },
+   {
+    "symbol": "AAPLx",
+    "ticker": "AAPL",
+    "family": "xStock",
+    "price": 332.3268021757694,
+    "multiplier": 1.0032690125398187,
+    "listMultiplier": 1,
+    "referencePrice": 334.115,
+    "statusCode": "TRADING",
+    "bnTrader": 7,
+    "volume24h": 15409123824
+   },
+   {
+    "symbol": "AAPLB",
+    "ticker": "AAPL",
+    "family": "bStock",
+    "price": 333.9715657308638,
+    "multiplier": 1.0006039060756324,
+    "listMultiplier": 1.0006039060756324,
+    "statusCode": "TRADING",
+    "bnTrader": 4516,
+    "volume24h": 15409123824
+   }
+  ],
+  "KO": [
+   {
+    "symbol": "KOon",
+    "ticker": "KO",
+    "family": "Ondo",
+    "price": 90.28666465640414,
+    "multiplier": 1.0238905041551842,
+    "listMultiplier": 1.0238905041551842,
+    "referencePrice": 88.18,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 895,
+    "bnTrader": 4057,
+    "volume24h": 2473293139.235992
+   },
+   {
+    "symbol": "KOx",
+    "ticker": "KO",
+    "family": "xStock",
+    "price": 88.26682460995913,
+    "multiplier": 1.0183317967386898,
+    "listMultiplier": 1,
+    "referencePrice": 88.18,
+    "statusCode": "TRADING",
+    "bnTrader": 3,
+    "volume24h": 1122563695
+   }
+  ],
+  "AMZN": [
+   {
+    "symbol": "AMZNon",
+    "ticker": "AMZN",
+    "family": "Ondo",
+    "price": 253.36,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 253.36,
+    "statusCode": "TRADING",
+    "holders": 2979,
+    "bnTrader": 3202,
+    "volume24h": 13244321533.731094
+   },
+   {
+    "symbol": "AMZNx",
+    "ticker": "AMZN",
+    "family": "xStock",
+    "price": 252.3120761529155,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 253.36,
+    "statusCode": "TRADING",
+    "volume24h": 9007709475
+   },
+   {
+    "symbol": "AMZNB",
+    "ticker": "AMZN",
+    "family": "bStock",
+    "price": 253.36,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 210,
+    "volume24h": 9007709475
+   }
+  ],
+  "HIMS": [
+   {
+    "symbol": "HIMSon",
+    "ticker": "HIMS",
+    "family": "Ondo",
+    "price": 28.045455,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 28.045455,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 499,
+    "bnTrader": 234,
+    "volume24h": 263514095.85725194
+   },
+   {
+    "symbol": "HIMSB",
+    "ticker": "HIMS",
+    "family": "bStock",
+    "price": 27.84,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 205,
+    "volume24h": 207886749
+   }
+  ],
+  "XOM": [
+   {
+    "symbol": "XOMon",
+    "ticker": "XOM",
+    "family": "Ondo",
+    "price": 165.50584514817083,
+    "multiplier": 1.013993393629342,
+    "listMultiplier": 1.013993393629342,
+    "referencePrice": 163.221818,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 337,
+    "bnTrader": 442,
+    "volume24h": 6143760093.934148
+   },
+   {
+    "symbol": "XOMx",
+    "ticker": "XOM",
+    "family": "xStock",
+    "price": 163.9700117898627,
+    "multiplier": 1.0130866005227463,
+    "listMultiplier": 1,
+    "referencePrice": 163.221818,
+    "statusCode": "TRADING",
+    "volume24h": 1989419404
+   }
+  ],
+  "RDDT": [
+   {
+    "symbol": "RDDTon",
+    "ticker": "RDDT",
+    "family": "Ondo",
+    "price": 151.758,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 151.758,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 240,
+    "bnTrader": 190,
+    "volume24h": 2109062722.4461234
+   },
+   {
+    "symbol": "RDDTB",
+    "ticker": "RDDT",
+    "family": "bStock",
+    "price": 151.09,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 52,
+    "volume24h": 869940194
+   }
+  ],
+  "ARM": [
+   {
+    "symbol": "ARMon",
+    "ticker": "ARM",
+    "family": "Ondo",
+    "price": 274.225,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 274.245,
+    "statusCode": "TRADING",
+    "holders": 523,
+    "bnTrader": 1120,
+    "volume24h": 1909606718.1728282
+   },
+   {
+    "symbol": "ARMB",
+    "ticker": "ARM",
+    "family": "bStock",
+    "price": 273.79,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 58,
+    "volume24h": 1302181618
+   }
+  ],
+  "BMNR": [
+   {
+    "symbol": "BMNRon",
+    "ticker": "BMNR",
+    "family": "Ondo",
+    "price": 25.835,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 25.835,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 632,
+    "bnTrader": 407,
+    "volume24h": 1687289247.6155334
+   },
+   {
+    "symbol": "BMNRB",
+    "ticker": "BMNR",
+    "family": "bStock",
+    "price": 25.4,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 121,
+    "volume24h": 1368644447
+   }
+  ],
+  "AMAT": [
+   {
+    "symbol": "AMATon",
+    "ticker": "AMAT",
+    "family": "Ondo",
+    "price": 444.57031654269343,
+    "multiplier": 1.0025016375685685,
+    "listMultiplier": 1.0025016375685685,
+    "referencePrice": 443.460938,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 255,
+    "bnTrader": 364,
+    "volume24h": 6342789268.156414
+   },
+   {
+    "symbol": "AMATB",
+    "ticker": "AMAT",
+    "family": "bStock",
+    "price": 440.54946084192534,
+    "multiplier": 1.0007484004405192,
+    "listMultiplier": 1.0007484004405192,
+    "statusCode": "TRADING",
+    "bnTrader": 70,
+    "volume24h": 3523650892
+   }
+  ],
+  "SPY": [
+   {
+    "symbol": "SPYon",
+    "ticker": "SPY",
+    "family": "Ondo",
+    "price": 769.4658023642727,
+    "multiplier": 1.0094730727840426,
+    "listMultiplier": 1.0094730727840426,
+    "referencePrice": 762.245,
+    "statusCode": "TRADING",
+    "holders": 24276,
+    "bnTrader": 2957,
+    "volume24h": 49847124817.82539
+   },
+   {
+    "symbol": "SPYx",
+    "ticker": "SPY",
+    "family": "xStock",
+    "price": 758.2004135685518,
+    "multiplier": 1.005714560286254,
+    "listMultiplier": 1,
+    "referencePrice": 762.245,
+    "statusCode": "TRADING",
+    "bnTrader": 9,
+    "volume24h": 50592064409
+   },
+   {
+    "symbol": "SPYB",
+    "ticker": "SPY",
+    "family": "bStock",
+    "price": 762.2763025483501,
+    "multiplier": 1.0017297920368353,
+    "listMultiplier": 1.0017297920368353,
+    "statusCode": "TRADING",
+    "bnTrader": 11088,
+    "volume24h": 50592064409
+   }
+  ],
+  "MSFT": [
+   {
+    "symbol": "MSFTon",
+    "ticker": "MSFT",
+    "family": "Ondo",
+    "price": 496.7103556022081,
+    "multiplier": 1.0057308568927839,
+    "listMultiplier": 1.0057308568927839,
+    "referencePrice": 493.895,
+    "statusCode": "TRADING",
+    "holders": 19410,
+    "bnTrader": 5427,
+    "volume24h": 19569250344.45076
+   },
+   {
+    "symbol": "MSFTx",
+    "ticker": "MSFT",
+    "family": "xStock",
+    "price": 491.85606822997886,
+    "multiplier": 1.0045820905025638,
+    "listMultiplier": 1,
+    "referencePrice": 493.895,
+    "statusCode": "TRADING",
+    "bnTrader": 3,
+    "volume24h": 9917708930
+   },
+   {
+    "symbol": "MSFTB",
+    "ticker": "MSFT",
+    "family": "bStock",
+    "price": 494.7392168845182,
+    "multiplier": 1.0013139648333669,
+    "listMultiplier": 1.0013139648333669,
+    "statusCode": "TRADING",
+    "bnTrader": 2594,
+    "volume24h": 9917708930
+   }
+  ],
+  "NFLX": [
+   {
+    "symbol": "NFLXon",
+    "ticker": "NFLX",
+    "family": "Ondo",
+    "price": 719.26667,
+    "multiplier": 10,
+    "listMultiplier": 10,
+    "referencePrice": 71.926667,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 1195,
+    "bnTrader": 5009,
+    "volume24h": 8229384688.4307165
+   },
+   {
+    "symbol": "NFLXx",
+    "ticker": "NFLX",
+    "family": "xStock",
+    "price": 77.18982664892837,
+    "multiplier": 10,
+    "listMultiplier": 1,
+    "referencePrice": 71.926667,
+    "statusCode": "TRADING",
+    "bnTrader": 6,
+    "volume24h": 5075525747
+   },
+   {
+    "symbol": "NFLXB",
+    "ticker": "NFLX",
+    "family": "bStock",
+    "price": 72.31,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 617,
+    "volume24h": 5075525747
+   }
+  ],
+  "MSTR": [
+   {
+    "symbol": "MSTRon",
+    "ticker": "MSTR",
+    "family": "Ondo",
+    "price": 153.455,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 153.505,
+    "statusCode": "TRADING",
+    "holders": 1772,
+    "bnTrader": 1602,
+    "volume24h": 8392751213.162578
+   },
+   {
+    "symbol": "MSTRx",
+    "ticker": "MSTR",
+    "family": "xStock",
+    "price": 138.8563937459189,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 153.505,
+    "statusCode": "TRADING",
+    "bnTrader": 5,
+    "volume24h": 6614908940
+   },
+   {
+    "symbol": "MSTRB",
+    "ticker": "MSTR",
+    "family": "bStock",
+    "price": 153.2,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 1242,
+    "volume24h": 6614908940
+   }
+  ],
+  "PFE": [
+   {
+    "symbol": "PFEon",
+    "ticker": "PFE",
+    "family": "Ondo",
+    "price": 29.267247419327216,
+    "multiplier": 1.0609316769447112,
+    "listMultiplier": 1.0609316769447112,
+    "referencePrice": 27.586364,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 315,
+    "bnTrader": 227,
+    "volume24h": 2085346716.006852
+   },
+   {
+    "symbol": "PFEx",
+    "ticker": "PFE",
+    "family": "xStock",
+    "price": 27.793279993166227,
+    "multiplier": 1.0537129709103943,
+    "listMultiplier": 1,
+    "referencePrice": 27.586364,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 727456847
+   }
+  ],
+  "MU": [
+   {
+    "symbol": "MUon",
+    "ticker": "MU",
+    "family": "Ondo",
+    "price": 1006.6724547879255,
+    "multiplier": 1.0011212375258447,
+    "listMultiplier": 1.0011212375258447,
+    "referencePrice": 1005.895,
+    "statusCode": "TRADING",
+    "holders": 4241,
+    "bnTrader": 6055,
+    "volume24h": 36014565335.25583
+   },
+   {
+    "symbol": "MUx",
+    "ticker": "MU",
+    "family": "xStock",
+    "price": 980.4846621062144,
+    "multiplier": 1.0004015986353854,
+    "listMultiplier": 1,
+    "referencePrice": 1005.895,
+    "statusCode": "TRADING",
+    "bnTrader": 3,
+    "volume24h": 28685659601
+   },
+   {
+    "symbol": "MUB",
+    "ticker": "MU",
+    "family": "bStock",
+    "price": 1004.8580232535074,
+    "multiplier": 1.0001075125688057,
+    "listMultiplier": 1.0001075125688057,
+    "statusCode": "TRADING",
+    "bnTrader": 3211,
+    "volume24h": 28685659601
+   }
+  ],
+  "IREN": [
+   {
+    "symbol": "IRENon",
+    "ticker": "IREN",
+    "family": "Ondo",
+    "price": 46.49,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 46.49,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 489,
+    "bnTrader": 1480,
+    "volume24h": 2115121844.9928617
+   },
+   {
+    "symbol": "IRENB",
+    "ticker": "IREN",
+    "family": "bStock",
+    "price": 45.93,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 52,
+    "volume24h": 1749198657
+   }
+  ],
+  "PLTR": [
+   {
+    "symbol": "PLTRon",
+    "ticker": "PLTR",
+    "family": "Ondo",
+    "price": 177.439655,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 177.439655,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 1019,
+    "bnTrader": 871,
+    "volume24h": 6973855607.932574
+   },
+   {
+    "symbol": "PLTRx",
+    "ticker": "PLTR",
+    "family": "xStock",
+    "price": 171.72500579504944,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 177.439655,
+    "statusCode": "TRADING",
+    "volume24h": 4354059899
+   },
+   {
+    "symbol": "PLTRB",
+    "ticker": "PLTR",
+    "family": "bStock",
+    "price": 176.87,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 278,
+    "volume24h": 4354059899
+   }
+  ],
+  "CRCL": [
+   {
+    "symbol": "CRCLon",
+    "ticker": "CRCL",
+    "family": "Ondo",
+    "price": 89.585,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 89.615,
+    "statusCode": "TRADING",
+    "holders": 4821,
+    "bnTrader": 6874,
+    "volume24h": 2736572994.4293323
+   },
+   {
+    "symbol": "CRCLx",
+    "ticker": "CRCL",
+    "family": "xStock",
+    "price": 92.30913975528503,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 89.625,
+    "statusCode": "TRADING",
+    "bnTrader": 3,
+    "volume24h": 1737470117
+   },
+   {
+    "symbol": "CRCLB",
+    "ticker": "CRCL",
+    "family": "bStock",
+    "price": 89.3,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 1046,
+    "volume24h": 1737470117
+   }
+  ],
+  "MCD": [
+   {
+    "symbol": "MCDon",
+    "ticker": "MCD",
+    "family": "Ondo",
+    "price": 254.4174903894314,
+    "multiplier": 1.0219040493061453,
+    "listMultiplier": 1.0219040493061453,
+    "referencePrice": 248.964167,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 2601,
+    "bnTrader": 517,
+    "volume24h": 2384436805.1789746
+   },
+   {
+    "symbol": "MCDx",
+    "ticker": "MCD",
+    "family": "xStock",
+    "price": 273.0410402369981,
+    "multiplier": 1.0161604345481776,
+    "listMultiplier": 1,
+    "referencePrice": 248.964167,
+    "statusCode": "TRADING",
+    "volume24h": 2384436805.1789746
+   }
+  ],
+  "AMD": [
+   {
+    "symbol": "AMDon",
+    "ticker": "AMD",
+    "family": "Ondo",
+    "price": 555.85,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 555.905,
+    "statusCode": "TRADING",
+    "holders": 2282,
+    "bnTrader": 2481,
+    "volume24h": 17715183401.574177
+   },
+   {
+    "symbol": "AMDx",
+    "ticker": "AMD",
+    "family": "xStock",
+    "price": 3979.7399992210317,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 555.905,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 17715183401.574177
+   },
+   {
+    "symbol": "AMDB",
+    "ticker": "AMD",
+    "family": "bStock",
+    "price": 555.11,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 1527,
+    "volume24h": 12493768915
+   }
+  ],
+  "INTC": [
+   {
+    "symbol": "INTCon",
+    "ticker": "INTC",
+    "family": "Ondo",
+    "price": 110.02,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 110.035,
+    "statusCode": "TRADING",
+    "holders": 2716,
+    "bnTrader": 17232,
+    "volume24h": 19255756908.18242
+   },
+   {
+    "symbol": "INTCx",
+    "ticker": "INTC",
+    "family": "xStock",
+    "price": 102.47540502816305,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 110.035,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 11283677495
+   },
+   {
+    "symbol": "INTCB",
+    "ticker": "INTC",
+    "family": "bStock",
+    "price": 109.93,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 821,
+    "volume24h": 11283677495
+   }
+  ],
+  "WMT": [
+   {
+    "symbol": "WMTon",
+    "ticker": "WMT",
+    "family": "Ondo",
+    "price": 107.51925920247918,
+    "multiplier": 1.0058556149846987,
+    "listMultiplier": 1.0058556149846987,
+    "referencePrice": 106.893333,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 298,
+    "bnTrader": 531,
+    "volume24h": 4846291067.943644
+   },
+   {
+    "symbol": "WMTx",
+    "ticker": "WMT",
+    "family": "xStock",
+    "price": 105.97005829031468,
+    "multiplier": 1.0055069408636728,
+    "listMultiplier": 1,
+    "referencePrice": 106.893333,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 2667170049
+   }
+  ],
+  "NVDA": [
+   {
+    "symbol": "NVDAon",
+    "ticker": "NVDA",
+    "family": "Ondo",
+    "price": 221.20376981537444,
+    "multiplier": 1.0017152487959897,
+    "listMultiplier": 1.0017152487959897,
+    "referencePrice": 220.885,
+    "statusCode": "TRADING",
+    "holders": 57114,
+    "bnTrader": 22540,
+    "volume24h": 42031638669.19664
+   },
+   {
+    "symbol": "NVDAx",
+    "ticker": "NVDA",
+    "family": "xStock",
+    "price": 221.74041071959007,
+    "multiplier": 1.0009180758490996,
+    "listMultiplier": 1,
+    "referencePrice": 220.885,
+    "statusCode": "TRADING",
+    "bnTrader": 12,
+    "volume24h": 25100509904
+   },
+   {
+    "symbol": "NVDAB",
+    "ticker": "NVDA",
+    "family": "bStock",
+    "price": 220.74165281315683,
+    "multiplier": 1.0007782237528078,
+    "listMultiplier": 1.0007782237528078,
+    "statusCode": "TRADING",
+    "bnTrader": 12652,
+    "volume24h": 25100509904
+   }
+  ],
+  "ASML": [
+   {
+    "symbol": "ASMLon",
+    "ticker": "ASML",
+    "family": "Ondo",
+    "price": 1679.946488160247,
+    "multiplier": 1.0053429426738953,
+    "listMultiplier": 1.0053429426738953,
+    "referencePrice": 1671.018333,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 764,
+    "bnTrader": 821,
+    "volume24h": 4222989239.3139787
+   },
+   {
+    "symbol": "ASMLB",
+    "ticker": "ASML",
+    "family": "bStock",
+    "price": 1665.96,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 90,
+    "volume24h": 2158216138
+   }
+  ],
+  "SMCI": [
+   {
+    "symbol": "SMCIon",
+    "ticker": "SMCI",
+    "family": "Ondo",
+    "price": 39.04697,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 39.04697,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 486,
+    "bnTrader": 1007,
+    "volume24h": 1877349401.5841706
+   },
+   {
+    "symbol": "SMCIB",
+    "ticker": "SMCI",
+    "family": "bStock",
+    "price": 38.62,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 67,
+    "volume24h": 1485398114
+   }
+  ],
+  "TSM": [
+   {
+    "symbol": "TSMon",
+    "ticker": "TSM",
+    "family": "Ondo",
+    "price": 436.61701508510083,
+    "multiplier": 1.0093207464084535,
+    "listMultiplier": 1.0093207464084535,
+    "referencePrice": 432.585,
+    "statusCode": "TRADING",
+    "holders": 1582,
+    "bnTrader": 1543,
+    "volume24h": 5582549823.195205
+   },
+   {
+    "symbol": "TSMx",
+    "ticker": "TSM",
+    "family": "xStock",
+    "price": 391.28115213975343,
+    "multiplier": 1.004065035082054,
+    "listMultiplier": 1,
+    "referencePrice": 432.585,
+    "statusCode": "TRADING",
+    "volume24h": 3213114922
+   },
+   {
+    "symbol": "TSMB",
+    "ticker": "TSM",
+    "family": "bStock",
+    "price": 432.9718471367825,
+    "multiplier": 1.002110464141051,
+    "listMultiplier": 1.002110464141051,
+    "statusCode": "TRADING",
+    "bnTrader": 217,
+    "volume24h": 3213114922
+   }
+  ],
+  "CRM": [
+   {
+    "symbol": "CRMon",
+    "ticker": "CRM",
+    "family": "Ondo",
+    "price": 240.3434670864262,
+    "multiplier": 1.0071241633489345,
+    "listMultiplier": 1.0071241633489345,
+    "referencePrice": 238.643333,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 258,
+    "bnTrader": 242,
+    "volume24h": 5241176904.743223
+   },
+   {
+    "symbol": "CRMB",
+    "ticker": "CRM",
+    "family": "bStock",
+    "price": 241.33636094072259,
+    "multiplier": 1.0012295093790349,
+    "listMultiplier": 1.0012295093790349,
+    "statusCode": "TRADING",
+    "bnTrader": 10,
+    "volume24h": 3030380078
+   }
+  ],
+  "CVX": [
+   {
+    "symbol": "CVXon",
+    "ticker": "CVX",
+    "family": "Ondo",
+    "price": 215.09771604907863,
+    "multiplier": 1.0274714144318269,
+    "listMultiplier": 1.0274714144318269,
+    "referencePrice": 209.346667,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 1610,
+    "bnTrader": 2979,
+    "volume24h": 9901832819.161547
+   },
+   {
+    "symbol": "CVXx",
+    "ticker": "CVX",
+    "family": "xStock",
+    "price": 210.77068312237105,
+    "multiplier": 1.023356544159142,
+    "listMultiplier": 1,
+    "referencePrice": 209.346667,
+    "statusCode": "TRADING",
+    "volume24h": 3095660764
+   }
+  ],
+  "BABA": [
+   {
+    "symbol": "BABAon",
+    "ticker": "BABA",
+    "family": "Ondo",
+    "price": 115.17251319004552,
+    "multiplier": 1.008913435154356,
+    "listMultiplier": 1.008913435154356,
+    "referencePrice": 114.155,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 1357,
+    "bnTrader": 1518,
+    "volume24h": 1512656490.1756835
+   },
+   {
+    "symbol": "BABAB",
+    "ticker": "BABA",
+    "family": "bStock",
+    "price": 114.77,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 2985,
+    "volume24h": 1347341621
+   }
+  ],
+  "BAC": [
+   {
+    "symbol": "BACon",
+    "ticker": "BAC",
+    "family": "Ondo",
+    "price": 58.42427405515584,
+    "multiplier": 1.0111773839732154,
+    "listMultiplier": 1.0111773839732154,
+    "referencePrice": 57.778462,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 185,
+    "bnTrader": 196,
+    "volume24h": 3032436767.6092925
+   },
+   {
+    "symbol": "BACx",
+    "ticker": "BAC",
+    "family": "xStock",
+    "price": 510.3762781190676,
+    "multiplier": 1.014331044782208,
+    "listMultiplier": 1,
+    "referencePrice": 57.778462,
+    "statusCode": "TRADING",
+    "volume24h": 1635784422
+   }
+  ],
+  "META": [
+   {
+    "symbol": "METAon",
+    "ticker": "META",
+    "family": "Ondo",
+    "price": 670.3192551609457,
+    "multiplier": 1.0022791066933001,
+    "listMultiplier": 1.0022791066933001,
+    "referencePrice": 668.83,
+    "statusCode": "TRADING",
+    "holders": 2178,
+    "bnTrader": 2760,
+    "volume24h": 18457321171.092937
+   },
+   {
+    "symbol": "METAx",
+    "ticker": "META",
+    "family": "xStock",
+    "price": 573.7537971023057,
+    "multiplier": 1.002298265651938,
+    "listMultiplier": 1,
+    "referencePrice": 668.83,
+    "statusCode": "TRADING",
+    "bnTrader": 2,
+    "volume24h": 13863782409
+   },
+   {
+    "symbol": "METAB",
+    "ticker": "META",
+    "family": "bStock",
+    "price": 668.39,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 851,
+    "volume24h": 13863782409
+   }
+  ],
+  "GME": [
+   {
+    "symbol": "GMEon",
+    "ticker": "GME",
+    "family": "Ondo",
+    "price": 22.964440271216194,
+    "multiplier": 1.0171383134189433,
+    "listMultiplier": 1.0171383134189433,
+    "referencePrice": 22.5775,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 2870,
+    "bnTrader": 586,
+    "volume24h": 216773958.11457488
+   },
+   {
+    "symbol": "GMEx",
+    "ticker": "GME",
+    "family": "xStock",
+    "price": 216.69400129095263,
+    "multiplier": 1.005309167384,
+    "listMultiplier": 1,
+    "referencePrice": 22.5775,
+    "statusCode": "TRADING",
+    "volume24h": 146286587
+   },
+   {
+    "symbol": "GMEB",
+    "ticker": "GME",
+    "family": "bStock",
+    "price": 22.33,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 4972,
+    "volume24h": 146286587
+   }
+  ],
+  "UBER": [
+   {
+    "symbol": "UBERon",
+    "ticker": "UBER",
+    "family": "Ondo",
+    "price": 70.565,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 70.565,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 341,
+    "bnTrader": 173,
+    "volume24h": 1457367457.8403645
+   },
+   {
+    "symbol": "UBERx",
+    "ticker": "UBER",
+    "family": "xStock",
+    "price": 8.513735644021718,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 70.565,
+    "statusCode": "TRADING",
+    "bnTrader": 1,
+    "volume24h": 881061628
+   }
+  ],
+  "TQQQ": [
+   {
+    "symbol": "TQQQon",
+    "ticker": "TQQQ",
+    "family": "Ondo",
+    "price": 72.25790682805763,
+    "multiplier": 1.0026768449047059,
+    "listMultiplier": 1.0026768449047059,
+    "referencePrice": 72.08,
+    "statusCode": "TRADING",
+    "holders": 1144,
+    "bnTrader": 2127,
+    "volume24h": 2955850068.769136
+   },
+   {
+    "symbol": "TQQQx",
+    "ticker": "TQQQ",
+    "family": "xStock",
+    "price": 72.41399234453158,
+    "multiplier": 2.008976295242212,
+    "listMultiplier": 1,
+    "referencePrice": 72.08,
+    "statusCode": "TRADING",
+    "bnTrader": 3,
+    "volume24h": 2853297967
+   },
+   {
+    "symbol": "TQQQB",
+    "ticker": "TQQQ",
+    "family": "bStock",
+    "price": 72.03,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 715,
+    "volume24h": 2853297967
+   }
+  ],
+  "CRWD": [
+   {
+    "symbol": "CRWDon",
+    "ticker": "CRWD",
+    "family": "Ondo",
+    "price": 948.310768,
+    "multiplier": 4,
+    "listMultiplier": 4,
+    "referencePrice": 237.077692,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 182,
+    "bnTrader": 175,
+    "volume24h": 4615672757.73092
+   },
+   {
+    "symbol": "CRWDx",
+    "ticker": "CRWD",
+    "family": "xStock",
+    "price": 225.9370602046391,
+    "multiplier": 4,
+    "listMultiplier": 1,
+    "referencePrice": 237.077692,
+    "statusCode": "TRADING",
+    "volume24h": 2675950080
+   },
+   {
+    "symbol": "CRWDB",
+    "ticker": "CRWD",
+    "family": "bStock",
+    "price": 237.37,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 16,
+    "volume24h": 2675950080
+   }
+  ],
+  "IBM": [
+   {
+    "symbol": "IBMon",
+    "ticker": "IBM",
+    "family": "Ondo",
+    "price": 235.39907440572173,
+    "multiplier": 1.0227923764446276,
+    "listMultiplier": 1.0227923764446276,
+    "referencePrice": 230.153333,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 563,
+    "bnTrader": 1103,
+    "volume24h": 3087235933.4475474
+   },
+   {
+    "symbol": "IBMx",
+    "ticker": "IBM",
+    "family": "xStock",
+    "price": 33.875931976948856,
+    "multiplier": 1.0204029187943977,
+    "listMultiplier": 1,
+    "referencePrice": 230.153333,
+    "statusCode": "TRADING",
+    "bnTrader": 2,
+    "volume24h": 1453945264
+   },
+   {
+    "symbol": "IBMB",
+    "ticker": "IBM",
+    "family": "bStock",
+    "price": 232.16639023296952,
+    "multiplier": 1.0050058016231744,
+    "listMultiplier": 1.0050058016231744,
+    "statusCode": "TRADING",
+    "bnTrader": 225,
+    "volume24h": 1453945264
+   }
+  ],
+  "COIN": [
+   {
+    "symbol": "COINon",
+    "ticker": "COIN",
+    "family": "Ondo",
+    "price": 192.135,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 192.165,
+    "statusCode": "TRADING",
+    "holders": 1485,
+    "bnTrader": 1001,
+    "volume24h": 4212251389.7174106
+   },
+   {
+    "symbol": "COINx",
+    "ticker": "COIN",
+    "family": "xStock",
+    "price": 175.4867061110081,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 192.165,
+    "statusCode": "TRADING",
+    "bnTrader": 3,
+    "volume24h": 3673276431
+   },
+   {
+    "symbol": "COINB",
+    "ticker": "COIN",
+    "family": "bStock",
+    "price": 192.01,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 240,
+    "volume24h": 3673276431
+   }
+  ],
+  "PEP": [
+   {
+    "symbol": "PEPon",
+    "ticker": "PEP",
+    "family": "Ondo",
+    "price": 134.41825779952498,
+    "multiplier": 1.0350872545088616,
+    "listMultiplier": 1.0350872545088616,
+    "referencePrice": 129.861765,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 212,
+    "bnTrader": 315,
+    "volume24h": 3056936953.0346
+   },
+   {
+    "symbol": "PEPx",
+    "ticker": "PEP",
+    "family": "xStock",
+    "price": 140.37169201658745,
+    "multiplier": 1.0268028384810615,
+    "listMultiplier": 1,
+    "referencePrice": 129.861765,
+    "statusCode": "TRADING",
+    "volume24h": 1850272472
+   }
+  ],
+  "GLD": [
+   {
+    "symbol": "GLDon",
+    "ticker": "GLD",
+    "family": "Ondo",
+    "price": 401.42,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 401.42,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 1111,
+    "bnTrader": 11009,
+    "volume24h": 3823071782.8996363
+   },
+   {
+    "symbol": "GLDx",
+    "ticker": "GLD",
+    "family": "xStock",
+    "price": 423.01628832208206,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 401.42,
+    "statusCode": "TRADING",
+    "bnTrader": 2,
+    "volume24h": 3811202994
+   }
+  ],
+  "QCOM": [
+   {
+    "symbol": "QCOMon",
+    "ticker": "QCOM",
+    "family": "Ondo",
+    "price": 181.26899466777624,
+    "multiplier": 1.0185368020889827,
+    "listMultiplier": 1.0185368020889827,
+    "referencePrice": 177.97,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 508,
+    "bnTrader": 806,
+    "volume24h": 9695865764.063555
+   },
+   {
+    "symbol": "QCOMB",
+    "ticker": "QCOM",
+    "family": "bStock",
+    "price": 178.79762605257517,
+    "multiplier": 1.00380432322353,
+    "listMultiplier": 1.00380432322353,
+    "statusCode": "TRADING",
+    "bnTrader": 277,
+    "volume24h": 3296163874
+   }
+  ],
+  "COHR": [
+   {
+    "symbol": "COHRon",
+    "ticker": "COHR",
+    "family": "Ondo",
+    "price": 317.3,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 317.3,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 354,
+    "bnTrader": 490,
+    "volume24h": 3227114009.052951
+   },
+   {
+    "symbol": "COHRB",
+    "ticker": "COHR",
+    "family": "bStock",
+    "price": 313.79,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 81,
+    "volume24h": 2148113109
+   }
+  ],
+  "ASTS": [
+   {
+    "symbol": "ASTSon",
+    "ticker": "ASTS",
+    "family": "Ondo",
+    "price": 58.739394,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 58.739394,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 446,
+    "bnTrader": 767,
+    "volume24h": 1162666272.3337421
+   },
+   {
+    "symbol": "ASTSB",
+    "ticker": "ASTS",
+    "family": "bStock",
+    "price": 58.67,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 41,
+    "volume24h": 807393122
+   }
+  ],
+  "CRWV": [
+   {
+    "symbol": "CRWVon",
+    "ticker": "CRWV",
+    "family": "Ondo",
+    "price": 81.291111,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 81.291111,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 383,
+    "bnTrader": 399,
+    "volume24h": 5395309572.78518
+   },
+   {
+    "symbol": "CRWVB",
+    "ticker": "CRWV",
+    "family": "bStock",
+    "price": 81.27,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 82,
+    "volume24h": 4415780666
+   }
+  ],
+  "EWY": [
+   {
+    "symbol": "EWYon",
+    "ticker": "EWY",
+    "family": "Ondo",
+    "price": 180.991667,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 180.991667,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 271,
+    "bnTrader": 351,
+    "volume24h": 1646320161.3389497
+   },
+   {
+    "symbol": "EWYB",
+    "ticker": "EWY",
+    "family": "bStock",
+    "price": 180.48,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 235,
+    "volume24h": 1414325625
+   }
+  ],
+  "STX": [
+   {
+    "symbol": "STXon",
+    "ticker": "STX",
+    "family": "Ondo",
+    "price": 862.7808519811078,
+    "multiplier": 1.0019131984769052,
+    "listMultiplier": 1.0019131984769052,
+    "referencePrice": 861.133333,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 182,
+    "bnTrader": 247,
+    "volume24h": 6007671338.849606
+   },
+   {
+    "symbol": "STXB",
+    "ticker": "STX",
+    "family": "bStock",
+    "price": 845.89,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 11,
+    "volume24h": 3484571977
+   }
+  ],
+  "NBIS": [
+   {
+    "symbol": "NBISon",
+    "ticker": "NBIS",
+    "family": "Ondo",
+    "price": 222.183333,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 222.183333,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 506,
+    "bnTrader": 515,
+    "volume24h": 4743106703.970365
+   },
+   {
+    "symbol": "NBISB",
+    "ticker": "NBIS",
+    "family": "bStock",
+    "price": 220.46,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 274,
+    "volume24h": 4012033776
+   }
+  ],
+  "SNDK": [
+   {
+    "symbol": "SNDKon",
+    "ticker": "SNDK",
+    "family": "Ondo",
+    "price": 1763.715,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 1763.695,
+    "statusCode": "TRADING",
+    "holders": 1494,
+    "bnTrader": 2284,
+    "volume24h": 31373299794.120922
+   },
+   {
+    "symbol": "SNDKB",
+    "ticker": "SNDK",
+    "family": "bStock",
+    "price": 1763,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 1736,
+    "volume24h": 24851775795
+   }
+  ],
+  "WDC": [
+   {
+    "symbol": "WDCon",
+    "ticker": "WDC",
+    "family": "Ondo",
+    "price": 442.49901604911435,
+    "multiplier": 1.0004047206753353,
+    "listMultiplier": 1.0004047206753353,
+    "referencePrice": 442.32,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 380,
+    "bnTrader": 682,
+    "volume24h": 5979693739.135237
+   },
+   {
+    "symbol": "WDCB",
+    "ticker": "WDC",
+    "family": "bStock",
+    "price": 437.23834947507663,
+    "multiplier": 1.000224983929809,
+    "listMultiplier": 1.000224983929809,
+    "statusCode": "TRADING",
+    "bnTrader": 202,
+    "volume24h": 2991648309
+   }
+  ],
+  "RKLB": [
+   {
+    "symbol": "RKLBon",
+    "ticker": "RKLB",
+    "family": "Ondo",
+    "price": 64.5,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 64.5,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 749,
+    "bnTrader": 1173,
+    "volume24h": 2083258177.825929
+   },
+   {
+    "symbol": "RKLBB",
+    "ticker": "RKLB",
+    "family": "bStock",
+    "price": 64.25,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 113,
+    "volume24h": 1503853813
+   }
+  ],
+  "STRC": [
+   {
+    "symbol": "STRCon",
+    "ticker": "STRC",
+    "family": "Ondo",
+    "price": 103.62613411194934,
+    "multiplier": 1.0533359163230906,
+    "listMultiplier": 1.0533359163230906,
+    "referencePrice": 98.379,
+    "statusCode": "TRADING",
+    "holders": 366,
+    "bnTrader": 255,
+    "volume24h": 135744973.27625787
+   },
+   {
+    "symbol": "STRCx",
+    "ticker": "STRC",
+    "family": "xStock",
+    "price": 80.47906382177129,
+    "multiplier": 1.0697834843705738,
+    "listMultiplier": 1,
+    "referencePrice": 98.379,
+    "statusCode": "TRADING",
+    "volume24h": 133102729
+   }
+  ],
+  "AXTI": [
+   {
+    "symbol": "AXTIon",
+    "ticker": "AXTI",
+    "family": "Ondo",
+    "price": 70.106154,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 70.106154,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 128,
+    "bnTrader": 104,
+    "volume24h": 1179179516.068388
+   },
+   {
+    "symbol": "AXTIB",
+    "ticker": "AXTI",
+    "family": "bStock",
+    "price": 68.68,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 168,
+    "volume24h": 499802131
+   }
+  ],
+  "CRDO": [
+   {
+    "symbol": "CRDOon",
+    "ticker": "CRDO",
+    "family": "Ondo",
+    "price": 175.916667,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 175.916667,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 93,
+    "bnTrader": 29,
+    "volume24h": 2347694529.2894883
+   },
+   {
+    "symbol": "CRDOB",
+    "ticker": "CRDO",
+    "family": "bStock",
+    "price": 172.38,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 43,
+    "volume24h": 1586351462
+   }
+  ],
+  "NOK": [
+   {
+    "symbol": "NOKon",
+    "ticker": "NOK",
+    "family": "Ondo",
+    "price": 10.686889713171647,
+    "multiplier": 1.0023251250219725,
+    "listMultiplier": 1.0023251250219725,
+    "referencePrice": 10.662099,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 203,
+    "bnTrader": 180,
+    "volume24h": 1726786959.5874805
+   },
+   {
+    "symbol": "NOKB",
+    "ticker": "NOK",
+    "family": "bStock",
+    "price": 10.644950801323134,
+    "multiplier": 1.0023494163204458,
+    "listMultiplier": 1.0023494163204458,
+    "statusCode": "TRADING",
+    "bnTrader": 171,
+    "volume24h": 1603039314
+   }
+  ],
+  "DELL": [
+   {
+    "symbol": "DELLon",
+    "ticker": "DELL",
+    "family": "Ondo",
+    "price": 571.5585396703917,
+    "multiplier": 1.00115351142125,
+    "listMultiplier": 1.00115351142125,
+    "referencePrice": 570.9,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 121,
+    "bnTrader": 45,
+    "volume24h": 6701857215.964964
+   },
+   {
+    "symbol": "DELLB",
+    "ticker": "DELL",
+    "family": "bStock",
+    "price": 569.58,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 107,
+    "volume24h": 4131462547
+   }
+  ],
+  "CBRS": [
+   {
+    "symbol": "CBRSon",
+    "ticker": "CBRS",
+    "family": "Ondo",
+    "price": 198.6,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 198.6,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 115,
+    "bnTrader": 57,
+    "volume24h": 2145715191.082966
+   },
+   {
+    "symbol": "CBRSB",
+    "ticker": "CBRS",
+    "family": "bStock",
+    "price": 197.02,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 212,
+    "volume24h": 884294537
+   }
+  ],
+  "LITE": [
+   {
+    "symbol": "LITEon",
+    "ticker": "LITE",
+    "family": "Ondo",
+    "price": 929.8,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 929.8,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 143,
+    "bnTrader": 121,
+    "volume24h": 8618661586.686056
+   },
+   {
+    "symbol": "LITEB",
+    "ticker": "LITE",
+    "family": "bStock",
+    "price": 920.22,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 250,
+    "volume24h": 5029595019
+   }
+  ],
+  "USAR": [
+   {
+    "symbol": "USARon",
+    "ticker": "USAR",
+    "family": "Ondo",
+    "price": 15.628182,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 15.628182,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 112,
+    "bnTrader": 27,
+    "volume24h": 270251051.92403096
+   },
+   {
+    "symbol": "USARB",
+    "ticker": "USAR",
+    "family": "bStock",
+    "price": 15.53,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 64,
+    "volume24h": 151102670
+   }
+  ],
+  "ALAB": [
+   {
+    "symbol": "ALABon",
+    "ticker": "ALAB",
+    "family": "Ondo",
+    "price": 302.34,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 302.34,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 73,
+    "bnTrader": 33,
+    "volume24h": 2138702326.642174
+   },
+   {
+    "symbol": "ALABB",
+    "ticker": "ALAB",
+    "family": "bStock",
+    "price": 296.8,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 41,
+    "volume24h": 1100637132
+   }
+  ],
+  "BE": [
+   {
+    "symbol": "BEon",
+    "ticker": "BE",
+    "family": "Ondo",
+    "price": 266.95,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 266.95,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 222,
+    "bnTrader": 48,
+    "volume24h": 19613282923.109364
+   },
+   {
+    "symbol": "BEB",
+    "ticker": "BE",
+    "family": "bStock",
+    "price": 267.85,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 66,
+    "volume24h": 9034676985
+   }
+  ],
+  "GLW": [
+   {
+    "symbol": "GLWon",
+    "ticker": "GLW",
+    "family": "Ondo",
+    "price": 150.49627648525845,
+    "multiplier": 1.0013392094564586,
+    "listMultiplier": 1.0013392094564586,
+    "referencePrice": 150.375,
+    "statusCode": "TRADING",
+    "holders": 261,
+    "bnTrader": 345,
+    "volume24h": 2181296035.7031407
+   },
+   {
+    "symbol": "GLWB",
+    "ticker": "GLW",
+    "family": "bStock",
+    "price": 150.55400489383726,
+    "multiplier": 1.001290269312565,
+    "listMultiplier": 1.001290269312565,
+    "statusCode": "TRADING",
+    "bnTrader": 157,
+    "volume24h": 1065036713
+   }
+  ],
+  "FLNC": [
+   {
+    "symbol": "FLNCon",
+    "ticker": "FLNC",
+    "family": "Ondo",
+    "price": 7.277778,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 7.277778,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 50,
+    "bnTrader": 13,
+    "volume24h": 110983320.37100302
+   },
+   {
+    "symbol": "FLNCB",
+    "ticker": "FLNC",
+    "family": "bStock",
+    "price": 7.3,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 633,
+    "volume24h": 87821576
+   }
+  ],
+  "AAOI": [
+   {
+    "symbol": "AAOIon",
+    "ticker": "AAOI",
+    "family": "Ondo",
+    "price": 104.936667,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 104.936667,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 206,
+    "bnTrader": 170,
+    "volume24h": 1041002526.4039105
+   },
+   {
+    "symbol": "AAOIB",
+    "ticker": "AAOI",
+    "family": "bStock",
+    "price": 105.11,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 226,
+    "volume24h": 726693763
+   }
+  ],
+  "SOXS": [
+   {
+    "symbol": "SOXSon",
+    "ticker": "SOXS",
+    "family": "Ondo",
+    "price": 4.195051959225098,
+    "multiplier": 0.10079128853122982,
+    "listMultiplier": 0.10079128853122982,
+    "referencePrice": 41.621176,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 302,
+    "bnTrader": 229,
+    "volume24h": 2305338386.2091746
+   },
+   {
+    "symbol": "SOXSB",
+    "ticker": "SOXS",
+    "family": "bStock",
+    "price": 42.36,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 631,
+    "volume24h": 2282745433
+   }
+  ],
+  "SOXL": [
+   {
+    "symbol": "SOXLon",
+    "ticker": "SOXL",
+    "family": "Ondo",
+    "price": 123.026667,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 123.026667,
+    "statusCode": "MARKET_CLOSED",
+    "holders": 256,
+    "bnTrader": 256,
+    "volume24h": 5592757703.806445
+   },
+   {
+    "symbol": "SOXLB",
+    "ticker": "SOXL",
+    "family": "bStock",
+    "price": 121.05,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 1103,
+    "volume24h": 5010428805
+   }
+  ],
+  "DRAM": [
+   {
+    "symbol": "DRAMon",
+    "ticker": "DRAM",
+    "family": "Ondo",
+    "price": 59.215,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 59.215,
+    "statusCode": "TRADING",
+    "holders": 519,
+    "bnTrader": 472,
+    "volume24h": 1838167869.0375843
+   },
+   {
+    "symbol": "DRAMB",
+    "ticker": "DRAM",
+    "family": "bStock",
+    "price": 59.14,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 275,
+    "volume24h": 1730503578
+   }
+  ],
+  "SPCX": [
+   {
+    "symbol": "SPCXx",
+    "ticker": "SPCX",
+    "family": "xStock",
+    "price": 154.98759695888495,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 152.565,
+    "statusCode": "TRADING",
+    "bnTrader": 62,
+    "volume24h": 51211567338.27065
+   },
+   {
+    "symbol": "SPCXon",
+    "ticker": "SPCX",
+    "family": "Ondo",
+    "price": 152.565,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 152.565,
+    "statusCode": "TRADING",
+    "holders": 33386,
+    "bnTrader": 3885,
+    "volume24h": 51211567338.27065
+   },
+   {
+    "symbol": "SPCXB",
+    "ticker": "SPCX",
+    "family": "bStock",
+    "price": 152.51,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 16723,
+    "volume24h": 20840127308
+   },
+   {
+    "symbol": "xSPCX",
+    "ticker": "SPCX",
+    "family": "type4",
+    "price": 105.67739676820388,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "bnTrader": 25,
+    "volume24h": 135.09408323640722
+   }
+  ],
+  "SKHY": [
+   {
+    "symbol": "SKHYon",
+    "ticker": "SKHY",
+    "family": "Ondo",
+    "price": 186.425,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "referencePrice": 186.475,
+    "statusCode": "TRADING",
+    "holders": 565,
+    "bnTrader": 378,
+    "volume24h": 13259148878.079111
+   },
+   {
+    "symbol": "SKHYB",
+    "ticker": "SKHY",
+    "family": "bStock",
+    "price": 186.5,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 3537,
+    "volume24h": 6309962231
+   }
+  ],
+  "BNC": [
+   {
+    "symbol": "BNC4",
+    "ticker": "BNC",
+    "family": "type9",
+    "price": 6.401743158696231,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 7027,
+    "volume24h": 33965780
+   },
+   {
+    "symbol": "BNCB",
+    "ticker": "BNC",
+    "family": "bStock",
+    "price": 6.53,
+    "multiplier": 1,
+    "listMultiplier": 1,
+    "statusCode": "TRADING",
+    "bnTrader": 1628,
+    "volume24h": 33965780
+   }
+  ]
+ }
+}
