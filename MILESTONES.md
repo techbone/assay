@@ -26,12 +26,12 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 
 ---
 
-## M1 — Reference engine `[~]` · target 21–23 Sep · ★ core IP ★
+## M1 — Reference engine `[x]` **DONE** · 20 Sep · ★ core IP ★
 
 | | Task |
 |-|------|
 |`[x]`| `normalize` — adjusted = price / sharesMultiplier |
-|`[x]`| `validate` — corrupt multipliers, non-TRADING (staleness needs M2 history) |
+|`[x]`| `validate` — corrupt multipliers, non-TRADING, **staleness, outliers** |
 |`[x]`| `trust` — liquidity · freshness · metadata agreement → [0,1] |
 |`[x]`| `assay` — trust-weighted median + confidence band |
 |`[x]`| `decompose` — naive basis = multiplier effect + true basis |
@@ -43,20 +43,20 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 - `[x]` `TQQQx` **rejected** (corrupt 2x multiplier)
 - `[x]` xStocks score median trust **0.04** vs Ondo 0.62 — excluded from the price by weight
 - `[x]` Invariant: assay price ∈ [min, max] of surviving quotes **off-tape**; venue reference wins in RTH
-- `[ ]` Staleness detection — **blocked on M2**, needs polling history
-- `[ ]` Outlier rule for `MSTRx`/`TSMx`/`ORCLx` (currently handled by trust weight, not rejection)
+- `[x]` Staleness detection — `ticksSinceChange` from the collector feeds `trustScore` and `STALE_QUOTE`
+- `[x]` Outlier rule — rejects 19 quotes, **all xStocks, zero false positives** on Ondo/bStock
 
 ---
 
-## M2 — Collector live 24/7 `[ ]` · target 23–25 Sep · ⚠ **start early**
+## M2 — Collector live 24/7 `[~]` · target 23–25 Sep · **started 20 Sep, 3 days early**
 
 | | Task |
 |-|------|
-|`[ ]`| SQLite schema — append-only raw snapshots |
-|`[ ]`| Poller: dynamic (1 min) · status (1 min) · universe (1 h) |
-|`[ ]`| Deploy to always-on host |
+|`[x]`| SQLite schema — append-only raw snapshots |
+|`[x]`| Poller: dynamic + status (120 s) · universe (1 h) · **49.9 s/cycle, 0 errors** |
+|`[~]`| Deploy to always-on host — Dockerfile + `docs/DEPLOY.md` ready; **running locally meanwhile** |
 |`[ ]`| Backfill history from `kline` |
-|`[ ]`| Uptime/heartbeat check |
+|`[x]`| Uptime/heartbeat check — `npm run health`, gaps surfaced not hidden |
 
 > **Scheduling note:** this milestone gates the scorecard's credibility. Every day not collected is
 > evidence permanently lost. Ship it crude and early — raw snapshots are re-processable once the

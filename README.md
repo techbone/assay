@@ -28,9 +28,11 @@ Measured across 84 live tickers, the adjustment takes worst-case basis error fro
 | Milestone | State |
 |-----------|-------|
 | M0 Foundation | **done** |
-| M1 Reference engine | in progress — core complete, 38 tests green |
-| M2 Collector (24/7) | next |
+| M1 Reference engine | **done** — normalize, validate, trust, assay, decompose |
+| M2 Collector (24/7) | in progress — running, 49.9s/cycle, 117 tickers, 0 errors |
 | M3 Web reports · M4 Off-hours scorecard · M5 Execution · M6 Agent · M7 Submission | queued |
+
+**61 regression tests, all green.**
 
 See [MILESTONES.md](MILESTONES.md) for the live tracker and [ARCHITECTURE.md](ARCHITECTURE.md) for design.
 [DEVEX.md](DEVEX.md) is the Developer Experience Report, written continuously.
@@ -39,10 +41,11 @@ See [MILESTONES.md](MILESTONES.md) for the live tracker and [ARCHITECTURE.md](AR
 
 ```bash
 npm install
-npm test          # 38 regression tests against live-captured fixtures
+npm test          # 61 regression tests against live-captured fixtures
 npm run typecheck
-npx tsx scripts/snapshot.ts   # capture a fresh market snapshot
-npx tsx scripts/analyze.ts    # corpus statistics
+npm run collect   # start the 24/7 collector
+npm run health    # collection coverage and gaps
+npm run analyze   # corpus statistics
 ```
 
 ## Layout
@@ -50,6 +53,8 @@ npx tsx scripts/analyze.ts    # corpus statistics
 ```
 src/binance/     typed client for the Binance Web3 RWA API (public, no key)
 src/reference/   the engine: normalize, validate, trust, assay, decompose
-scripts/         snapshot capture + corpus analysis
-tests/           28 golden cases (pinned live values) + 10 corpus invariants
+src/store/       append-only SQLite; raw observations stay recomputable
+src/collector/   24/7 poller, concurrency-pooled, incremental writes
+scripts/         snapshot capture, corpus analysis, health
+tests/           31 golden cases + 13 corpus invariants + 17 collector/pool
 ```

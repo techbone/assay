@@ -116,6 +116,36 @@ describe("corpus: 84 multi-wrapper tickers, live BSC snapshot", () => {
     expect(corrupt.filter((q) => q.family === "Ondo")).toHaveLength(0);
   });
 
+  /**
+   * The price-sanity guards (corrupt multiplier + outlier) must fire only on wrappers that
+   * genuinely cannot be priced. On the 2026-09-20 corpus every single rejection is an
+   * xStock: 22 of 43 xStock quotes on BSC fail basic sanity, while no Ondo or bStock
+   * wrapper trips either rule.
+   */
+  it("price-sanity rejections land exclusively on the untrusted family", () => {
+    const rejected = allQuotes.filter(
+      (q) => q.rejected === "OUTLIER" || q.rejected === "CORRUPT_MULTIPLIER",
+    );
+    expect(rejected.length).toBeGreaterThanOrEqual(15);
+    expect(rejected.every((q) => q.family === "xStock")).toBe(true);
+    expect(rejected.every((q) => q.trust < 0.25)).toBe(true);
+  });
+
+  it("roughly half of all xStock quotes on BSC are unusable", () => {
+    const xs = allQuotes.filter((q) => q.family === "xStock");
+    const bad = xs.filter((q) => q.rejected === "OUTLIER" || q.rejected === "CORRUPT_MULTIPLIER");
+    expect(xs.length).toBeGreaterThan(30);
+    expect(bad.length / xs.length).toBeGreaterThan(0.4);
+  });
+
+  it("no Ondo or bStock wrapper is ever excluded on price grounds", () => {
+    const wrongly = allQuotes.filter(
+      (q) => (q.family === "Ondo" || q.family === "bStock") &&
+             (q.rejected === "OUTLIER" || q.rejected === "CORRUPT_MULTIPLIER"),
+    );
+    expect(wrongly.map((q) => q.symbol)).toEqual([]);
+  });
+
   it("confidence widens when a ticker's wrappers disagree", () => {
     const withMulti = results.filter((r) => r.accepted.length > 1);
     expect(withMulti.length).toBeGreaterThan(5);

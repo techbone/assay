@@ -14,6 +14,13 @@ const CORRUPT_MULTIPLIER_MARGIN = 3;
 const MULTIPLIER_AGREEMENT_TOL = 0.0001;
 /** Liquidity proxy saturation point: holders + traders at which liquidity scores 1.0. */
 const LIQUIDITY_SATURATION = 100_000;
+/**
+ * A quote this far from consensus is not basis — it is a stale print. Only applied to
+ * low-trust wrappers: a deep quote that disagrees is information, a thin one is noise.
+ * Calibrated against MSTRx (-9.6%), ORCLx (+11%) and TSMx (-9.9%) observed 2026-09-20.
+ */
+const OUTLIER_THRESHOLD = 0.05;
+const OUTLIER_TRUST_FLOOR = 0.25;
 
 export function median(xs: number[]): number {
   if (xs.length === 0) return NaN;
@@ -84,11 +91,23 @@ export function trustScore(q: RawQuote): number {
   return Math.max(0, Math.min(1, liquidity * freshness * meta));
 }
 
-function rejectionOf(q: RawQuote, benchmark: number): RejectReason | null {
+/** Consecutive unchanged polls after which a quote is treated as dead rather than merely quiet. */
+const STALE_TICKS = 60;
+
+function rejectionOf(q: RawQuote, benchmark: number, trust: number): RejectReason | null {
   if (!Number.isFinite(q.price) || q.price <= 0) return "NO_PRICE";
   if (!Number.isFinite(q.multiplier) || q.multiplier <= 0) return "NO_PRICE";
   if (q.statusCode && q.statusCode !== "TRADING") return "NOT_TRADING";
   if (multiplierIsCorrupt(q, benchmark)) return "CORRUPT_MULTIPLIER";
+  if ((q.ticksSinceChange ?? 0) >= STALE_TICKS) return "STALE_QUOTE";
+  if (
+    trust < OUTLIER_TRUST_FLOOR &&
+    Number.isFinite(benchmark) &&
+    benchmark > 0 &&
+    Math.abs(normalize(q) / benchmark - 1) > OUTLIER_THRESHOLD
+  ) {
+    return "OUTLIER";
+  }
   return null;
 }
 
@@ -121,7 +140,7 @@ export function assay(
     ...q,
     adjusted: normalize(q),
     trust: trustScore(q),
-    rejected: rejectionOf(q, benchmark),
+    rejected: rejectionOf(q, benchmark, trustScore(q)),
     naiveBasisBp: 0,
     trueBasisBp: 0,
     multiplierEffectBp: 0,

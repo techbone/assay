@@ -169,10 +169,34 @@ describe("assay", () => {
     expect(r.accepted.map((x) => x.symbol)).not.toContain("NVDAon");
   });
 
-  it("widens the confidence band when quotes disagree", () => {
+  it("widens the confidence band when a TRUSTED quote disagrees", () => {
     const tight = assay("NVDA", NVDA, "closed").confidenceBp;
-    const wide = assay("NVDA", NVDA.map((x, i) => (i === 1 ? { ...x, price: x.price * 1.1 } : x)), "closed").confidenceBp;
-    expect(wide).toBeGreaterThan(tight * 2);
+    // NVDAB carries ~12.6k traders, so its disagreement is information and must be priced in.
+    const moved = NVDA.map((x) => (x.symbol === "NVDAB" ? { ...x, price: x.price * 1.02 } : x));
+    const wide = assay("NVDA", moved, "closed");
+    expect(wide.quotes.find((x) => x.symbol === "NVDAB")!.rejected).toBeNull();
+    expect(wide.confidenceBp).toBeGreaterThan(tight * 2);
+  });
+
+  it("rejects an UNTRUSTED quote that disagrees, rather than widening the band", () => {
+    // NVDAx has 12 traders. A 10% disagreement from a wrapper that thin is a stale
+    // print, not price discovery - excluding it is the whole point of the trust score.
+    const moved = NVDA.map((x) => (x.symbol === "NVDAx" ? { ...x, price: x.price * 1.1 } : x));
+    const r = assay("NVDA", moved, "closed");
+    expect(r.quotes.find((x) => x.symbol === "NVDAx")!.rejected).toBe("OUTLIER");
+    expect(r.accepted.map((x) => x.symbol)).not.toContain("NVDAx");
+    expect(r.assayPrice).toBeLessThan(230);
+  });
+
+  it("rejects a quote frozen for many consecutive polls", () => {
+    const frozen = NVDA.map((x) => (x.symbol === "NVDAon" ? { ...x, ticksSinceChange: 120 } : x));
+    const r = assay("NVDA", frozen, "closed");
+    expect(r.quotes.find((x) => x.symbol === "NVDAon")!.rejected).toBe("STALE_QUOTE");
+  });
+
+  it("tolerates a quote that is merely quiet", () => {
+    const quiet = NVDA.map((x) => (x.symbol === "NVDAon" ? { ...x, ticksSinceChange: 5 } : x));
+    expect(assay("NVDA", quiet, "closed").quotes.find((x) => x.symbol === "NVDAon")!.rejected).toBeNull();
   });
 
   it("survives a single-wrapper ticker", () => {

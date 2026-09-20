@@ -35,7 +35,13 @@ export class BinanceRwaClient {
   private readonly retries: number;
   private readonly timeoutMs: number;
   private readonly fetchImpl: typeof fetch;
-  private lastCallAt = 0;
+  /**
+   * Serialised issue gate. A plain `lastCallAt` check does not rate-limit once calls run
+   * concurrently — they all read the same timestamp and fire together. Chaining the gate
+   * guarantees a minimum spacing between issues while still allowing requests to overlap
+   * in flight, which is what makes a full market cycle finish in seconds rather than minutes.
+   */
+  private gate: Promise<void> = Promise.resolve();
 
   constructor(opts: ClientOptions = {}) {
     this.throttleMs = opts.throttleMs ?? 120;
@@ -44,9 +50,16 @@ export class BinanceRwaClient {
     this.fetchImpl = opts.fetchImpl ?? fetch;
   }
 
+  private async acquire(): Promise<void> {
+    const prior = this.gate;
+    let release!: () => void;
+    this.gate = new Promise<void>((r) => { release = r; });
+    await prior;
+    setTimeout(release, this.throttleMs);
+  }
+
   private async get<T>(url: string): Promise<T | null> {
-    const wait = this.throttleMs - (Date.now() - this.lastCallAt);
-    if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+    await this.acquire();
 
     let lastErr: unknown;
     for (let attempt = 0; attempt <= this.retries; attempt++) {
@@ -55,7 +68,6 @@ export class BinanceRwaClient {
         const timer = setTimeout(() => ctrl.abort(), this.timeoutMs);
         try {
           const res = await this.fetchImpl(url, { headers: HEADERS, signal: ctrl.signal });
-          this.lastCallAt = Date.now();
           if (!res.ok) throw new BinanceApiError(`HTTP ${res.status}`, url);
           const body = (await res.json()) as ApiEnvelope<T>;
           // `success: true` with `data: null` is returned for unknown assets —

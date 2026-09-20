@@ -138,3 +138,38 @@ The Skills Hub repo (`binance/binance-skills-hub`) turned out to be better API d
 API reference — the `binance-tokenized-securities-info` skill contains the endpoint list, required
 headers and response shapes in one readable file. **Link it from the docs landing page.** We found it
 by accident via search, and it saved hours.
+
+---
+
+## Addendum — 2026-09-20, after running the sanity layer across the whole market
+
+Having built the validation layer, we ran it over every multi-wrapper ticker on BSC (84 tickers,
+194 wrapper quotes). The result is worth reporting directly to the team:
+
+**22 of the 43 xStock quotes on BNB Chain — 51 % — fail basic price sanity.** Every single
+rejection across the entire corpus is an xStock. No Ondo wrapper and no bStock wrapper trips either
+guard.
+
+Observed deviations from the adjusted consensus, after correcting for `sharesMultiplier`:
+
+| Wrapper | deviation | Wrapper | deviation |
+|---------|----------:|---------|----------:|
+| `GMEx`  | **+855 %** | `UBERx` | −87.9 % |
+| `BACx`  | **+771 %** | `CSCOx` | −87.7 % |
+| `AMDx`  | **+616 %** | `MRVLx` | −86.6 % |
+| `NVOx`  | +13.8 %   | `IBMx`  | −85.6 % |
+| `ORCLx` | +11.0 %   | `TSMx`  | −9.9 %  |
+
+A quote showing `GMEx` at nearly ten times its own reference price is being served through the same
+field, with the same shape and no warning flag, as a healthy `NVDAon` quote that is accurate to
+within 1 bp. Any application that reads `tokenInfo.price` and compares wrappers — which is the
+obvious thing to build — will surface these as extraordinary arbitrage opportunities.
+
+This is the strongest possible argument for the two capabilities requested above:
+`lastTradeTime` and a depth measure on `tokenInfo`. With either one, a developer could filter these
+out in a single line. Without them, every integrator has to rediscover this problem independently and
+build a statistical sanity layer before they can safely show a user a price.
+
+**Suggested redesign:** serve a `priceQuality` or `stale` flag on `tokenInfo`, computed server-side
+against the issuer's own reference. You already have `stockInfo.price` in the same payload, so the
+comparison costs nothing — and it would prevent a whole class of applications from shipping broken.
