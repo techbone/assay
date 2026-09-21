@@ -66,7 +66,24 @@ export interface DynamicPayload {
   statusInfo: StatusInfo | null;
 }
 
-export type MarketRegime = "rth" | "offhours" | "closed";
+/**
+ * Session regime. Only `rth` means `stockInfo.price` is a live quote; in every other
+ * regime it is a stale print that must not be used as an anchor. `unknown` is recorded
+ * when the venue's status call returns no data - it is never guessed at.
+ */
+export type MarketRegime =
+  | "rth"
+  | "premarket"
+  | "afterhours"
+  | "overnight"
+  | "offhours"
+  | "closed"
+  | "unknown";
+
+/** The underlying equity reference price is only trustworthy during regular hours. */
+export function isReferenceLive(regime: MarketRegime): boolean {
+  return regime === "rth";
+}
 
 export interface MarketStatus {
   marketStatus: string | null;

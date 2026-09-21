@@ -173,3 +173,43 @@ build a statistical sanity layer before they can safely show a user a price.
 **Suggested redesign:** serve a `priceQuality` or `stale` flag on `tokenInfo`, computed server-side
 against the issuer's own reference. You already have `stockInfo.price` in the same payload, so the
 comparison costs nothing — and it would prevent a whole class of applications from shipping broken.
+
+---
+
+## Addendum — 2026-09-21, after a full session cycle
+
+### 8. `marketStatus` publishes extended sessions with `openState: true` · **high**
+
+Overnight, the venue moved through `closed` → `overnight` → `premarket`. In both extended
+sessions the payload reports `openState: true`:
+
+```json
+{"marketStatus":"premarket","openState":true,"reasonCode":null,
+ "nextOpen":"2026-09-21T13:31:00Z","nextClose":"2026-09-21T13:29:00Z"}
+```
+
+`openState: true` at 08:47 UTC, nearly five hours before the US market opens. Any client that
+reads `openState` as "regular hours are running" — which is what the field name suggests — will
+treat a premarket quote as a live one. We did exactly that, and mislabelled 26 of our first
+209 session samples before catching it.
+
+Note also that `nextClose` (13:29) precedes `nextOpen` (13:31). That is internally consistent
+once you work out that the premarket session closes two minutes before the regular one opens,
+but nothing in the payload says so, and the naive reading is that the data is corrupt.
+
+**Ask:** document the full set of `marketStatus` values and state plainly which ones mean the
+underlying tape is live. Better, add an explicit `referencePriceLive` boolean, since that is the
+only question an integrator actually needs answered.
+
+### 9. A failed status read is indistinguishable from a quiet market · **high**
+
+Twenty-five consecutive status calls returned `data: null` with `success: true` and HTTP 200.
+Because nothing threw, our error counter stayed at zero and the cycles looked healthy. We had
+recorded a fabricated market regime for fifty minutes of history.
+
+This is pitfall #4 again, but the consequence is worse than an empty result: the null was
+silently laundered into a legitimate-looking session state. We now record `unknown` explicitly
+and count the read as an error.
+
+**Ask:** this single behaviour has now cost us time twice in two days. `success` should be false
+when there is no data.

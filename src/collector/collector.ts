@@ -66,6 +66,10 @@ export class Collector {
     let errors = 0;
 
     const status = await this.client.marketStatus().catch(() => { errors++; return null; });
+    // A null payload is a failed read, not a quiet market. This API returns `data: null`
+    // with `success: true` (DEVEX.md #4), so it never throws - it has to be counted here
+    // or a degraded cycle looks identical to a healthy one.
+    if (status === null) errors++;
     const regime = regimeOf(status?.marketStatus, status?.openState);
     this.store.writeSession({
       ts: now,

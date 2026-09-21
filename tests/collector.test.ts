@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Collector } from "../src/collector/collector.js";
 import { AssayStore, regimeOf } from "../src/store/db.js";
 import type { BinanceRwaClient } from "../src/binance/client.js";
-import type { DynamicPayload, UniverseEntry } from "../src/binance/types.js";
+import { isReferenceLive, type DynamicPayload, type UniverseEntry } from "../src/binance/types.js";
 
 const UNIVERSE: UniverseEntry[] = [
   { chainId: "56", contractAddress: "0xon", symbol: "NVDAon", ticker: "NVDA", type: 1, multiplier: "1.0017152", d: 18 },
@@ -54,12 +54,50 @@ const make = () => {
 };
 
 describe("regimeOf", () => {
-  it("maps the venue's status onto three regimes", () => {
+  it("maps each published session label to its own regime", () => {
     expect(regimeOf("closed", false)).toBe("closed");
     expect(regimeOf("offhours", true)).toBe("offhours");
-    expect(regimeOf(null, true)).toBe("rth");
-    expect(regimeOf(null, false)).toBe("offhours");
-    expect(regimeOf(undefined, undefined)).toBe("offhours");
+    expect(regimeOf("open", true)).toBe("rth");
+  });
+
+  /**
+   * The bug this pins: the venue reports `premarket` and `overnight` with
+   * `openState: true`, hours before the US tape opens. Collapsing those into `rth`
+   * anchored the assay price to a reference quote that did not exist yet.
+   */
+  it("never treats an extended session as regular hours", () => {
+    for (const label of ["premarket", "overnight", "afterhours", "aftermarket", "postmarket"]) {
+      expect(regimeOf(label, true)).not.toBe("rth");
+    }
+    expect(regimeOf("premarket", true)).toBe("premarket");
+    expect(regimeOf("overnight", true)).toBe("overnight");
+    expect(regimeOf("afterhours", true)).toBe("afterhours");
+  });
+
+  it("is case-insensitive about the label", () => {
+    expect(regimeOf("PreMarket", true)).toBe("premarket");
+    expect(regimeOf("CLOSED", false)).toBe("closed");
+  });
+
+  /** A missing payload is a failed read, and must not be laundered into a real regime. */
+  it("records an absent status as unknown rather than guessing", () => {
+    expect(regimeOf(null, true)).toBe("unknown");
+    expect(regimeOf(null, false)).toBe("unknown");
+    expect(regimeOf(undefined, undefined)).toBe("unknown");
+  });
+
+  it("refuses to call an unrecognised label regular hours", () => {
+    expect(regimeOf("some-new-session", true)).toBe("offhours");
+    expect(regimeOf("some-new-session", false)).toBe("closed");
+  });
+});
+
+describe("reference anchoring by regime", () => {
+  it("anchors to the venue reference only during regular hours", () => {
+    expect(isReferenceLive("rth")).toBe(true);
+    for (const r of ["premarket", "overnight", "afterhours", "offhours", "closed", "unknown"] as const) {
+      expect(isReferenceLive(r)).toBe(false);
+    }
   });
 });
 
@@ -74,6 +112,16 @@ describe("collector", () => {
 
     const tickers = store.db.prepare("SELECT DISTINCT ticker FROM observation").all();
     expect(tickers).toEqual([{ ticker: "NVDA" }]);
+  });
+
+  it("counts a null status payload as an error", async () => {
+    const store = new AssayStore(":memory:");
+    const client = new MockClient();
+    client.marketStatus = async () => null as never;
+    const c = new Collector(client as unknown as BinanceRwaClient, store);
+    const r = await c.runCycle(1000);
+    expect(r.errors).toBeGreaterThanOrEqual(1);
+    expect(r.regime).toBe("unknown");
   });
 
   it("writes a session row, an assay snapshot and a heartbeat per cycle", async () => {

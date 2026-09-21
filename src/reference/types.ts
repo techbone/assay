@@ -48,7 +48,7 @@ export interface AssayResult {
   confidenceBp: number;
   /** Underlying equity price, if the venue published one. */
   referencePrice: number | null;
-  regime: "rth" | "offhours" | "closed";
+  regime: import("../binance/types.js").MarketRegime;
   quotes: AssayedQuote[];
   /** Quotes that survived validation and contributed to the price. */
   accepted: AssayedQuote[];

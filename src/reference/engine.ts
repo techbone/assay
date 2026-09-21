@@ -1,3 +1,4 @@
+import { isReferenceLive, type MarketRegime } from "../binance/types.js";
 import type { AssayResult, AssayedQuote, RawQuote, RejectReason } from "./types.js";
 
 export const BP = 10_000;
@@ -127,7 +128,7 @@ function rejectionOf(q: RawQuote, benchmark: number, trust: number): RejectReaso
 export function assay(
   ticker: string,
   quotes: RawQuote[],
-  regime: "rth" | "offhours" | "closed" = "rth",
+  regime: MarketRegime = "rth",
 ): AssayResult {
   const referencePrice = quotes.find((q) => q.referencePrice && q.referencePrice > 0)
     ?.referencePrice ?? null;
@@ -149,10 +150,11 @@ export function assay(
   const accepted = scored.filter((q) => q.rejected === null);
   const pool = accepted.length > 0 ? accepted : scored.filter((q) => q.rejected !== "NO_PRICE");
 
-  // Outside RTH the tape is frozen, so on-chain quotes lead. During RTH the venue's own
-  // reference is authoritative and the wrappers are measured against it.
+  // Outside regular hours the tape is frozen - including premarket and overnight, where
+  // the venue reports openState: true but the US market has not opened - so on-chain
+  // quotes lead. Only during RTH is the venue reference authoritative.
   const onChain = weightedMedian(pool.map((q) => q.adjusted), pool.map((q) => q.trust));
-  const assayPrice = regime === "rth" && referencePrice ? referencePrice : onChain;
+  const assayPrice = isReferenceLive(regime) && referencePrice ? referencePrice : onChain;
 
   for (const q of scored) {
     q.naiveBasisBp = (q.price / assayPrice - 1) * BP;
