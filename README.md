@@ -29,7 +29,7 @@ Measured across 84 live tickers, the adjustment takes worst-case basis error fro
 |-----------|-------|
 | M0 Foundation | **done** |
 | M1 Reference engine | **done** — normalize, validate, trust, assay, decompose |
-| M2 Collector (24/7) | **done** — 16h unbroken, 117 tickers, 0 errors, no gaps |
+| M2 Collector (24/7) | code done; **needs an always-on host** — laptop run is at 44% uptime |
 | M3 Web reports | in progress — API + UI live locally |
 | M4 Off-hours scorecard · M5 Execution · M6 Agent · M7 Submission | queued |
 

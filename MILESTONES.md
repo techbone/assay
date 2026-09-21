@@ -48,7 +48,7 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 
 ---
 
-## M2 — Collector live 24/7 `[x]` **DONE** · 20–21 Sep, 3 days early
+## M2 — Collector live 24/7 `[~]` · code done, **hosting not done** · blocked on always-on deploy
 
 | | Task |
 |-|------|
@@ -62,7 +62,7 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 > evidence permanently lost. Ship it crude and early — raw snapshots are re-processable once the
 > engine improves. Do not wait for M1 to be perfect.
 
-**Exit criteria:** `[x]` 16 h unbroken at 2-min resolution across **117** tickers, 0 errors, no gaps. Continuing.
+**Exit criteria:** `[ ]` ≥48 h unbroken. **Not met.** Laptop run to date: 17.1 h span, 25 gaps, 9.5 h lost, **44% uptime** (sleep/kills). Fix: deploy to an always-on host.
 
 ---
 
