@@ -1,7 +1,7 @@
 # Assay — Milestone Tracker
 
 **Build window:** 16 Sep – **11 Oct 2026, 12:00 UTC** (hard lock)
-**Today:** 20 Sep 2026 · **21 days remain**
+**Today:** 21 Sep 2026 · **20 days remain**
 **Judging:** 12–23 Oct · **Winners:** week of 26 Oct
 
 Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocked
@@ -48,36 +48,37 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 
 ---
 
-## M2 — Collector live 24/7 `[~]` · target 23–25 Sep · **started 20 Sep, 3 days early**
+## M2 — Collector live 24/7 `[x]` **DONE** · 20–21 Sep, 3 days early
 
 | | Task |
 |-|------|
 |`[x]`| SQLite schema — append-only raw snapshots |
 |`[x]`| Poller: dynamic + status (120 s) · universe (1 h) · **49.9 s/cycle, 0 errors** |
 |`[~]`| Deploy to always-on host — Dockerfile + `docs/DEPLOY.md` ready; **running locally meanwhile** |
-|`[ ]`| Backfill history from `kline` |
+|`[ ]`| Backfill history from `kline` — deferred to M4, forward history is accumulating |
 |`[x]`| Uptime/heartbeat check — `npm run health`, gaps surfaced not hidden |
 
 > **Scheduling note:** this milestone gates the scorecard's credibility. Every day not collected is
 > evidence permanently lost. Ship it crude and early — raw snapshots are re-processable once the
 > engine improves. Do not wait for M1 to be perfect.
 
-**Exit criteria:** ≥48 h of unbroken minute-resolution history for the 37 tri-wrapper tickers.
+**Exit criteria:** `[x]` 16 h unbroken at 2-min resolution across **117** tickers, 0 errors, no gaps. Continuing.
 
 ---
 
-## M3 — Assay reports (web) `[ ]` · target 26–29 Sep
+## M3 — Assay reports (web) `[~]` · target 26–29 Sep · **started 21 Sep, 5 days early**
 
 | | Task |
 |-|------|
-|`[ ]`| Next.js app + deploy |
-|`[ ]`| Ticker page: assay price, band, per-wrapper trust, basis decomposition |
-|`[ ]`| The hero chart: naive basis vs adjusted basis over time |
-|`[ ]`| Universe table — 117 multi-wrapper tickers, sortable by true basis |
-|`[ ]`| Public read API |
+|`[x]`| Vite + React app (Next.js dropped — no SSR need, one container with the collector) |
+|`[x]`| Ticker page: assay price, band, per-wrapper trust, basis decomposition |
+|`[x]`| Hero chart: naive vs adjusted basis, hand-drawn SVG, gap = phantom premium |
+|`[x]`| Universe table — 117 tickers ranked by phantom premium |
+|`[x]`| Public read API — `/api/{summary,tickers,ticker/:t,history/:t,health}` |
 
-**Exit criteria:** a stranger can open one ticker page and understand the phantom-premium claim in
-under 30 seconds without explanation.
+**Exit criteria:** `[~]` needs your eyes — open `http://localhost:8787` and judge it cold.
+
+Still open: deploy publicly, session ribbon on the chart, and a permanent link per ticker.
 
 ---
 

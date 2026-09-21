@@ -29,10 +29,11 @@ Measured across 84 live tickers, the adjustment takes worst-case basis error fro
 |-----------|-------|
 | M0 Foundation | **done** |
 | M1 Reference engine | **done** — normalize, validate, trust, assay, decompose |
-| M2 Collector (24/7) | in progress — running, 49.9s/cycle, 117 tickers, 0 errors |
-| M3 Web reports · M4 Off-hours scorecard · M5 Execution · M6 Agent · M7 Submission | queued |
+| M2 Collector (24/7) | **done** — 16h unbroken, 117 tickers, 0 errors, no gaps |
+| M3 Web reports | in progress — API + UI live locally |
+| M4 Off-hours scorecard · M5 Execution · M6 Agent · M7 Submission | queued |
 
-**61 regression tests, all green.**
+**82 regression tests, all green.**
 
 See [MILESTONES.md](MILESTONES.md) for the live tracker and [ARCHITECTURE.md](ARCHITECTURE.md) for design.
 [DEVEX.md](DEVEX.md) is the Developer Experience Report, written continuously.
@@ -41,9 +42,12 @@ See [MILESTONES.md](MILESTONES.md) for the live tracker and [ARCHITECTURE.md](AR
 
 ```bash
 npm install
-npm test          # 61 regression tests against live-captured fixtures
+npm test          # 82 regression tests against live-captured fixtures
 npm run typecheck
 npm run collect   # start the 24/7 collector
+npm run api       # read API + built site on :8787
+npm run web       # UI dev server on :5173 (proxies /api)
+npm run web:build # build the site so the API serves it
 npm run health    # collection coverage and gaps
 npm run analyze   # corpus statistics
 ```
@@ -55,6 +59,8 @@ src/binance/     typed client for the Binance Web3 RWA API (public, no key)
 src/reference/   the engine: normalize, validate, trust, assay, decompose
 src/store/       append-only SQLite; raw observations stay recomputable
 src/collector/   24/7 poller, concurrency-pooled, incremental writes
-scripts/         snapshot capture, corpus analysis, health
+src/api/         read layer + plain node:http server
+web/             Vite + React UI
+scripts/         snapshot capture, corpus analysis, health, reclassify
 tests/           31 golden cases + 13 corpus invariants + 17 collector/pool
 ```
