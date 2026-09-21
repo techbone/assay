@@ -1,5 +1,5 @@
 import { isReferenceLive, type MarketRegime } from "../binance/types.js";
-import type { AssayResult, AssayedQuote, RawQuote, RejectReason } from "./types.js";
+import type { AssayResult, AssayedQuote, MultiplierKind, RawQuote, RejectReason } from "./types.js";
 
 export const BP = 10_000;
 
@@ -42,6 +42,20 @@ export function weightedMedian(xs: number[], ws: number[]): number {
     if (acc >= total / 2) return p.x;
   }
   return pairs[pairs.length - 1]!.x;
+}
+
+/**
+ * Beyond this distance from 1:1 a multiplier is a unit conversion, not accrued
+ * distribution. Real drift on a total-return token runs to a few percent a year; a token
+ * representing a fifth or a tenth of a share is a different instrument.
+ */
+const FRACTIONAL_LOWER = 0.75;
+const FRACTIONAL_UPPER = 1.25;
+
+export function classifyMultiplier(multiplier: number): MultiplierKind {
+  if (multiplier === 1) return "unit";
+  if (multiplier < FRACTIONAL_LOWER || multiplier > FRACTIONAL_UPPER) return "fractional";
+  return "drift";
 }
 
 /** price / multiplier — the one operation that makes wrappers comparable. */
@@ -145,6 +159,7 @@ export function assay(
     naiveBasisBp: 0,
     trueBasisBp: 0,
     multiplierEffectBp: 0,
+    multiplierKind: classifyMultiplier(q.multiplier),
   }));
 
   const accepted = scored.filter((q) => q.rejected === null);

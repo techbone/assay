@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assay, median, multiplierIsCorrupt, normalize, trustScore, weightedMedian } from "../src/reference/engine.js";
+import { assay, classifyMultiplier, median, multiplierIsCorrupt, normalize, trustScore, weightedMedian } from "../src/reference/engine.js";
 import type { RawQuote } from "../src/reference/types.js";
 
 /**
@@ -66,6 +66,26 @@ describe("normalize — the phantom premium", () => {
       expect(Math.abs(adjBp)).toBeLessThan(Math.abs(naiveBp));
     },
   );
+});
+
+describe("classifyMultiplier", () => {
+  it("separates a unit wrapper from accrued drift", () => {
+    expect(classifyMultiplier(1)).toBe("unit");
+    expect(classifyMultiplier(1.0017152)).toBe("drift");   // NVDAon
+    expect(classifyMultiplier(1.009473)).toBe("drift");    // SPYon, ~95bp of dividends
+  });
+
+  it("calls a fractionalised wrapper what it is", () => {
+    expect(classifyMultiplier(10)).toBe("fractional");     // NFLXon, 1 token = 1/10 share
+    expect(classifyMultiplier(5)).toBe("fractional");
+    expect(classifyMultiplier(0.0667)).toBe("fractional"); // the other extreme seen on BSC
+  });
+
+  it("does not let a unit conversion masquerade as a dividend", () => {
+    // The whole point: a 900% 'premium' is not a premium, and averaging it with a
+    // 95bp one produces a number that describes nothing.
+    expect(classifyMultiplier(10)).not.toBe(classifyMultiplier(1.009473));
+  });
 });
 
 describe("validate — corrupt multipliers", () => {

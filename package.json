@@ -13,7 +13,8 @@
     "collect": "tsx src/collector/run.ts --interval 120",
     "collect:once": "tsx src/collector/run.ts --once",
     "health": "tsx scripts/health.ts",
-    "analyze": "tsx scripts/analyze.ts"
+    "analyze": "tsx scripts/analyze.ts",
+    "api": "tsx src/api/server.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.5",

@@ -1,3 +1,11 @@
+/**
+ * What a wrapper's multiplier actually encodes. These are different failure modes and
+ * must not be reported as one number: drift is tens of basis points of accrued
+ * distribution, whereas a fractional token is a different unit entirely and a naive
+ * price comparison against it is wrong by an order of magnitude.
+ */
+export type MultiplierKind = "unit" | "drift" | "fractional";
+
 export type RejectReason =
   | "NOT_TRADING"
   | "CORRUPT_MULTIPLIER"
@@ -38,6 +46,8 @@ export interface AssayedQuote extends RawQuote {
   trueBasisBp: number;
   /** naiveBasisBp - trueBasisBp: the phantom premium created by the multiplier. */
   multiplierEffectBp: number;
+  /** Which kind of distortion the multiplier represents. */
+  multiplierKind: MultiplierKind;
 }
 
 export interface AssayResult {

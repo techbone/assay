@@ -146,6 +146,35 @@ describe("corpus: 84 multi-wrapper tickers, live BSC snapshot", () => {
     expect(wrongly.map((q) => q.symbol)).toEqual([]);
   });
 
+  it("distribution drift and fractionalisation are reported apart", () => {
+    // Drift is measured over quotes that pass sanity: the multiplier effect scales with
+    // the quoted price, so a rejected outlier trading at 8.7x reference (BACx) produces a
+    // large "drift" figure that says nothing about dividends.
+    const drift = allQuotes.filter((q) => !q.rejected && q.multiplierKind === "drift");
+    // Fractional wrappers are counted regardless of acceptance - in this weekend snapshot
+    // every one of them was halted, but the classification still has to be right.
+    const fractional = allQuotes.filter((q) => q.multiplierKind === "fractional");
+
+    expect(drift.length).toBeGreaterThan(20);
+    expect(fractional.length).toBeGreaterThan(0);
+
+    const driftMax = Math.max(...drift.map((q) => Math.abs(q.multiplierEffectBp)));
+    const fracMin = Math.min(...fractional.map((q) => Math.abs(q.multiplierEffectBp)));
+
+    // The two live in different orders of magnitude, which is the entire reason they are
+    // reported as separate numbers rather than averaged into one.
+    expect(driftMax).toBeLessThan(1_000);
+    expect(fracMin).toBeGreaterThan(1_000);
+    expect(fracMin).toBeGreaterThan(driftMax);
+  });
+
+  it("classifies every wrapper's multiplier", () => {
+    const kinds = new Set(allQuotes.map((q) => q.multiplierKind));
+    expect([...kinds].every((k) => ["unit", "drift", "fractional"].includes(k))).toBe(true);
+    // All three kinds occur on BSC today.
+    expect(kinds.size).toBe(3);
+  });
+
   it("confidence widens when a ticker's wrappers disagree", () => {
     const withMulti = results.filter((r) => r.accepted.length > 1);
     expect(withMulti.length).toBeGreaterThan(5);
