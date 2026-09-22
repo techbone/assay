@@ -27,6 +27,21 @@ export interface Summary {
   coverage: { observations: number; tickers: number; firstTs: number | null; lastTs: number | null; cycles: number };
 }
 
+export interface TickerScore {
+  ticker: string; openTs: number; markTs: number; actualOpen: number;
+  estimates: Record<string, number>; errorsBp: Record<string, number>;
+}
+
+export interface EstimatorSummary {
+  estimator: string; maeBp: number; medianBp: number; p90Bp: number; n: number;
+}
+
+export interface ScorecardPayload {
+  overall: { events: number; tickers: number; summary: EstimatorSummary[] };
+  events: Array<{ openTs: number; markTs: number; previousRegime: Regime;
+                  scores: TickerScore[]; summary: EstimatorSummary[] }>;
+}
+
 export interface HistoryPoint {
   ts: number; regime: Regime; assayPrice: number; confidenceBp: number; referencePrice: number | null;
   wrappers: Array<{ symbol: string; family: string; naiveBasisBp: number; trueBasisBp: number;
@@ -44,6 +59,7 @@ export const api = {
   tickers: () => get<TickerRow[]>("/api/tickers"),
   ticker: (t: string) => get<TickerDetail>(`/api/ticker/${t}`),
   history: (t: string, hours = 24) => get<HistoryPoint[]>(`/api/history/${t}?hours=${hours}`),
+  scorecard: () => get<ScorecardPayload>("/api/scorecard"),
 };
 
 export const REGIME_LABEL: Record<Regime, string> = {

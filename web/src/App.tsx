@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { api, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistoryPoint } from "./api.js";
 import { BasisChart } from "./Chart.js";
+import { ScorecardPage } from "./Scorecard.js";
+import { useAsync } from "./useAsync.js";
 import { ago, bp, bpClass, compact, usd } from "./format.js";
 
 const useHash = (): string => {
@@ -13,24 +15,10 @@ const useHash = (): string => {
   return h;
 };
 
-function useAsync<T>(fn: () => Promise<T>, deps: unknown[]) {
-  const [state, set] = useState<{ data?: T; error?: string; loading: boolean }>({ loading: true });
-  useEffect(() => {
-    let alive = true;
-    set({ loading: true });
-    fn().then(
-      (data) => alive && set({ data, loading: false }),
-      (e: Error) => alive && set({ error: e.message, loading: false }),
-    );
-    return () => { alive = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
-  return state;
-}
-
 export function App() {
   const hash = useHash();
   const ticker = hash.startsWith("/t/") ? hash.slice(3) : null;
+  const onScorecard = hash.startsWith("/scorecard");
   const s = useAsync(() => api.summary(), [ticker === null]);
 
   return (
@@ -43,11 +31,18 @@ export function App() {
             <span className="hide-sm">the real price of a tokenized stock</span>
           </a>
           <div className="spacer" />
+          <a href="#/scorecard" className="navlink" style={{
+            color: onScorecard ? "var(--gold)" : "var(--muted)", fontSize: 13, marginRight: 4,
+          }}>Scorecard</a>
           {s.data && <StatusPill summary={s.data} />}
         </div>
       </header>
       <div className="shell">
-        {ticker ? <Detail ticker={ticker} /> : <Home summary={s.data} error={s.error} />}
+        {onScorecard
+          ? <ScorecardPage />
+          : ticker
+            ? <Detail ticker={ticker} />
+            : <Home summary={s.data} error={s.error} />}
         <footer>
           Assay reads the Binance Web3 RWA API and BNB Smart Chain. Every figure is recomputed
           through the same engine the test suite pins — the site cannot disagree with the tests.
