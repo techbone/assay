@@ -1,8 +1,16 @@
 node_modules/
 dist/
+web/dist/
 .next/
+
+# Collected data and logs are runtime state, not source.
+data/
+logs/
 *.db
 *.db-journal
-data/raw/
+*.db-wal
+*.db-shm
+
 .env
 .env.local
+.DS_Store
