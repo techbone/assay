@@ -10,6 +10,7 @@ import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { extname, join, normalize } from "node:path";
 import { AssayStore } from "../store/db.js";
+import { Scorecard } from "../scorecard/detect.js";
 import { Queries } from "./queries.js";
 
 const arg = (flag: string, fallback: string): string => {
@@ -23,6 +24,7 @@ const webRoot = arg("--web", "web/dist");
 
 const store = new AssayStore(dbPath);
 const q = new Queries(store);
+const scorecard = new Scorecard(store);
 
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
@@ -65,6 +67,9 @@ const handler = (req: IncomingMessage, res: ServerResponse): void => {
                   ageMin < 6 ? 200 : 503);
     }
     if (p === "/api/summary") return json(res, q.summary());
+    if (p === "/api/scorecard") {
+      return json(res, { overall: scorecard.overall(), events: scorecard.all().slice(0, 20) });
+    }
     if (p === "/api/sessions") return json(res, q.sessions(Number(url.searchParams.get("hours") ?? 48)));
     if (p === "/api/tickers") {
       const rows = q.latest()
@@ -105,5 +110,5 @@ const handler = (req: IncomingMessage, res: ServerResponse): void => {
 
 createServer(handler).listen(port, () => {
   console.log(`assay api · http://localhost:${port} · db=${dbPath}`);
-  console.log(`  /api/summary  /api/tickers  /api/ticker/NVDA  /api/history/NVDA  /api/health`);
+  console.log(`  /api/summary  /api/tickers  /api/ticker/NVDA  /api/history/NVDA  /api/scorecard  /api/health`);
 });

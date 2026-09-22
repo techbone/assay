@@ -15,7 +15,10 @@ primary_region = "iad"
 [[services]]
   internal_port = 8787
   protocol = "tcp"
-  auto_stop_machines = false
+  # Must be the string "off", not `false`. As a boolean this was ignored and flyd
+  # stopped the machine after 5 minutes idle (exit_code=130, requested_stop=true),
+  # so the collector only ran while someone was loading the site.
+  auto_stop_machines = "off"
   auto_start_machines = true
   min_machines_running = 1
 

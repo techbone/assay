@@ -82,18 +82,27 @@ Still open: deploy publicly, session ribbon on the chart, and a permanent link p
 
 ---
 
-## M4 — Off-hours mark + scorecard `[ ]` · target 30 Sep – 2 Oct
+## M4 — Off-hours mark + scorecard `[~]` · target 30 Sep – 2 Oct · **started 22 Sep**
 
 | | Task |
 |-|------|
-|`[ ]`| Session regime machine (RTH / offhours / closed) |
-|`[ ]`| Off-hours mark + confidence band |
-|`[ ]`| Crypto-beta overlay for MSTR · COIN · HOOD · BMNR · IREN |
-|`[ ]`| Scorecard: mark at close vs actual open, MAE per ticker |
+|`[x]`| Session regime machine — 7 regimes, `unknown` never guessed |
+|`[x]`| Off-hours mark + band (the assay price outside RTH) |
+|`[ ]`| Crypto-beta overlay — **deferred**, must first show the plain mark beats the alternatives |
+|`[x]`| Scorecard engine: 7 competing estimators scored at the open, MAE/median/p90 |
 |`[ ]`| Historical backtest over kline data |
-|`[ ]`| Public scorecard page — **left running through judging** |
+|`[ ]`| Public scorecard page — blocked until a real open is captured |
 
-**Exit criteria:** scorecard is live, self-updating, and shows real accumulated error history.
+**Exit criteria:** `[ ]` scorecard live with real accumulated history. **0 opens scored so far** —
+every regular-hours session to date was lost to collector downtime. First scoreable open is the
+next one after the host is confirmed stable.
+
+**Premise corrected:** this was designed around "the tape is frozen off-hours, we extend it".
+That is false — the venue's `stockInfo.price` moves continuously through overnight and premarket
+(78 changes in 89 NVDA premarket samples). The scorecard therefore does not claim to extend a
+frozen number. It asks a falsifiable question instead: at the open, whose estimate was closest —
+raw median (no multiplier), adjusted median (multiplier, no trust), assay (full engine), the
+venue's own pre-open reference, or any single wrapper?
 
 ---
 
