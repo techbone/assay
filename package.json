@@ -7,7 +7,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:live": "vitest run --mode live tests/live",
+    "test:live": "vitest run --config vitest.live.config.ts",
     "typecheck": "tsc --noEmit",
     "snapshot": "tsx scripts/snapshot.ts",
     "collect": "tsx src/collector/run.ts --interval 120",
@@ -17,7 +17,8 @@
     "api": "tsx src/api/server.ts",
     "web": "vite",
     "web:build": "vite build",
-    "dev": "npm run api & npm run web"
+    "dev": "npm run api & npm run web",
+    "scorecard": "tsx scripts/scorecard.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.5",

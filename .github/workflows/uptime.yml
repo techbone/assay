@@ -1,0 +1,30 @@
+name: uptime
+
+# Independent record of collector liveness. The scorecard's credibility rests on
+# coverage, and coverage attested only by the collector's own logs is circular -
+# a process that dies cannot report that it died. This runs outside Fly.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe /api/health
+        run: |
+          set -o pipefail
+          body=$(curl -sS --max-time 25 https://assay-hackathon.fly.dev/api/health) || {
+            echo "::error::health endpoint unreachable"; exit 1; }
+          echo "$body" | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+age = d.get("ageMin")
+print(f"cycles={d.get(\"cycles\")} observations={d.get(\"observations\")} gaps={d.get(\"gaps\")} ageMin={age:.1f}")
+# Cycles run every 120s; older than 6 minutes means collection has stalled,
+# regardless of whether the HTTP layer is still answering.
+if age is None or age > 6:
+    print(f"::error::collector stalled - last cycle {age} min ago")
+    sys.exit(1)
+'
