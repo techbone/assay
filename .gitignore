@@ -6,6 +6,10 @@ web/dist/
 # Collected data and logs are runtime state, not source.
 data/
 logs/
+
+# Generated snapshots - published to Vercel, not committed.
+web/public/data/
+.vercel/
 *.db
 *.db-journal
 *.db-wal

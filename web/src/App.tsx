@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistoryPoint } from "./api.js";
+import { api, isStatic, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistoryPoint } from "./api.js";
 import { BasisChart } from "./Chart.js";
 import { ScorecardPage } from "./Scorecard.js";
 import { useAsync } from "./useAsync.js";
@@ -46,6 +46,10 @@ export function App() {
         <footer>
           Assay reads the Binance Web3 RWA API and BNB Smart Chain. Every figure is recomputed
           through the same engine the test suite pins — the site cannot disagree with the tests.
+          {isStatic && s.data?.ts && (
+            <> This page serves a published snapshot; the collector last ran{" "}
+              <b className="mono">{ago(s.data.ts)}</b>. Coverage gaps are recorded, not hidden.</>
+          )}
           {" "}Built for BNB Hack: Tokenized Stocks Edition.
         </footer>
       </div>
@@ -219,11 +223,17 @@ function Detail({ ticker }: { ticker: string }) {
         </div>
         <div className="panel chartwrap">
           {h.loading && <div className="empty">Loading history…</div>}
+          {h.error && (
+            <div className="empty">
+              Basis history is published for tickers carrying three or more wrappers.
+              <br />{r.ticker} has {r.quotes.length}, so only its current state is shown above.
+            </div>
+          )}
           {h.data && <BasisChart points={h.data as HistoryPoint[]} symbol={chartSymbol} />}
-          <div className="dkey" style={{ marginTop: 10, paddingLeft: 52 }}>
+          {h.data && <div className="dkey" style={{ marginTop: 10, paddingLeft: 52 }}>
             <span><em style={{ background: "#d9a441" }} />Naive basis — what a raw price comparison shows</span>
             <span><em style={{ background: "#5b8fd6" }} />Adjusted basis — what is actually there</span>
-          </div>
+          </div>}
         </div>
       </section>
     </>

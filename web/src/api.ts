@@ -48,18 +48,42 @@ export interface HistoryPoint {
                     multiplierEffectBp: number; trust: number; rejected: string | null }>;
 }
 
+/**
+ * Two data sources, same shapes.
+ *
+ * In production the site is static and reads JSON snapshots published by the collector, so
+ * the judge-facing URL stays up regardless of where (or whether) the collector is running.
+ * In local development it talks to the live API instead. `VITE_DATA_BASE` selects.
+ */
+const DATA_BASE: string = (import.meta.env?.VITE_DATA_BASE as string | undefined) ?? "";
+const STATIC = DATA_BASE.length > 0;
+
 const get = async <T>(path: string): Promise<T> => {
-  const res = await fetch(path);
+  // Cache-bust so a CDN never pins judges to a stale snapshot.
+  const url = STATIC ? `${DATA_BASE}${path}?v=${Math.floor(Date.now() / 60_000)}` : path;
+  const res = await fetch(url);
   if (!res.ok) throw new Error(`${path}: ${res.status}`);
   return res.json() as Promise<T>;
 };
 
+export interface Meta {
+  generatedAt: number;
+  lastCycleTs: number | null;
+  coverage: { observations: number; tickers: number; firstTs: number | null; lastTs: number | null; cycles: number };
+  historyTickers: string[];
+}
+
+export const isStatic = STATIC;
+
 export const api = {
-  summary: () => get<Summary>("/api/summary"),
-  tickers: () => get<TickerRow[]>("/api/tickers"),
-  ticker: (t: string) => get<TickerDetail>(`/api/ticker/${t}`),
-  history: (t: string, hours = 24) => get<HistoryPoint[]>(`/api/history/${t}?hours=${hours}`),
-  scorecard: () => get<ScorecardPayload>("/api/scorecard"),
+  summary: () => get<Summary>(STATIC ? "/summary.json" : "/api/summary"),
+  tickers: () => get<TickerRow[]>(STATIC ? "/tickers.json" : "/api/tickers"),
+  ticker: (t: string) =>
+    get<TickerDetail>(STATIC ? `/ticker/${t.toUpperCase()}.json` : `/api/ticker/${t}`),
+  history: (t: string, hours = 24) =>
+    get<HistoryPoint[]>(STATIC ? `/history/${t.toUpperCase()}.json` : `/api/history/${t}?hours=${hours}`),
+  scorecard: () => get<ScorecardPayload>(STATIC ? "/scorecard.json" : "/api/scorecard"),
+  meta: () => get<Meta>(STATIC ? "/meta.json" : "/api/health"),
 };
 
 export const REGIME_LABEL: Record<Regime, string> = {
