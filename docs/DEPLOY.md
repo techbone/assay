@@ -19,6 +19,27 @@ file without a separate database server. If either process dies, `start.sh` exit
 platform's restart policy brings the whole container back — verified locally: `docker build`,
 run, health-checked, killed, confirmed to report `healthy` again after Fly-style restart logic.
 
+## ⚠ Fly trial limit — blocking
+
+A Fly account without a credit card **hard-caps every machine at 5 minutes**:
+
+```
+Trial machine stopping. To run for longer than 5m0s,
+add a credit card by visiting https://fly.io/trial.
+```
+
+No configuration fixes this. `auto_stop_machines = false` in fly.toml, the string form
+`"off"`, and `fly machine update --autostop=off` at machine level were all applied and all
+correctly reflected in the machine config (`autostop: False`) — flyd stops the machine anyway,
+with `exit_code=130, requested_stop=true`, exactly 5 minutes after each start.
+
+**Fix: add a card at https://fly.io/trial.** A `shared-cpu-1x` 512MB machine with a 1GB volume
+is a few dollars a month and may fall inside the free allowance. Until then the app is deployed
+and correct but can only run in 5-minute bursts, which is useless for collection.
+
+The machine is currently **stopped** deliberately, and the laptop is primary again, to avoid two
+collectors writing divergent histories.
+
 ## Deploy to Fly.io
 
 `flyctl` is installed (`~/.fly/bin`, already on PATH via `~/.zshrc`). `fly.toml` is written:
