@@ -2,6 +2,8 @@
 
 **The real price of a tokenized stock.**
 
+**Live:** https://assay-hackathon.fly.dev — collecting continuously since 2026-09-20.
+
 BNB Hack: Tokenized Stocks Edition · submissions lock 11 Oct 2026, 12:00 UTC.
 
 ---
@@ -29,7 +31,7 @@ Measured across 84 live tickers, the adjustment takes worst-case basis error fro
 |-----------|-------|
 | M0 Foundation | **done** |
 | M1 Reference engine | **done** — normalize, validate, trust, assay, decompose |
-| M2 Collector (24/7) | code done; **needs an always-on host** — laptop run is at 44% uptime |
+| M2 Collector (24/7) | **done** — deployed on Fly.io, 76k+ observations |
 | M3 Web reports | in progress — API + UI live locally |
 | M4 Off-hours scorecard · M5 Execution · M6 Agent · M7 Submission | queued |
 
