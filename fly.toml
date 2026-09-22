@@ -1,0 +1,44 @@
+# Fly.io app config for Assay: collector + read API in one always-on machine,
+# backed by a persistent volume so raw observations survive restarts/deploys.
+app = "assay-hackathon"
+primary_region = "iad"
+
+[build]
+
+[env]
+  PORT = "8787"
+
+[[mounts]]
+  source = "assay_data"
+  destination = "/app/data"
+
+[[services]]
+  internal_port = 8787
+  protocol = "tcp"
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "5s"
+
+  [[services.http_checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "get"
+    path = "/api/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
