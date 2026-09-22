@@ -11,6 +11,19 @@ DB="${ASSAY_DB:-data/assay.db}"
 PUBLISH_EVERY_SEC="${PUBLISH_EVERY_SEC:-1200}"   # 20 minutes
 
 mkdir -p logs
+
+# Two collectors writing the same SQLite file would interleave divergent histories, so
+# take over from anything already running rather than racing it.
+if pgrep -f "collector/run.ts" >/dev/null 2>&1; then
+  echo "stopping an existing collector before taking over..."
+  pkill -f "collector/run.ts" 2>/dev/null
+  sleep 3
+fi
+if pgrep -f "api/server.ts" >/dev/null 2>&1; then
+  pkill -f "api/server.ts" 2>/dev/null
+  sleep 1
+fi
+
 prefix() { while IFS= read -r line; do printf '%s %s\n' "$1" "$line"; done; }
 
 echo "assay station"
