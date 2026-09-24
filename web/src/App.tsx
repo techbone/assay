@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, isStatic, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistoryPoint } from "./api.js";
+import { api, isStatic, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistorySeries } from "./api.js";
 import { BasisChart } from "./Chart.js";
 import { ScorecardPage } from "./Scorecard.js";
 import { useAsync } from "./useAsync.js";
@@ -229,7 +229,7 @@ function Detail({ ticker }: { ticker: string }) {
               <br />{r.ticker} has {r.quotes.length}, so only its current state is shown above.
             </div>
           )}
-          {h.data && <BasisChart points={h.data as HistoryPoint[]} symbol={chartSymbol} />}
+          {h.data && <BasisChart points={h.data as HistorySeries} symbol={chartSymbol} />}
           {h.data && <div className="dkey" style={{ marginTop: 10, paddingLeft: 52 }}>
             <span><em style={{ background: "#d9a441" }} />Naive basis — what a raw price comparison shows</span>
             <span><em style={{ background: "#5b8fd6" }} />Adjusted basis — what is actually there</span>

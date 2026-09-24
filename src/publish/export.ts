@@ -15,10 +15,13 @@ import { AssayStore } from "../store/db.js";
 /** Full basis history is only published for tickers carrying three or more wrappers. */
 const HISTORY_MIN_WRAPPERS = 3;
 const HISTORY_HOURS = 48;
-const HISTORY_POINTS = 240;
+const HISTORY_POINTS = 180;
 
-/** Trims float noise so snapshots diff and compress well. */
-const round = (v: unknown, dp = 6): unknown =>
+/**
+ * Trims float noise so snapshots stay small and diff well. Three decimals is far below
+ * anything meaningful here: prices are dollars and everything else is basis points.
+ */
+const round = (v: unknown, dp = 3): unknown =>
   typeof v === "number" && Number.isFinite(v) ? Number(v.toFixed(dp)) : v;
 
 const deepRound = (o: unknown): unknown => {

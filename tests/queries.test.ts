@@ -92,11 +92,25 @@ describe("Queries", () => {
   it("builds a basis history with the decomposition intact", async () => {
     const { q } = await seed(4);
     const h = q.history("NVDA", 24);
-    expect(h.length).toBeGreaterThanOrEqual(4);
-    for (const point of h) {
-      expect(point.wrappers).toHaveLength(2);
-      for (const w of point.wrappers) {
-        expect(w.naiveBasisBp).toBeCloseTo(w.trueBasisBp + w.multiplierEffectBp, 6);
+    expect(h.ts.length).toBeGreaterThanOrEqual(4);
+    expect(h.wrappers).toHaveLength(2);
+    for (const w of h.wrappers) {
+      for (let i = 0; i < h.ts.length; i++) {
+        expect(w.naive[i]!).toBeCloseTo(w.adj[i]! + w.mult[i]!, 6);
+      }
+    }
+  });
+
+  it("keeps every series aligned to the timestamp axis by position", async () => {
+    const { q } = await seed(5);
+    const h = q.history("NVDA", 24);
+    const n = h.ts.length;
+    for (const key of ["regime", "assay", "conf", "ref"] as const) {
+      expect(h[key]).toHaveLength(n);
+    }
+    for (const w of h.wrappers) {
+      for (const key of ["naive", "adj", "mult", "trust", "rej"] as const) {
+        expect(w[key]).toHaveLength(n);
       }
     }
   });
@@ -104,10 +118,12 @@ describe("Queries", () => {
   it("downsamples by dropping cycles, never by averaging", async () => {
     const { q } = await seed(40);
     const h = q.history("NVDA", 24, 10);
-    expect(h.length).toBeLessThanOrEqual(11);
+    expect(h.ts.length).toBeLessThanOrEqual(11);
     // Every retained point is a real cycle, so its decomposition still holds exactly.
-    for (const p of h) {
-      for (const w of p.wrappers) expect(w.naiveBasisBp).toBeCloseTo(w.trueBasisBp + w.multiplierEffectBp, 6);
+    for (const w of h.wrappers) {
+      for (let i = 0; i < h.ts.length; i++) {
+        expect(w.naive[i]!).toBeCloseTo(w.adj[i]! + w.mult[i]!, 6);
+      }
     }
   });
 
@@ -143,7 +159,7 @@ describe("Queries", () => {
     const q = new Queries(new AssayStore(":memory:"));
     expect(q.latestTs()).toBeNull();
     expect(q.latest()).toEqual([]);
-    expect(q.history("NVDA")).toEqual([]);
+    expect(q.history("NVDA")).toMatchObject({ ts: [], wrappers: [] });
     expect(q.summary().tickers).toBe(0);
   });
 });

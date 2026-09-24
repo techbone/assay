@@ -42,10 +42,18 @@ export interface ScorecardPayload {
                   scores: TickerScore[]; summary: EstimatorSummary[] }>;
 }
 
-export interface HistoryPoint {
-  ts: number; regime: Regime; assayPrice: number; confidenceBp: number; referencePrice: number | null;
-  wrappers: Array<{ symbol: string; family: string; naiveBasisBp: number; trueBasisBp: number;
-                    multiplierEffectBp: number; trust: number; rejected: string | null }>;
+/** Columnar: every series is aligned to `ts` by position. */
+export interface HistorySeries {
+  ts: number[];
+  regime: Regime[];
+  assay: number[];
+  conf: number[];
+  ref: (number | null)[];
+  wrappers: Array<{
+    symbol: string; family: string;
+    naive: (number | null)[]; adj: (number | null)[]; mult: (number | null)[];
+    trust: (number | null)[]; rej: (string | null)[];
+  }>;
 }
 
 /**
@@ -81,7 +89,7 @@ export const api = {
   ticker: (t: string) =>
     get<TickerDetail>(STATIC ? `/ticker/${t.toUpperCase()}.json` : `/api/ticker/${t}`),
   history: (t: string, hours = 24) =>
-    get<HistoryPoint[]>(STATIC ? `/history/${t.toUpperCase()}.json` : `/api/history/${t}?hours=${hours}`),
+    get<HistorySeries>(STATIC ? `/history/${t.toUpperCase()}.json` : `/api/history/${t}?hours=${hours}`),
   scorecard: () => get<ScorecardPayload>(STATIC ? "/scorecard.json" : "/api/scorecard"),
   meta: () => get<Meta>(STATIC ? "/meta.json" : "/api/health"),
 };

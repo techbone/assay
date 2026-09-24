@@ -30,6 +30,19 @@ const toQuote = (r: ObsRow): RawQuote => ({
  * Read layer. Every figure the UI shows is recomputed through the engine rather than
  * read from a derived column, so the site can never disagree with the tests.
  */
+export interface HistorySeries {
+  ts: number[];
+  regime: MarketRegime[];
+  assay: number[];
+  conf: number[];
+  ref: (number | null)[];
+  wrappers: Array<{
+    symbol: string; family: string;
+    naive: (number | null)[]; adj: (number | null)[]; mult: (number | null)[];
+    trust: (number | null)[]; rej: (string | null)[];
+  }>;
+}
+
 export class Queries {
   constructor(private readonly store: AssayStore) {}
 
@@ -82,21 +95,20 @@ export class Queries {
   }
 
   /**
-   * Basis history for one ticker: for each cycle, the assay price plus each wrapper's
-   * naive and adjusted basis. This is the series behind the hero chart - the gap between
-   * the two lines is the phantom premium.
+   * Basis history for one ticker, in columnar form.
+   *
+   * Stored per-series rather than per-point: a row-shaped encoding repeats every key on
+   * every timestamp, which made the published snapshot 3.3MB for 27 tickers. Columnar is
+   * the same data an order of magnitude smaller, and the site loads it over a CDN.
    */
-  history(ticker: string, hours = 24, maxPoints = 600): Array<{
-    ts: number; regime: MarketRegime; assayPrice: number; confidenceBp: number;
-    referencePrice: number | null;
-    wrappers: Array<{ symbol: string; family: string; naiveBasisBp: number; trueBasisBp: number;
-                      multiplierEffectBp: number; trust: number; rejected: string | null }>;
-  }> {
+  history(ticker: string, hours = 24, maxPoints = 600): HistorySeries {
     const since = Date.now() - hours * 3_600_000;
     const rows = this.db
       .prepare(`SELECT * FROM observation WHERE ticker = ? AND ts >= ? ORDER BY ts`)
       .all(ticker.toUpperCase(), since) as ObsRow[];
-    if (rows.length === 0) return [];
+
+    const empty: HistorySeries = { ts: [], regime: [], assay: [], conf: [], ref: [], wrappers: [] };
+    if (rows.length === 0) return empty;
 
     const byTs = new Map<number, ObsRow[]>();
     for (const r of rows) {
@@ -119,21 +131,51 @@ export class Queries {
       return out;
     };
 
-    return picked.map((ts) => {
+    const out: HistorySeries = { ts: [], regime: [], assay: [], conf: [], ref: [], wrappers: [] };
+    const index = new Map<string, number>();
+
+    for (const ts of picked) {
       const regime = regimeAt(ts);
       const r = assay(ticker.toUpperCase(), byTs.get(ts)!.map(toQuote), regime);
-      return {
-        ts, regime,
-        assayPrice: r.assayPrice,
-        confidenceBp: r.confidenceBp,
-        referencePrice: r.referencePrice,
-        wrappers: r.quotes.map((q) => ({
-          symbol: q.symbol, family: q.family,
-          naiveBasisBp: q.naiveBasisBp, trueBasisBp: q.trueBasisBp,
-          multiplierEffectBp: q.multiplierEffectBp, trust: q.trust, rejected: q.rejected,
-        })),
-      };
-    });
+      const slot = out.ts.length;
+
+      out.ts.push(ts);
+      out.regime.push(regime);
+      out.assay.push(r.assayPrice);
+      out.conf.push(r.confidenceBp);
+      out.ref.push(r.referencePrice);
+
+      for (const q of r.quotes) {
+        let i = index.get(q.symbol);
+        if (i === undefined) {
+          i = out.wrappers.length;
+          index.set(q.symbol, i);
+          // A wrapper first seen mid-window is padded back so every series stays aligned
+          // to `ts` by position.
+          out.wrappers.push({
+            symbol: q.symbol, family: q.family,
+            naive: Array(slot).fill(null), adj: Array(slot).fill(null),
+            mult: Array(slot).fill(null), trust: Array(slot).fill(null),
+            rej: Array(slot).fill(null),
+          });
+        }
+        const w = out.wrappers[i]!;
+        w.naive.push(q.naiveBasisBp);
+        w.adj.push(q.trueBasisBp);
+        w.mult.push(q.multiplierEffectBp);
+        w.trust.push(q.trust);
+        w.rej.push(q.rejected);
+      }
+
+      // Wrappers absent from this cycle keep their alignment with a gap.
+      for (const w of out.wrappers) {
+        while (w.naive.length <= slot) {
+          w.naive.push(null); w.adj.push(null); w.mult.push(null);
+          w.trust.push(null); w.rej.push(null);
+        }
+      }
+    }
+    return out;
   }
 
   /** Headline figures for the landing page. */

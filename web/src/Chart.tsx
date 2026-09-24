@@ -1,4 +1,4 @@
-import type { HistoryPoint } from "./api.js";
+import type { HistorySeries } from "./api.js";
 
 /**
  * Naive basis against adjusted basis for one wrapper, over time.
@@ -7,15 +7,17 @@ import type { HistoryPoint } from "./api.js";
  * chart library so the two series can share an axis and the fill between them can be the
  * point of the picture rather than decoration.
  */
-export function BasisChart({ points, symbol }: { points: HistoryPoint[]; symbol: string }) {
+export function BasisChart({ points, symbol }: { points: HistorySeries; symbol: string }) {
   const W = 880, H = 260, PL = 52, PR = 16, PT = 16, PB = 26;
 
-  const series = points
-    .map((p) => {
-      const w = p.wrappers.find((x) => x.symbol === symbol);
-      return w ? { ts: p.ts, naive: w.naiveBasisBp, adj: w.trueBasisBp } : null;
-    })
-    .filter((x): x is { ts: number; naive: number; adj: number } => x !== null);
+  const w = points.wrappers.find((x) => x.symbol === symbol);
+  // Cycles where this wrapper had no usable quote are holes in the series, not zeroes.
+  const series = !w
+    ? []
+    : points.ts
+        .map((ts, i) => ({ ts, naive: w.naive[i], adj: w.adj[i] }))
+        .filter((p): p is { ts: number; naive: number; adj: number } =>
+          typeof p.naive === "number" && typeof p.adj === "number");
 
   if (series.length < 2) return <div className="empty">Not enough history yet — the collector needs a few more cycles.</div>;
 
