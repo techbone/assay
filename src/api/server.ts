@@ -11,6 +11,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { extname, join, normalize } from "node:path";
 import { AssayStore } from "../store/db.js";
 import { Scorecard } from "../scorecard/detect.js";
+import { tickerRows } from "./present.js";
 import { Queries } from "./queries.js";
 
 const arg = (flag: string, fallback: string): string => {
@@ -68,26 +69,14 @@ const handler = (req: IncomingMessage, res: ServerResponse): void => {
     }
     if (p === "/api/summary") return json(res, q.summary());
     if (p === "/api/scorecard") {
-      return json(res, { overall: scorecard.overall(), events: scorecard.all().slice(0, 20) });
+      return json(res, {
+        overall: scorecard.overall(),
+        events: scorecard.all().slice(0, 20),
+        recordedThrough: store.coverage().lastTs,
+      });
     }
     if (p === "/api/sessions") return json(res, q.sessions(Number(url.searchParams.get("hours") ?? 48)));
-    if (p === "/api/tickers") {
-      const rows = q.latest()
-        .map((r) => {
-          const worst = r.quotes
-            .filter((x) => !x.rejected)
-            .reduce((a, x) => (Math.abs(x.multiplierEffectBp) > Math.abs(a) ? x.multiplierEffectBp : a), 0);
-          return {
-            ticker: r.ticker, assayPrice: r.assayPrice, confidenceBp: r.confidenceBp,
-            referencePrice: r.referencePrice, regime: r.regime,
-            wrappers: r.quotes.length, accepted: r.accepted.length,
-            phantomBp: worst,
-            families: r.quotes.map((x) => x.family),
-          };
-        })
-        .sort((a, b) => Math.abs(b.phantomBp) - Math.abs(a.phantomBp));
-      return json(res, rows);
-    }
+    if (p === "/api/tickers") return json(res, tickerRows(q.latest()));
     const m = /^\/api\/ticker\/([A-Za-z0-9.\-]+)$/.exec(p);
     if (m) {
       const r = q.ticker(m[1]!);

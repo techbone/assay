@@ -8,6 +8,7 @@
  */
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { tickerRows } from "../api/present.js";
 import { Queries } from "../api/queries.js";
 import { Scorecard } from "../scorecard/detect.js";
 import { AssayStore } from "../store/db.js";
@@ -58,21 +59,10 @@ export function exportSnapshot(dbPath: string, outDir: string): { files: number;
   add(write(outDir, "scorecard.json", {
     overall: sc.overall(),
     events: sc.all().slice(0, 20),
+    recordedThrough: summary.coverage.lastTs,
   }));
 
-  const rows = latest
-    .map((r) => {
-      const worst = r.quotes
-        .filter((x) => !x.rejected)
-        .reduce((a, x) => (Math.abs(x.multiplierEffectBp) > Math.abs(a) ? x.multiplierEffectBp : a), 0);
-      return {
-        ticker: r.ticker, assayPrice: r.assayPrice, confidenceBp: r.confidenceBp,
-        referencePrice: r.referencePrice, regime: r.regime,
-        wrappers: r.quotes.length, accepted: r.accepted.length,
-        phantomBp: worst, families: r.quotes.map((x) => x.family),
-      };
-    })
-    .sort((a, b) => Math.abs(b.phantomBp) - Math.abs(a.phantomBp));
+  const rows = tickerRows(latest);
   add(write(outDir, "tickers.json", rows));
 
   for (const r of latest) {

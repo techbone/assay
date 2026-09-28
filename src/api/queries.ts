@@ -2,6 +2,7 @@ import type { MarketRegime } from "../binance/types.js";
 import { assay } from "../reference/engine.js";
 import type { AssayResult, RawQuote } from "../reference/types.js";
 import type { AssayStore } from "../store/db.js";
+import { summaryOf, type Summary } from "./present.js";
 
 interface ObsRow {
   ts: number; ticker: string; symbol: string; contract: string; family: string;
@@ -179,41 +180,9 @@ export class Queries {
   }
 
   /** Headline figures for the landing page. */
-  summary(): {
-    tickers: number; wrappers: number; families: Record<string, number>;
-    rejected: Record<string, number>;
-    phantomBp: { median: number; p90: number; max: number; n: number };
-    fractional: number;
-    regime: MarketRegime; ts: number | null; coverage: ReturnType<AssayStore["coverage"]>;
-  } {
-    const results = this.latest();
-    const quotes = results.flatMap((r) => r.quotes);
-    const families: Record<string, number> = {};
-    const rejected: Record<string, number> = {};
-    for (const q of quotes) {
-      families[q.family] = (families[q.family] ?? 0) + 1;
-      if (q.rejected) rejected[q.rejected] = (rejected[q.rejected] ?? 0) + 1;
-    }
-    // The phantom premium, restricted to distribution drift. Fractional wrappers are
-    // reported separately: mixing a 1:10 unit conversion into this statistic would turn a
-    // precise claim about accrued dividends into a meaningless average.
-    const effects = quotes
-      .filter((q) => !q.rejected && q.multiplierKind === "drift" && Math.abs(q.multiplierEffectBp) > 0)
-      .map((q) => Math.abs(q.multiplierEffectBp))
-      .sort((a, b) => a - b);
-    const at = (p: number) => (effects.length ? effects[Math.min(effects.length - 1, Math.floor(effects.length * p))]! : 0);
+  summary(): Summary {
     const ts = this.latestTs();
-    return {
-      tickers: results.length,
-      wrappers: quotes.length,
-      families,
-      rejected,
-      phantomBp: { median: at(0.5), p90: at(0.9), max: effects.at(-1) ?? 0, n: effects.length },
-      fractional: quotes.filter((q) => q.multiplierKind === "fractional").length,
-      regime: ts === null ? "unknown" : this.regimeAt(ts),
-      ts,
-      coverage: this.store.coverage(),
-    };
+    return summaryOf(this.latest(), ts === null ? "unknown" : this.regimeAt(ts), ts, this.store.coverage());
   }
 
   /** Regime transitions, for the session ribbon. */
