@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, isStatic, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistorySeries } from "./api.js";
+import { api, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistorySeries } from "./api.js";
 import { BasisChart } from "./Chart.js";
 import { ScorecardPage } from "./Scorecard.js";
 import { useAsync } from "./useAsync.js";
@@ -46,9 +46,11 @@ export function App() {
         <footer>
           Assay reads the Binance Web3 RWA API and BNB Smart Chain. Every figure is recomputed
           through the same engine the test suite pins — the site cannot disagree with the tests.
-          {isStatic && s.data?.ts && (
-            <> This page serves a published snapshot; the collector last ran{" "}
-              <b className="mono">{ago(s.data.ts)}</b>. Coverage gaps are recorded, not hidden.</>
+          {s.data && (
+            <> Prices are fetched live from Binance on each visit. Basis history and the
+              scorecard are recorded by the collector, which last ran{" "}
+              <b className="mono">{ago(s.data.coverage.lastTs)}</b> — gaps in that record are
+              shown, not hidden.</>
           )}
           {" "}Built for BNB Hack: Tokenized Stocks Edition.
         </footer>
@@ -225,7 +227,7 @@ function Detail({ ticker }: { ticker: string }) {
           {h.loading && <div className="empty">Loading history…</div>}
           {h.error && (
             <div className="empty">
-              Basis history is published for tickers carrying three or more wrappers.
+              Basis history is recorded for tickers carrying three or more wrappers.
               <br />{r.ticker} has {r.quotes.length}, so only its current state is shown above.
             </div>
           )}

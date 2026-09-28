@@ -1,12 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
-  "headers": [
-    {
-      "source": "/data/(.*)",
-      "headers": [
-        { "key": "cache-control", "value": "public, max-age=60, stale-while-revalidate=600" }
-      ]
-    }
-  ]
+  "framework": null,
+  "installCommand": "npm install",
+  "buildCommand": "npm run vercel-build"
 }

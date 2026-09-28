@@ -10,13 +10,12 @@ cd "$(dirname "$0")/.."
 
 DB="${ASSAY_DB:-data/assay.db}"
 REMOTE="${ASSAY_REMOTE:-$(git remote get-url origin)}"
-OUT=web/public/data
-
-npx tsx scripts/export.ts "$DB" "$OUT" >/dev/null
-
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
-cp -R "$OUT"/. "$TMP"/
+
+# Export straight into the publish dir: nothing under web/public, so the recorded data
+# can never leak into the site build and drift from what Vercel actually serves.
+npx tsx scripts/export.ts "$DB" "$TMP" >/dev/null
 
 cd "$TMP"
 git init -q

@@ -1,4 +1,5 @@
 import { api, type EstimatorSummary } from "./api.js";
+import { ago } from "./format.js";
 import { useAsync } from "./useAsync.js";
 
 /** How each competing estimate is built, in plain terms. */
@@ -37,9 +38,8 @@ export function ScorecardPage() {
             <div className="empty" style={{ padding: 40, lineHeight: 1.7 }}>
               <b style={{ color: "var(--text)" }}>No opens scored yet.</b>
               <br />
-              Every regular-hours session so far was lost to collector downtime. The scorecard
-              stays empty rather than showing a number it has not earned — the first scoreable
-              open will appear here automatically.
+              The scorecard needs the collector to have recorded both sides of a US open. It
+              stays empty rather than showing a number it has not earned.
             </div>
           </div>
         </section>
