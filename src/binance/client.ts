@@ -1,3 +1,4 @@
+import { fetchFromEnv } from "./dns.js";
 import type {
   ApiEnvelope, DynamicPayload, MarketStatus, StatusInfo, UniverseEntry,
 } from "./types.js";
@@ -47,7 +48,7 @@ export class BinanceRwaClient {
     this.throttleMs = opts.throttleMs ?? 120;
     this.retries = opts.retries ?? 3;
     this.timeoutMs = opts.timeoutMs ?? 20_000;
-    this.fetchImpl = opts.fetchImpl ?? fetch;
+    this.fetchImpl = opts.fetchImpl ?? fetchFromEnv() ?? fetch;
   }
 
   private async acquire(): Promise<void> {

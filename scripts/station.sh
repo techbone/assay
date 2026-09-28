@@ -8,6 +8,9 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 
 DB="${ASSAY_DB:-data/assay.db}"
+# Resolve Binance through public DNS: some local resolvers answer NXDOMAIN for
+# binance.com, which silently empties every collection cycle.
+export ASSAY_DNS="${ASSAY_DNS:-1.1.1.1,8.8.8.8}"
 PUBLISH_EVERY_SEC="${PUBLISH_EVERY_SEC:-1200}"   # 20 minutes
 
 mkdir -p logs
@@ -28,6 +31,7 @@ prefix() { while IFS= read -r line; do printf '%s %s\n' "$1" "$line"; done; }
 
 echo "assay station"
 echo "  db        $DB"
+echo "  dns       $ASSAY_DNS"
 echo "  api       http://localhost:8787"
 echo "  publish   every $((PUBLISH_EVERY_SEC / 60)) min"
 echo "  stop      Ctrl-C"
