@@ -213,3 +213,29 @@ and count the read as an error.
 
 **Ask:** this single behaviour has now cost us time twice in two days. `success` should be false
 when there is no data.
+
+---
+
+## Addendum — 2026-09-28, the API host is unresolvable on some networks in eligible regions
+
+### 10. `www.binance.com` returns NXDOMAIN on common resolvers · **high**
+
+The hackathon is open to builders in Nigeria. From our build machine there, every API call
+began failing instantly with `Could not resolve host: www.binance.com`, while GitHub and
+everything else resolved normally. The machine's resolvers (the router plus
+`114.114.114.114`) answer **NXDOMAIN** for the domain; Cloudflare `1.1.1.1` and Google
+`8.8.8.8` resolve it fine, and the API itself answers `200` once reached.
+
+Because the OS alternates between resolvers, this presents as *intermittent* failure — our
+collector silently produced empty cycles for hours at a time, which we initially misread
+as laptop sleep. In our uptime record, a large share of 35 hours of gaps is attributable
+to this.
+
+The Web3 API is a developer product whose documentation lives on `web3.binance.com`, but
+whose data endpoints are served from `www.binance.com` — the one hostname most likely to
+be blocked by regional DNS filtering aimed at the consumer exchange.
+
+**Ask:** serve the Web3 API from a dedicated hostname (e.g. `api.web3.binance.com`) that is
+not the consumer exchange's domain. **Workaround we shipped:** the client resolves through
+public DNS when `ASSAY_DNS` is set, and the public site calls Binance from a serverless
+function in Frankfurt, so neither depends on the visitor's resolver.

@@ -1,7 +1,7 @@
 # Assay — Milestone Tracker
 
 **Build window:** 16 Sep – **11 Oct 2026, 12:00 UTC** (hard lock)
-**Today:** 21 Sep 2026 · **20 days remain**
+**Today:** 28 Sep 2026 · **13 days remain**
 **Judging:** 12–23 Oct · **Winners:** week of 26 Oct
 
 Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocked
@@ -70,7 +70,7 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 
 | | Task |
 |-|------|
-|`[x]`| Vite + React app (Next.js dropped — no SSR need, one container with the collector) |
+|`[x]`| Vite + React app, deployed on Vercel with a live serverless `/api` (fra1) |
 |`[x]`| Ticker page: assay price, band, per-wrapper trust, basis decomposition |
 |`[x]`| Hero chart: naive vs adjusted basis, hand-drawn SVG, gap = phantom premium |
 |`[x]`| Universe table — 117 tickers ranked by phantom premium |

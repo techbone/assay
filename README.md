@@ -2,7 +2,7 @@
 
 **The real price of a tokenized stock.**
 
-**Live:** https://assay-hackathon.fly.dev — collecting continuously since 2026-09-20.
+**Live:** deployed on Vercel — prices fetched live from Binance on every visit.
 
 BNB Hack: Tokenized Stocks Edition · submissions lock 11 Oct 2026, 12:00 UTC.
 
@@ -24,6 +24,21 @@ trusted, and says which part of an apparent premium is real:
 > *NVDAon looks 18 bp rich. 17 bp of that is accrued distribution. 1 bp is real.*
 
 Measured across 84 live tickers, the adjustment takes worst-case basis error from **533 bp to 5.3 bp**.
+
+## How it runs
+
+```
+browser ── /api/* ──> Vercel function (fra1) ──> Binance Web3 RWA API     live prices
+                            │
+                            └──> data branch (raw.githubusercontent) ──>   recorded history,
+                                         ▲                                  scorecard, coverage
+collector (laptop / Oracle) ── publish ──┘
+```
+
+Live prices need no memory, so they are computed on demand, statelessly, through the same
+engine the tests pin. The scorecard and basis history need memory, so they are recorded by
+the collector and published to the `data` branch every 20 minutes. If the collector stops,
+the site keeps serving live prices and says how old its recorded history is.
 
 ## Status
 
@@ -52,6 +67,8 @@ npm run web       # UI dev server on :5173 (proxies /api)
 npm run web:build # build the site so the API serves it
 npm run health    # collection coverage and gaps
 npm run analyze   # corpus statistics
+npm run vercel-build && ASSAY_DNS=1.1.1.1,8.8.8.8 npm run vercel:local
+                  # the exact Vercel artifact, served locally
 ```
 
 ## Layout
