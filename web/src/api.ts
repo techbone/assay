@@ -16,7 +16,15 @@ export interface TickerDetail {
 
 export interface TickerRow {
   ticker: string; assayPrice: number; confidenceBp: number; referencePrice: number | null;
-  regime: Regime; wrappers: number; accepted: number; phantomBp: number; families: string[];
+  regime: Regime; wrappers: number; accepted: number;
+  /** Not rejected, and trust >= 0.5 - the same bar the buy router uses. */
+  trusted: number;
+  /** Largest dividend-drift phantom premium among trusted wrappers. */
+  phantomBp: number;
+  /** Wrappers whose multiplier is a unit conversion, e.g. 1 token = 10 shares. */
+  fractional: Array<{ symbol: string; multiplier: number }>;
+  realSpreadBp: number;
+  families: string[];
 }
 
 export interface Summary {
@@ -25,6 +33,7 @@ export interface Summary {
   phantomBp: { median: number; p90: number; max: number; n: number };
   fractional: number; regime: Regime; ts: number | null;
   coverage: { observations: number; tickers: number; firstTs: number | null; lastTs: number | null; cycles: number };
+  phantomLeader: { ticker: string; symbol: string; phantomBp: number; trueBasisBp: number } | null;
 }
 
 export interface TickerScore {

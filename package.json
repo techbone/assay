@@ -8,7 +8,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:live": "vitest run --config vitest.live.config.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p web",
     "snapshot": "tsx scripts/snapshot.ts",
     "collect": "tsx src/collector/run.ts --interval 120",
     "collect:once": "tsx src/collector/run.ts --once",
