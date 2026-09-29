@@ -20,3 +20,7 @@ web/public/data/
 .DS_Store
 
 iCloud Drive/**/Assay Backups
+
+# Working notes for the hackathon submission - not project docs
+docs/DEMO.md
+docs/SUBMISSION.md

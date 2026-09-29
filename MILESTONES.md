@@ -138,10 +138,10 @@ venue's own pre-open reference, or any single wrapper?
 | | Task |
 |-|------|
 |`[x]`| **`DEVEX.md`** restructured to the required sections |
-|`[~]`| Demo video — script in `docs/DEMO.md`; **recording is yours** |
+|`[~]`| Demo video — script in a private script, kept locally, not in the repo |
 |`[x]`| README for judges, with how to verify each claim |
 |`[x]`| https://assay-woad.vercel.app verified live |
-|`[ ]`| Submit — text in `docs/SUBMISSION.md` |
+|`[ ]`| Submit — text kept locally, not in the repo |
 |`[ ]`| Confirm everything stays up through 23 Oct |
 
 ---
