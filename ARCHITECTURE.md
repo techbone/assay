@@ -196,18 +196,22 @@ accumulated history. Most submissions are a frozen demo and a video.
 **This is why the collector ships before the engine is finished.** Raw snapshots are append-only and
 re-processable; a day not collected is evidence lost forever.
 
-## 7. Stack
+## 7. Stack — as built
 
 | Layer | Choice | Why |
 |-------|--------|-----|
-| Language | TypeScript (strict) | one language across collector, engine, web |
-| Runtime | Node 20+ | — |
-| Store | SQLite (`better-sqlite3`) | zero infra, single-file, trivially deployable |
-| Tests | Vitest | fixture-driven regression suite |
-| Web | Next.js + React | plays to existing strengths |
-| Chain | viem | BSC / opBNB reads |
-| Contracts | Foundry | `AssayOracle` only — a few hundred lines, deliberately |
-| Agent | Binance Agentic Wallet skill + BNB Agent Studio | targets the two $2 000 special prizes |
+| Language | TypeScript (strict) | one language across collector, engine, API, site |
+| Engine | pure functions in `src/reference` | identical in the collector, the live API and the tests |
+| Live API | Vercel serverless, Frankfurt | stateless on-demand pricing; outside Binance's restricted regions |
+| Recorder | Node collector + append-only SQLite | history and the scorecard need memory |
+| Recorded data | orphan `data` branch | publishable without a database or a server |
+| Site | Vite + React | no SSR need |
+| Execution | Binance Agentic Wallet (`baw`) | executable quotes; the wallet executes, Assay never does |
+| Tests | Vitest, fixtures captured live | the claims are pinned, not asserted |
+
+**Designed but cut to ship on time:** the `AssayOracle` contract on opBNB, a BNB Agent Studio
+agent, and a wrapper-to-wrapper rebalancing agent. The collector also runs on a laptop rather than
+an always-on host: Fly.io's trial caps machines at five minutes without a card.
 
 ## 8. Scoring alignment
 
