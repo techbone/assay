@@ -24,7 +24,8 @@
     "export": "tsx scripts/export.ts",
     "vercel-build": "node vercel/build.mjs",
     "vercel:local": "node vercel/local.mjs",
-    "buy": "tsx scripts/buy.ts"
+    "buy": "tsx scripts/buy.ts",
+    "backup": "tsx scripts/backup.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.5",

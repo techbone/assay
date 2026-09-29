@@ -12,6 +12,7 @@ DB="${ASSAY_DB:-data/assay.db}"
 # binance.com, which silently empties every collection cycle.
 export ASSAY_DNS="${ASSAY_DNS:-1.1.1.1,8.8.8.8}"
 PUBLISH_EVERY_SEC="${PUBLISH_EVERY_SEC:-1200}"   # 20 minutes
+BACKUP_EVERY_SEC="${BACKUP_EVERY_SEC:-14400}"  # 4 hours - off-laptop copy of the full history
 
 mkdir -p logs
 
@@ -53,10 +54,19 @@ API=$!
 ) &
 PUBLISHER=$!
 
+(
+  sleep 300
+  while true; do
+    npx tsx scripts/backup.ts 2>&1 | prefix "[backup] "
+    sleep "$BACKUP_EVERY_SEC"
+  done
+) &
+BACKUP=$!
+
 cleanup() {
   echo
   echo "stopping..."
-  kill -TERM $COLLECTOR $API $PUBLISHER 2>/dev/null
+  kill -TERM $COLLECTOR $API $PUBLISHER $BACKUP 2>/dev/null
   wait 2>/dev/null
   exit 0
 }
@@ -70,6 +80,6 @@ while kill -0 $COLLECTOR 2>/dev/null && kill -0 $API 2>/dev/null && kill -0 $PUB
   sleep 5
 done
 echo "a station process exited - stopping the rest so the supervisor restarts everything"
-kill -TERM $COLLECTOR $API $PUBLISHER 2>/dev/null
+kill -TERM $COLLECTOR $API $PUBLISHER $BACKUP 2>/dev/null
 wait 2>/dev/null
 exit 1
