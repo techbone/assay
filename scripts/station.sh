@@ -62,4 +62,14 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-wait
+# Supervise: if any part dies, stop the rest and exit non-zero so launchd (or systemd)
+# restarts the whole station. Waiting on all children instead left a live shell with a
+# dead collector - which looks healthy to a supervisor while recording nothing.
+# (macOS ships bash 3.2, which has no `wait -n`, hence the polling.)
+while kill -0 $COLLECTOR 2>/dev/null && kill -0 $API 2>/dev/null && kill -0 $PUBLISHER 2>/dev/null; do
+  sleep 5
+done
+echo "a station process exited - stopping the rest so the supervisor restarts everything"
+kill -TERM $COLLECTOR $API $PUBLISHER 2>/dev/null
+wait 2>/dev/null
+exit 1
