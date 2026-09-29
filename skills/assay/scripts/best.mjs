@@ -25,16 +25,25 @@ const res = await fetch(`${API}/api/buy/${encodeURIComponent(ticker)}?spend=${sp
 if (!res.ok) { console.error(`assay: ${res.status} ${await res.text()}`); process.exit(1); }
 const plan = await res.json();
 
+/** Returns tokens received, or the wallet's reason it would not quote. */
 async function quote(contract) {
+  let stdout;
   try {
-    const { stdout } = await run(BAW[0], [...BAW.slice(1), "market-order", "quote",
+    ({ stdout } = await run(BAW[0], [...BAW.slice(1), "market-order", "quote",
       "--fromTokenQty", String(spend), "--fromToken", USDT, "--toToken", contract,
-      "--binanceChainId", "56", "--json"], { timeout: 30_000 });
+      "--binanceChainId", "56", "--json"], { timeout: 30_000 }));
+  } catch (e) {
+    // baw exits non-zero on a refused quote but still prints its JSON reason.
+    stdout = e?.stdout;
+    if (!stdout) return { reason: "wallet unavailable" };
+  }
+  try {
     const body = JSON.parse(stdout);
     const out = Number(body?.data?.toCoinAmount);
-    return body?.success && out > 0 ? out : null;
+    if (body?.success && out > 0) return { tokens: out };
+    return { reason: body?.error?.message ?? "no quote" };
   } catch {
-    return null;
+    return { reason: "unreadable wallet response" };
   }
 }
 
@@ -42,8 +51,8 @@ async function quote(contract) {
 // an engine rejection (halted, corrupt multiplier, stale, outlier) is never overridden.
 const candidates = plan.legs.filter((l) => !l.rejected);
 const quoted = await Promise.all(candidates.map(async (l) => {
-  const tokens = await quote(l.contract);
-  if (tokens === null) return { ...l, tokens: null };
+  const { tokens = null, reason } = await quote(l.contract);
+  if (tokens === null) return { ...l, tokens: null, reason };
   const shares = tokens * l.multiplier;
   const costPerShare = spend / shares;
   return { ...l, tokens, shares, costPerShare, premiumBp: (costPerShare / plan.assayPrice - 1) * 1e4 };
@@ -65,6 +74,13 @@ for (const l of ranked) {
 }
 for (const l of plan.legs.filter((x) => x.rejected || (!executable && x.excluded))) {
   console.log(`    ${l.symbol.padEnd(8)} excluded: ${l.rejected ?? l.excluded}`);
+}
+// A wrapper the wallet refused to quote is a finding, not a gap to hide: it is usually
+// the thin one a price-only router would have bought.
+if (executable) {
+  for (const l of quoted.filter((x) => x.tokens === null)) {
+    console.log(`    ${l.symbol.padEnd(8)} no executable quote: ${l.reason}`);
+  }
 }
 if (!best) { console.log("\nno wrapper can be recommended."); process.exit(2); }
 

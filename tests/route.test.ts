@@ -104,3 +104,29 @@ describe("eligibility", () => {
     await expect(bestExecution(spy(), CONTRACTS, 0, indicativeProvider)).rejects.toThrow();
   });
 });
+
+describe("bestExecution — the wallet router prices Ondo tokens per share", () => {
+  /**
+   * Observed 2026-09-29 on live Binance Agentic Wallet quotes: the router values an Ondo
+   * token at roughly the underlying share price, ignoring `sharesMultiplier` (PFEon: token
+   * 30.574 on screen, router 28.842, share 28.820, multiplier 1.06093). Counting tokens,
+   * a buyer would think the bStock leg is as good; counting shares - which is what the
+   * money buys - the Ondo leg delivers ~6% more stock.
+   */
+  const PFE: RawQuote[] = [
+    q({ ticker: "PFE", symbol: "PFEon", family: "Ondo",   price: 30.574, multiplier: 1.06093, referencePrice: 28.82, holders: 20000, bnTrader: 9000 }),
+    q({ ticker: "PFE", symbol: "PFEB",  family: "bStock", price: 28.83,  multiplier: 1.0,     referencePrice: 28.82, holders: 9000,  bnTrader: 9000 }),
+  ];
+  const routerPerShare = scripted({ "0xpon": 100 / 28.842, "0xpb": 100 / 28.83 });
+
+  it("ranks by shares, so the multiplier the router ignored is credited to the buyer", async () => {
+    const plan = await bestExecution(assay("PFE", PFE, "premarket"), { PFEon: "0xpon", PFEB: "0xpb" }, 100, routerPerShare);
+    const on = plan.legs.find((l) => l.symbol === "PFEon")!;
+    const b = plan.legs.find((l) => l.symbol === "PFEB")!;
+    // Fewer tokens...
+    expect(on.quote!.tokensOut).toBeLessThan(b.quote!.tokensOut);
+    // ...but ~6% more stock.
+    expect(on.shares! / b.shares! - 1).toBeGreaterThan(0.05);
+    expect(plan.best!.symbol).toBe("PFEon");
+  });
+});
