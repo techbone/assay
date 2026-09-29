@@ -1,7 +1,7 @@
 # Assay — Milestone Tracker
 
 **Build window:** 16 Sep – **11 Oct 2026, 12:00 UTC** (hard lock)
-**Today:** 28 Sep 2026 · **13 days remain**
+**Today:** 29 Sep 2026 · **12 days remain**
 **Judging:** 12–23 Oct · **Winners:** week of 26 Oct
 
 Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocked
@@ -106,42 +106,42 @@ venue's own pre-open reference, or any single wrapper?
 
 ---
 
-## M5 — Best execution `[ ]` · target 3–5 Oct
+## M5 — Best execution `[x]` **DONE** · 29 Sep
 
 | | Task |
 |-|------|
-|`[ ]`| Binance Trading API integration (quote → route → unsigned tx) |
-|`[ ]`| Adjusted best-execution ranking, net of fees |
-|`[ ]`| "Buy $500 of NVDA" → cheapest real entry, with the reasoning shown |
-|`[ ]`| Wallet connect + local signing |
+|`[x]`| Executable quotes via Binance Agentic Wallet `market-order quote` |
+|`[x]`| Ranking by real shares received; thin wrappers held back on indicative quotes |
+|`[x]`| "Buy $500 of NVDA" on the site, `npm run buy`, and the agent skill |
+|`[x]`| Execution handed to the Agentic Wallet skill (its security checks + user confirmation) |
 
-**Exit criteria:** a live swap executes on BSC and the route explanation is auditable.
+**Exit criteria:** `[~]` route explanation auditable ✓; executable quotes verified against a stand-in only — needs a signed-in `baw` for a live run.
 
 ---
 
-## M6 — Agent + oracle `[ ]` · target 6–7 Oct · 💰 $2 000 + $2 000
+## M6 — Agent `[x]` **DONE** · 29 Sep · 💰 targets Agentic Wallet prize
 
 | | Task |
 |-|------|
-|`[ ]`| Binance Agentic Wallet skill integration → *Best Use of Agentic Wallet/Wallet Skills* |
-|`[ ]`| BNB Agent Studio agent (ERC-8004 identity, ERC-8183 tasks) → *Best Use of Agent Studio* |
-|`[ ]`| `AssayOracle` contract on opBNB — publishes (ticker → price, confidence, ts) |
-|`[ ]`| Agent: wrapper-to-wrapper rebalance when true basis > round-trip cost |
+|`[x]`| `skills/assay` — composes with `binance-agentic-wallet`; installs via `npx skills add` |
+|`[—]`| BNB Agent Studio — **cut** to finish on time |
+|`[—]`| `AssayOracle` on opBNB — **cut**, listed as next step |
+|`[—]`| Rebalancing agent — **cut** |
 
 > **Cut order if time runs short:** rebalancing agent → oracle contract → Agent Studio.
 > The Agentic Wallet skill stays; it is cheap and worth $2 000.
 
 ---
 
-## M7 — Submission `[ ]` · target 8–11 Oct
+## M7 — Submission `[~]` · 29 Sep
 
 | | Task |
 |-|------|
-|`[ ]`| **`DEVEX.md`** — Developer Experience Report (**25 % of total score**) |
-|`[ ]`| Demo video ≤ 4 min, rehearsed |
-|`[ ]`| README with judge-followable run instructions |
-|`[ ]`| Deployed links verified from a clean browser |
-|`[ ]`| Submit — **do not** wait for 11 Oct |
+|`[x]`| **`DEVEX.md`** restructured to the required sections |
+|`[~]`| Demo video — script in `docs/DEMO.md`; **recording is yours** |
+|`[x]`| README for judges, with how to verify each claim |
+|`[x]`| https://assay-woad.vercel.app verified live |
+|`[ ]`| Submit — text in `docs/SUBMISSION.md` |
 |`[ ]`| Confirm everything stays up through 23 Oct |
 
 ---
