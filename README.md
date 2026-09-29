@@ -6,6 +6,10 @@
 
 Built for BNB Hack: Tokenized Stocks Edition. [Developer Experience Report →](DEVEX.md)
 
+[![CI](https://github.com/techbone/assay/actions/workflows/ci.yml/badge.svg)](https://github.com/techbone/assay/actions/workflows/ci.yml)
+
+![Assay: SPY's three tokens, adjusted to the price per real share](docs/screenshots/home.png)
+
 ---
 
 ## The problem
@@ -76,6 +80,20 @@ Honest reading: Assay beats the venue's own reference by 36%, and the naive meth
 that it doesn't need to know in advance which issuer to trust — it works that out, and adapts the day
 that issuer halts, goes stale or ships a bad multiplier.
 
+## The site
+
+| Page | What it shows |
+|---|---|
+| [Markets](https://assay-woad.vercel.app) | Every stock with more than one token, ranked by phantom premium, searchable |
+| [A stock](https://assay-woad.vercel.app/#/t/SPY) | Each token's screen price, shares per token, price per real share, trust — and what part of any premium is real |
+| [Best execution](https://assay-woad.vercel.app/#/buy/SPY) | Which token buys the most real stock for your money |
+| [Scorecard](https://assay-woad.vercel.app/#/scorecard) | Assay against every alternative at each US market open |
+| [Findings](https://assay-woad.vercel.app/#/findings) | Each headline number, linked to the test or script that reproduces it |
+
+![A stock page: SPYon looks 94.7 bp expensive, and all of it is reinvested dividends](docs/screenshots/stock.png)
+
+Light and dark themes follow your system setting.
+
 ## How it runs
 
 ```
@@ -118,13 +136,16 @@ build:
 
 ```bash
 npm install
-npm test               # 120 tests
+npm test               # 126 tests
 ```
 
 - `tests/engine.test.ts` — the phantom premium on 8 tickers, corrupt `NFLXx`/`TQQQx` multipliers
 - `tests/corpus.test.ts` — the 533bp → 5.3bp result and the 51% xStock rejection, across 84 tickers
 - `tests/route.test.ts` — the multiplier trap, the thin-wrapper guard, the router's per-share pricing
+- `tests/present.test.ts` — unit tokens never reported as premiums; "trusted" means the same everywhere
 - `tests/scorecard.test.ts`, `tests/live.test.ts`, `tests/collector.test.ts` — the rest
+
+CI runs the typecheck, the suite and the Vercel build on every push.
 
 ## Run it
 
@@ -148,8 +169,8 @@ src/scorecard/   scoring every estimator at each US open
 src/collector/   the recorder; src/store/ its append-only SQLite
 skills/assay/    the agent skill
 vercel/          Build Output for Vercel, and a local runner for it
-web/             the site (Vite + React)
+web/src/pages/   the site's pages (Vite + React); web/src/components/ shared parts
 ```
 
 [ARCHITECTURE.md](ARCHITECTURE.md) has the design, [DEVEX.md](DEVEX.md) the Developer Experience
-Report.
+Report, [docs/DEPLOY.md](docs/DEPLOY.md) how to run it.

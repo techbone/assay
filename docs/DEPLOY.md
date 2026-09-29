@@ -1,108 +1,104 @@
-# Deploying Assay
+# Running Assay
 
-The collector must run continuously from now until judging ends (23 Oct). Gaps cannot be
-backfilled: `sharesMultiplier` has no historical endpoint, so a quote not captured at the time
-is gone. Uptime here is the scorecard's credibility.
-
-**Laptop status:** two full outages in two days (9.5h + 18h lost). `launchd` now auto-restarts
-the local processes if killed, but a laptop sleep/lid-close still pauses collection. This is why
-it needs a real host.
-
-## What's containerized
-
-One image, two processes, one shared SQLite file (`start.sh`):
-- the collector, polling every 120s
-- the read API on :8787, serving both `/api/*` and the built React site
-
-WAL mode (set in `src/store/schema.sql`) is what makes one writer + one reader safe in the same
-file without a separate database server. If either process dies, `start.sh` exits and the
-platform's restart policy brings the whole container back — verified locally: `docker build`,
-run, health-checked, killed, confirmed to report `healthy` again after Fly-style restart logic.
-
-## ⚠ Fly trial limit — blocking
-
-A Fly account without a credit card **hard-caps every machine at 5 minutes**:
+Assay has two independent parts. The public site never depends on the collector: if the
+collector stops, the site keeps serving live prices and says how old its recorded history is.
 
 ```
-Trial machine stopping. To run for longer than 5m0s,
-add a credit card by visiting https://fly.io/trial.
+browser ── /api/* ──> Vercel function (Frankfurt) ──> Binance Web3 RWA API     live prices
+                            │
+                            └──> data branch ──> recorded history, scorecard, coverage
+                                     ▲
+collector ── every 2 min ── publish ─┘
 ```
 
-No configuration fixes this. `auto_stop_machines = false` in fly.toml, the string form
-`"off"`, and `fly machine update --autostop=off` at machine level were all applied and all
-correctly reflected in the machine config (`autostop: False`) — flyd stops the machine anyway,
-with `exit_code=130, requested_stop=true`, exactly 5 minutes after each start.
+## The site — Vercel
 
-**Fix: add a card at https://fly.io/trial.** A `shared-cpu-1x` 512MB machine with a 1GB volume
-is a few dollars a month and may fall inside the free allowance. Until then the app is deployed
-and correct but can only run in 5-minute bursts, which is useless for collection.
+Deploys automatically on every push to `main`. `vercel.json` sets everything; no environment
+variables are needed.
 
-The machine is currently **stopped** deliberately, and the laptop is primary again, to avoid two
-collectors writing divergent histories.
+- `npm run vercel-build` emits Vercel's Build Output directly: the static site plus one bundled
+  function for `/api/*`.
+- The function runs in **Frankfurt (`fra1`)**. Binance's Web3 API excludes the US, which is
+  Vercel's default region.
+- Run the exact deploy artifact locally: `npm run vercel-build && npm run vercel:local`.
 
-## Deploy to Fly.io
+Check it: `https://assay-woad.vercel.app/api/health` should report `"live": {"reachable": true}`.
 
-`flyctl` is installed (`~/.fly/bin`, already on PATH via `~/.zshrc`). `fly.toml` is written:
-`shared-cpu-1x` / 512MB (bumped from the original 256MB estimate — two Node processes plus
-better-sqlite3's native bindings want the headroom), a 1GB volume at `/app/data`, and an HTTP
-health check on `/api/health`.
+## The collector
+
+The collector records history and the scorecard, which need memory the stateless site doesn't
+have. `sharesMultiplier` has no historical endpoint, so anything not recorded at the time is gone
+for good — the site shows those gaps rather than hiding them.
 
 ```bash
-cd /Users/muhammadmusa/Workspace/Startups/assay
-
-fly auth login                     # opens a browser - only step that needs you
-
-fly apps create assay-hackathon    # if the name is taken, edit `app = ` in fly.toml to match
-fly volumes create assay_data --region iad --size 1 -a assay-hackathon -y
-
-fly deploy                         # builds the Dockerfile and ships it
-fly status                         # confirm the machine is running
-fly logs                           # watch the collector cycle live
+npm run station
 ```
 
-After it's up:
+One process group: the collector (every 2 minutes), a local API on `:8787`, and a publish of the
+recorded data to the [`data`](https://github.com/techbone/assay/tree/data) branch every 20
+minutes. The site reads that branch. Ctrl-C stops everything.
+
+**Networks that block `binance.com`.** Some resolvers answer NXDOMAIN for it. `station`
+resolves Binance through public DNS by default (`ASSAY_DNS=1.1.1.1,8.8.8.8`); override the
+variable to change servers.
+
+### Keeping it running on a Mac
+
+A `launchd` agent restarts the station after crashes and reboots:
 
 ```bash
-curl https://assay-hackathon.fly.dev/api/health
+cat > ~/Library/LaunchAgents/com.assay.station.plist <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.assay.station</string>
+  <key>ProgramArguments</key><array><string>/bin/bash</string><string>$(pwd)/scripts/station.sh</string></array>
+  <key>WorkingDirectory</key><string>$(pwd)</string>
+  <key>EnvironmentVariables</key><dict><key>PATH</key><string>$(dirname "$(command -v node)"):/usr/bin:/bin</string></dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardOutPath</key><string>$(pwd)/logs/station.log</string>
+  <key>StandardErrorPath</key><string>$(pwd)/logs/station.log</string>
+</dict></plist>
+PLIST
+launchctl load ~/Library/LaunchAgents/com.assay.station.plist
+tail -f logs/station.log
 ```
 
-`ok: true` and a low `ageMin` means it's healthy. That URL is also the one to put in the
-submission and to check back into through judging (12–23 Oct).
+A sleeping Mac pauses collection; `caffeinate -dimsu` prevents that.
 
-## Migrating existing history
+### Moving it to an always-on machine
 
-The laptop's `data/assay.db` already holds real collected history (gappy, but real - don't
-discard it). Upload it into the volume once the app exists, before or right after first deploy:
+Any small Linux VM works (e.g. Oracle Cloud Always Free). The collector needs Node 22 and push
+access to the repo, for publishing:
 
 ```bash
-fly ssh console -a assay-hackathon -C "mkdir -p /app/data"
-fly ssh sftp shell -a assay-hackathon <<< $'put data/assay.db /app/data/assay.db\nbye'
-fly apps restart assay-hackathon
+git clone git@github.com:techbone/assay.git && cd assay && npm ci
+# copy data/assay.db across first to keep the history recorded so far
+sudo tee /etc/systemd/system/assay.service >/dev/null <<UNIT
+[Unit]
+Description=Assay collector
+After=network-online.target
+[Service]
+WorkingDirectory=$(pwd)
+ExecStart=/bin/bash $(pwd)/scripts/station.sh
+Restart=always
+User=$(whoami)
+[Install]
+WantedBy=multi-user.target
+UNIT
+sudo systemctl enable --now assay
 ```
 
-## Verifying
+Run only one collector at a time. Two writing the same history would publish divergent data.
+
+## Health
 
 ```bash
-curl -s https://assay-hackathon.fly.dev/api/health | python3 -m json.tool
+npm run health        # span, cycles, gaps over five minutes, uptime percentage
+npm run scorecard     # the leaderboard, from local data
 ```
 
-Or from the repo, pointed at a copy of the volume:
-
-```bash
-npm run health
-```
-
-Reports span, cycle count, gaps over five minutes, and an uptime percentage. Gaps are recorded
-and surfaced rather than hidden — the scorecard states its own coverage.
-
-## Local fallback (stopgap only, not for the remaining ~20 days)
-
-```bash
-npm run collect          # 120s interval, data/assay.db
-npm run health            # exits non-zero if the last cycle is >6 min old
-```
-
-`launchd` agents (`com.assay.collector`, `com.assay.api` in `~/Library/LaunchAgents/`) keep these
-alive locally through crashes, but not through sleep. Once Fly is confirmed healthy, these should
-be unloaded (`launchctl unload ~/Library/LaunchAgents/com.assay.*.plist`) so there is one source
-of truth instead of two collectors writing possibly-diverging history.
+`https://assay-woad.vercel.app/api/health` reports whether the site can reach Binance and how old
+the collector's recorded history is. The `ci` workflow runs typecheck, the test suite and the
+Vercel build on every push.

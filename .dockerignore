@@ -1,9 +1,0 @@
-node_modules
-web/dist
-data
-logs
-.git
-*.db
-*.db-journal
-*.db-wal
-*.db-shm

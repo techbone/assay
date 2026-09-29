@@ -48,13 +48,13 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 
 ---
 
-## M2 — Collector live 24/7 `[x]` **DONE** · 22 Sep · https://assay-hackathon.fly.dev
+## M2 — Collector `[x]` **DONE** · live prices no longer depend on it
 
 | | Task |
 |-|------|
 |`[x]`| SQLite schema — append-only raw snapshots |
 |`[x]`| Poller: dynamic + status (120 s) · universe (1 h) · **49.9 s/cycle, 0 errors** |
-|`[x]`| Deployed to Fly.io — collector + API in one container, 1GB volume, health checks passing |
+|`[x]`| Runs via `npm run station` under `launchd`; restarts after crashes and reboots. Fly.io was tried and dropped — its trial caps machines at five minutes without a card |
 |`[ ]`| Backfill history from `kline` — deferred to M4, forward history is accumulating |
 |`[x]`| Uptime/heartbeat check — `npm run health`, gaps surfaced not hidden |
 
@@ -62,7 +62,7 @@ Status key: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocke
 > evidence permanently lost. Ship it crude and early — raw snapshots are re-processable once the
 > engine improves. Do not wait for M1 to be perfect.
 
-**Exit criteria:** `[~]` ≥48 h unbroken. Laptop history (76,982 observations, 28 gaps) migrated onto Fly. Uptime clock restarts from 22 Sep 11:07 UTC — gaps before that are permanent and will be stated on the scorecard rather than hidden.
+**Exit criteria:** `[~]` ≥48 h unbroken — not met on a laptop; gaps are permanent and shown on the site rather than hidden. The public site is decoupled: it prices live on Vercel and keeps working when the collector stops. Oracle Always Free is the planned always-on host (`docs/DEPLOY.md`).
 
 ---
 
