@@ -11,7 +11,7 @@ import { Recorded, DEFAULT_RECORDED_BASE } from "../src/live/recorded.js";
 import { route } from "../src/live/router.js";
 import { LiveSource } from "../src/live/source.js";
 
-const live = new LiveSource(new BinanceRwaClient({ throttleMs: 25, retries: 2, timeoutMs: 8_000 }));
+const live = new LiveSource(new BinanceRwaClient({ throttleMs: 25, retries: 2, timeoutMs: 20_000 }));
 const recorded = new Recorded(process.env.ASSAY_RECORDED_BASE ?? DEFAULT_RECORDED_BASE);
 
 export default async function handler(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -21,7 +21,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   let status = 500, body: unknown = { error: "internal error" }, maxAge = 0;
   try {
-    ({ status, body, maxAge } = await route(path, live, recorded));
+    ({ status, body, maxAge } = await route(path, live, recorded, url.searchParams));
   } catch (err) {
     body = { error: err instanceof Error ? err.message : String(err) };
   }

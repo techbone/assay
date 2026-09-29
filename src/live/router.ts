@@ -1,4 +1,5 @@
 import { EMPTY_COVERAGE, summaryOf, tickerRows, type Coverage } from "../api/present.js";
+import { bestExecution, indicativeProvider } from "../route/best.js";
 import type { LiveSource } from "./source.js";
 import type { Recorded } from "./recorded.js";
 
@@ -17,7 +18,12 @@ const TICKER = /^[A-Za-z0-9.\-]{1,15}$/;
  * The serverless API. Same paths and shapes as the local SQLite-backed server, so the
  * site runs unchanged against either - live prices here, recorded history relayed.
  */
-export async function route(path: string, live: LiveSource, recorded: Recorded): Promise<RouteResult> {
+export async function route(
+  path: string,
+  live: LiveSource,
+  recorded: Recorded,
+  query: URLSearchParams = new URLSearchParams(),
+): Promise<RouteResult> {
   const p = path.replace(/^\/+/, "").replace(/\/+$/, "");
 
   if (p === "summary") {
@@ -39,6 +45,21 @@ export async function route(path: string, live: LiveSource, recorded: Recorded):
     return r
       ? { status: 200, body: r, maxAge: 30 }
       : { status: 404, body: { error: "unknown ticker" }, maxAge: 300 };
+  }
+
+  const b = /^buy\/(.+)$/.exec(p)?.[1];
+  if (b !== undefined) {
+    if (!TICKER.test(b)) return { status: 400, body: { error: "bad ticker" }, maxAge: 0 };
+    const spend = Number(query.get("spend") ?? 500);
+    if (!(spend >= 1 && spend <= 100_000)) {
+      return { status: 400, body: { error: "spend must be between 1 and 100000" }, maxAge: 0 };
+    }
+    const r = await live.ticker(b);
+    if (!r) return { status: 404, body: { error: "unknown ticker" }, maxAge: 300 };
+    // Indicative only: executable quotes come from the user's own signed-in wallet,
+    // which a shared serverless function does not have and should not have.
+    const plan = await bestExecution(r, await live.contracts(b), spend, indicativeProvider);
+    return { status: 200, body: plan, maxAge: 30 };
   }
 
   const h = /^history\/(.+)$/.exec(p)?.[1];

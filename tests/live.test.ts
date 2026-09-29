@@ -169,3 +169,24 @@ describe("live caching", () => {
     expect(client.calls.dynamic).toBe(8);
   });
 });
+
+describe("live router — buy", () => {
+  it("prices a buy across wrappers and names the best", async () => {
+    const { live, recorded } = setup();
+    const r = await route("buy/SPY", live, recorded, new URLSearchParams({ spend: "1000" }));
+    expect(r.status).toBe(200);
+    const plan = r.body as { best: { symbol: string }; quoteKind: string; spend: number };
+    expect(plan.quoteKind).toBe("indicative");
+    expect(plan.spend).toBe(1000);
+    expect(["SPYon", "SPYB"]).toContain(plan.best.symbol);
+  });
+
+  it("validates spend and ticker", async () => {
+    const { live, recorded } = setup();
+    for (const spend of ["0", "-5", "abc", "1000000"]) {
+      expect((await route("buy/SPY", live, recorded, new URLSearchParams({ spend }))).status).toBe(400);
+    }
+    expect((await route("buy/NOPE", live, recorded)).status).toBe(404);
+    expect((await route("buy/a b", live, recorded)).status).toBe(400);
+  });
+});

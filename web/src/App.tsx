@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, REGIME_LABEL, type Quote, type Summary, type TickerDetail, type TickerRow, type HistorySeries } from "./api.js";
 import { BasisChart } from "./Chart.js";
+import { BuyPanel } from "./Buy.js";
 import { ScorecardPage } from "./Scorecard.js";
 import { useAsync } from "./useAsync.js";
 import { ago, bp, bpClass, compact, usd } from "./format.js";
@@ -217,6 +218,8 @@ function Detail({ ticker }: { ticker: string }) {
           ))}
         </div>
       </section>
+
+      <BuyPanel ticker={r.ticker} />
 
       <section>
         <div className="h2row">

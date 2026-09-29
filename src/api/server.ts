@@ -11,6 +11,10 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { extname, join, normalize } from "node:path";
 import { AssayStore } from "../store/db.js";
 import { Scorecard } from "../scorecard/detect.js";
+import { BinanceRwaClient } from "../binance/client.js";
+import { Recorded } from "../live/recorded.js";
+import { route as liveRoute } from "../live/router.js";
+import { LiveSource } from "../live/source.js";
 import { tickerRows } from "./present.js";
 import { Queries } from "./queries.js";
 
@@ -26,6 +30,8 @@ const webRoot = arg("--web", "web/dist");
 const store = new AssayStore(dbPath);
 const q = new Queries(store);
 const scorecard = new Scorecard(store);
+// Buying is priced live even locally: a recorded quote is the wrong basis for a trade.
+let live: LiveSource | undefined;
 
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
@@ -68,6 +74,13 @@ const handler = (req: IncomingMessage, res: ServerResponse): void => {
                   ageMin < 6 ? 200 : 503);
     }
     if (p === "/api/summary") return json(res, q.summary());
+    if (p.startsWith("/api/buy/")) {
+      live ??= new LiveSource(new BinanceRwaClient());
+      liveRoute(p.slice(5), live, new Recorded(), url.searchParams)
+        .then((r) => json(res, r.body, r.status))
+        .catch((e) => json(res, { error: String(e) }, 500));
+      return;
+    }
     if (p === "/api/scorecard") {
       return json(res, {
         overall: scorecard.overall(),

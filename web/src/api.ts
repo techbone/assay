@@ -44,6 +44,20 @@ export interface ScorecardPayload {
                   scores: TickerScore[]; summary: EstimatorSummary[] }>;
 }
 
+export interface Leg {
+  symbol: string; family: string; contract: string; multiplier: number; quotedPrice: number;
+  trust: number; rejected: string | null;
+  shares: number | null; costPerShare: number | null; premiumBp: number | null; excluded: string | null;
+}
+
+export interface BestExecution {
+  ticker: string; spend: number; assayPrice: number; quoteKind: "executable" | "indicative";
+  legs: Leg[]; best: Leg | null;
+  naivePick: Leg | null; naiveVerdict: "agrees" | "excluded" | "worse" | "none";
+  naiveShortfallShares: number | null;
+  multiplierBlindPick: Leg | null; multiplierBlindShortfallShares: number | null;
+}
+
 /** Columnar: every series is aligned to `ts` by position. */
 export interface HistorySeries {
   ts: number[];
@@ -75,6 +89,8 @@ export const api = {
   ticker: (t: string) => get<TickerDetail>(`/api/ticker/${encodeURIComponent(t)}`),
   history: (t: string, hours = 48) => get<HistorySeries>(`/api/history/${encodeURIComponent(t)}?hours=${hours}`),
   scorecard: () => get<ScorecardPayload>("/api/scorecard"),
+  buy: (t: string, spend: number) =>
+    get<BestExecution>(`/api/buy/${encodeURIComponent(t)}?spend=${encodeURIComponent(spend)}`),
 };
 
 export const REGIME_LABEL: Record<Regime, string> = {

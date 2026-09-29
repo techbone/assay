@@ -107,6 +107,12 @@ export class LiveSource {
     return wrappers ? this.price(t, wrappers, regime) : null;
   }
 
+  /** Contract address per wrapper symbol, for routing a buy. */
+  async contracts(ticker: string): Promise<Record<string, string>> {
+    const ws = (await this.universe.get()).get(ticker.toUpperCase()) ?? [];
+    return Object.fromEntries(ws.map((w) => [w.symbol, w.contractAddress]));
+  }
+
   /** Every multi-wrapper ticker. Shared across callers for `latestTtlMs`. */
   async latest(): Promise<{ ts: number; results: AssayResult[] }> {
     return this.all.get();
