@@ -56,7 +56,24 @@ npm run buy -- SPY 1000
 > one that buys the most stock, and hands it to the wallet — which checks it and asks you to confirm.
 > Assay decides what to buy. The wallet does the buying."
 
-*If `baw` is signed in:* `node skills/assay/scripts/best.mjs NVDA 500` — show "EXECUTABLE".
+*With `baw` signed in:*
+
+```bash
+node skills/assay/scripts/best.mjs SPY 1000
+```
+
+> "These are real quotes from Binance's wallet. Look at SPYx — the cheapest token on screen. A
+> thousand dollars buys you fifty-seven dollars of stock. That's the one a price-comparing router
+> buys first."
+
+```bash
+node skills/assay/scripts/router-check.mjs PFE SPY
+```
+
+> "And something we didn't expect: Binance's own router prices these tokens as if one token were
+> one share. PFEon carries six percent of reinvested dividends — sell it through the wallet and
+> they're gone."
+
 
 **3:05 – 3:40 · Proof** — *scorecard page*
 

@@ -17,16 +17,19 @@ in the repo's regression tests.
 
 ---
 
-## The five changes that would matter most
+## The changes that would matter most
 
-1. **Document `sharesMultiplier`, and return an `adjustedPrice`.** It is the single field that
+1. **Make the Agentic Wallet router respect `sharesMultiplier`.** It prices Ondo tokens as if one
+   token were one share, so selling PFEon through the wallet gives up ~6% — every reinvested
+   dividend. (§ AI stack)
+2. **Document `sharesMultiplier`, and return an `adjustedPrice`.** It is the single field that
    decides whether a tokenized-stock product is right or wrong, and it is undocumented. (§ Pitfalls 1)
-2. **Put liquidity on the price.** `lastTradeTime` and depth on `tokenInfo`. Without them, half of
+3. **Put liquidity on the price.** `lastTradeTime` and depth on `tokenInfo`. Without them, half of
    all xStock quotes on BSC are indistinguishable from real prices. (§ Pitfalls 2, § Tokenized stocks)
-3. **`success: false` when there is no data.** It cost us time twice in two days. (§ Pitfalls 4)
-4. **Serve the Web3 API from its own hostname.** `www.binance.com` is DNS-blocked on common
+4. **`success: false` when there is no data.** It cost us time twice in two days. (§ Pitfalls 4)
+5. **Serve the Web3 API from its own hostname.** `www.binance.com` is DNS-blocked on common
    resolvers in at least one eligible country. (§ Onboarding)
-5. **A documented HTTP quote endpoint.** Executable quotes are only reachable through a signed-in
+6. **A documented HTTP quote endpoint.** Executable quotes are only reachable through a signed-in
    wallet CLI, so no backend can show one. (§ AI stack)
 
 ---
@@ -190,15 +193,55 @@ wholesale: an `orderId` is not a fill, poll to a terminal state, never report su
 downgrade a conditional order to a market order. We built Assay so that it only ever *prices* a
 swap and leaves executing it to the wallet skill, precisely so that guidance stays in force.
 
+### The router prices Ondo tokens per share, not per token · critical
+
+With a signed-in (and unfunded) wallet, we asked the router for executable quotes on every Ondo and
+bStock wrapper of six stocks, $100 each, on 29 Sep. The router's price per token sits at the
+**underlying share price**, not at the token's value — the gap tracks each token's accrued
+dividends almost exactly:
+
+| wrapper | `sharesMultiplier` | screen price | router, per token | share price | router vs screen | −(multiplier − 1) |
+|---|---:|---:|---:|---:|---:|---:|
+| `PFEon` | 1.06093 | 30.574 | **28.842** | 28.820 | **−567bp** | −609bp |
+| `STRCon` | 1.05334 | 104.580 | **99.448** | 99.302 | **−491bp** | −533bp |
+| `PEPon` | 1.03509 | 131.912 | **127.601** | 127.450 | **−327bp** | −351bp |
+| `SPYon` | 1.00947 | 773.854 | **767.334** | 766.549 | **−84bp** | −95bp |
+| `TSMon` | 1.00932 | 456.753 | **453.278** | 452.578 | **−76bp** | −93bp |
+| `SPYB` | 1.00173 | 768.207 | 766.600 | 766.549 | −21bp | −17bp |
+
+The screen price is right: `SPYon` at 773.85 is the S&P reference 766.55 × 1.00947. The router's buy
+and sell quotes both bracket the *share* price (`SPYon`: buy 767.07, sell 766.21). So one `SPYon`
+token — 1.0095 shares — is priced as one share.
+
+**Consequence: a holder selling an Ondo token through the Agentic Wallet gives up every reinvested
+dividend** — about 6% on `PFEon`, 5% on `STRCon`. A buyer gets the same amount for free. Anyone
+building "sell my tokenized stocks" on this router ships that loss to their users.
+
+Caveats, stated plainly: these are **quotes, not settled trades** (we had no funds to execute), and
+we do not know the mechanism — it may be routing through an issuer's mint/redeem at a per-share
+price. Reproduce with `node skills/assay/scripts/router-check.mjs` and a signed-in `baw`.
+
+> **Ask:** price tokenized-stock routes per token — `share price × sharesMultiplier` — or at minimum
+> flag the discrepancy in the quote response.
+
+**The router also exposes what screen prices hide.** On the same day, a $500 quote for `NVDAx` —
+the cheapest token on screen — returned `No liquidity available`, and $1,000 of `SPYx` quoted
+**0.075 shares of SPY: about $57 of stock** for a token whose screen price said $765. Both are the
+wrappers a price-comparing router buys first. Executable quotes are the only honest price.
+
 **Agentic Wallet — what blocked us.**
 
-- **An executable quote needs a signed-in wallet.** `market-order quote` is the only documented way
-  to learn what a swap would actually fill at, and it runs through a CLI built around the user's own
-  wallet session, paired via the Binance app. A backend cannot show an executable quote, so our public
+- **An executable quote needs a signed-in wallet — though not a funded one.** `market-order quote` is
+  the only documented way to learn what a swap would actually fill at, and it runs through a CLI built
+  around the user's own wallet session, paired via the Binance app. It worked on an empty wallet, which
+  is good. But a backend cannot show an executable quote, so our public
   site can only rank wrappers on indicative last-trade prices — exactly the prices pitfall 2 says not
   to trust. Our agent skill gets executable quotes; our website cannot.
 - **It depends on `www.binance.com`** and so fails the same way on DNS-filtered networks, with no
   resolver override.
+- **Refused quotes exit non-zero.** `baw` exits with an error on a refused quote but still prints the
+  JSON reason to stdout; a caller that trusts the exit code loses the reason (`No liquidity
+  available`), which is the useful part.
 - **Tokenized-stock support differs by issuer.** The skill notes that limit orders fail with
   `Ondo-related tokens cannot be traded`, so behaviour depends on which wrapper you picked — the same
   choice Assay exists to make well. We found this in the skill text, not in any API reference.
@@ -253,10 +296,11 @@ honestly claim.
 
 ## Requested capabilities
 
-1. `lastTradeTime` and depth or liquidity on `tokenInfo`.
-2. A first-class `adjustedPrice`.
-3. Historical `sharesMultiplier` (as-of queries).
-4. An unauthenticated or API-key HTTP quote endpoint for executable swap quotes.
-5. A forward corporate-action calendar (dividends, splits, earnings), not just current status.
-6. Batch dynamic lookup, and a by-underlying lookup.
-7. A dedicated API hostname outside `www.binance.com`.
+1. Router quotes priced per token (`share price × sharesMultiplier`) for tokenized stocks.
+2. `lastTradeTime` and depth or liquidity on `tokenInfo`.
+3. A first-class `adjustedPrice`.
+4. Historical `sharesMultiplier` (as-of queries).
+5. An unauthenticated or API-key HTTP quote endpoint for executable swap quotes.
+6. A forward corporate-action calendar (dividends, splits, earnings), not just current status.
+7. Batch dynamic lookup, and a by-underlying lookup.
+8. A dedicated API hostname outside `www.binance.com`.

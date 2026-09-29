@@ -33,8 +33,16 @@ expensive; it is at fair value to within 0.1bp.
 price sanity: `GMEx` at +855% of its reference, `UBERx` at −88%, served through the same field as
 prices accurate to 1bp.
 
-**The cheaper token can buy less stock.** `SPYB`'s token was **$5.31 cheaper** than `SPYon`'s, yet
-$1,000 of `SPYon` bought more SPY. A router comparing token prices picks the wrong one.
+**The cheaper token can buy less stock.** On an executable Binance Agentic Wallet quote, `NVDAB`'s
+token is cheaper than `NVDAon`'s, yet $500 of `NVDAon` buys more Nvidia. And the cheapest token of
+all is often the trap: $1,000 of `SPYx` — screen price $765 — quoted **0.075 shares, about $57 of
+stock**. `NVDAx` returned *no liquidity* at all.
+
+**Binance's own router ignores the multiplier.** The Agentic Wallet prices Ondo tokens as if one
+token were one share, so selling `PFEon` through it gives up **~6%** — every reinvested dividend.
+Measured across six stocks and reproducible with `skills/assay/scripts/router-check.mjs`
+([details](DEVEX.md#the-router-prices-ondo-tokens-per-share-not-per-token--critical)). These are
+quotes, not settled trades.
 
 ## What it does
 
@@ -110,12 +118,12 @@ build:
 
 ```bash
 npm install
-npm test               # 119 tests
+npm test               # 120 tests
 ```
 
 - `tests/engine.test.ts` — the phantom premium on 8 tickers, corrupt `NFLXx`/`TQQQx` multipliers
 - `tests/corpus.test.ts` — the 533bp → 5.3bp result and the 51% xStock rejection, across 84 tickers
-- `tests/route.test.ts` — the `SPYB`/`SPYon` multiplier trap and the thin-wrapper guard
+- `tests/route.test.ts` — the multiplier trap, the thin-wrapper guard, the router's per-share pricing
 - `tests/scorecard.test.ts`, `tests/live.test.ts`, `tests/collector.test.ts` — the rest
 
 ## Run it

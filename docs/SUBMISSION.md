@@ -34,7 +34,10 @@ rejects halted, stale, corrupt and outlier quotes with the reason shown. On live
 
 - correcting for the multiplier takes pricing error from a 533bp worst case to 5.3bp across 84 stocks;
 - 51% of xStock quotes on BSC fail basic sanity — GameStop quoted at 8.5x its real price;
-- a token $5.31 cheaper bought *less* S&P 500 than its rival — so Assay ranks buys by real shares received.
+- on real Binance Agentic Wallet quotes, the cheapest token often buys the least: $1,000 of `SPYx`
+  quoted $57 of stock — so Assay ranks buys by real shares received;
+- Binance's own wallet router prices Ondo tokens as if one token were one share, so selling `PFEon`
+  through it gives up ~6% in reinvested dividends (quotes, not settled trades).
 
 Best execution runs on the site (indicative) and through an agent skill that composes with Binance's
 Agentic Wallet (executable): Assay decides what to buy, the wallet executes after the user confirms.
@@ -45,6 +48,6 @@ Binance's own pre-open price by 36% and naive comparison by ~20x.
 Market (kline), Trading (swap quotes via Agentic Wallet), plus the Skills Hub and
 `binance-agentic-wallet` skill.
 
-**Tech:** TypeScript, Vite + React, Vercel serverless (Frankfurt), SQLite, Vitest (119 tests).
+**Tech:** TypeScript, Vite + React, Vercel serverless (Frankfurt), SQLite, Vitest (120 tests).
 
 **What's next:** an on-chain reference feed on opBNB, and the scorecard running through judging.

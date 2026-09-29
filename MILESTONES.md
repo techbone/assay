@@ -115,7 +115,7 @@ venue's own pre-open reference, or any single wrapper?
 |`[x]`| "Buy $500 of NVDA" on the site, `npm run buy`, and the agent skill |
 |`[x]`| Execution handed to the Agentic Wallet skill (its security checks + user confirmation) |
 
-**Exit criteria:** `[~]` route explanation auditable ✓; executable quotes verified against a stand-in only — needs a signed-in `baw` for a live run.
+**Exit criteria:** `[x]` route explanation auditable; executable quotes verified live on a signed-in wallet (29 Sep). Found the router pricing Ondo tokens per share.
 
 ---
 
