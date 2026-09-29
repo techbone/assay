@@ -17,6 +17,10 @@ trap 'rm -rf "$TMP"' EXIT
 # can never leak into the site build and drift from what Vercel actually serves.
 npx tsx scripts/export.ts "$DB" "$TMP" >/dev/null
 
+# The data branch is JSON, not a site. Without this, Vercel tries to build every snapshot
+# as a preview deployment and fails every 20 minutes (no package.json).
+printf '{\n  "git": { "deploymentEnabled": false }\n}\n' > "$TMP/vercel.json"
+
 cd "$TMP"
 git init -q
 git checkout -q -b data
