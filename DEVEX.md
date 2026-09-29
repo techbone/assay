@@ -1,241 +1,262 @@
 # Developer Experience Report — Binance Web3 API
 
-*Logged continuously during the build, dated as encountered. Not reconstructed from memory.*
+**Project:** Assay — a reference-price and best-execution layer for tokenized stocks on BNB Chain.
+**Built:** 20 Sep – 11 Oct 2026, from Nigeria. Findings were logged the day they were hit, not
+reconstructed at the end; every number below comes from live production data and most are pinned
+in the repo's regression tests.
 
-Project: **Assay** — a reference-price and best-execution layer for tokenized equities on BSC.
-Surface used: RWA Data (token list, meta, market status, asset status, dynamic v2), Market (kline),
-Trading, Transaction, Wallet, DeFi.
+**What we used**
 
----
-
-## What worked well
-
-**No API key needed to start.** Every RWA read endpoint is public. We validated our entire product
-thesis against live production data **before writing a line of product code or registering**. That is
-an unusually low activation energy and it is the single best thing about this API surface. Most chains
-would have cost us a day on credentials first.
-
-**`rwa/dynamic/ai` (v2) is genuinely well-designed.** One call returns `tokenInfo` (on-chain price,
-multiplier, holders, supply), `stockInfo` (the underlying reference price plus fundamentals),
-`statusInfo` (trading state) and `limitInfo`. Having the **on-chain price and the underlying
-reference price in the same payload** is exactly right for this asset class and saved us an entire
-integration.
-
-**The session state machine is precise.** `market/status/ai` returns `nextOpen`/`nextClose` as both
-ISO strings and epoch millis, plus a nested `offhours` object. Modelling RTH / offhours / closed was
-straightforward because the API models it properly rather than making us infer it from a calendar.
+| Module | How | Depth |
+|---|---|---|
+| RWA Data | token list, `rwa/dynamic/ai` v2, market status, asset status | core — ~550k observations over 9 days |
+| Market | `kline` | explored; not load-bearing (see pitfall 8) |
+| Trading | executable swap quotes via Agentic Wallet `market-order quote`; swaps handed to the wallet | best execution |
+| AI stack | Skills Hub, `binance-tokenized-securities-info`, `binance-agentic-wallet` | reference + integration |
+| Transaction, Wallet, DeFi APIs | not used | — |
 
 ---
 
-## Pitfalls — highest impact first
+## The five changes that would matter most
 
-### 1. `sharesMultiplier` is undocumented as the key to the whole asset class · **critical**
-
-The single most important field for tokenized equities appears in the schema without an explanation
-of what it means or when it changes. It encodes **two different things at once**:
-
-- distribution accrual (Ondo total-return tokens ratchet the multiplier up as dividends reinvest)
-- fractionalisation / split ratios (observed range on BSC: **0.0667 → 10.03**)
-
-Consequence: the obvious implementation — comparing quoted prices across wrappers — is not slightly
-wrong, it is **wrong by up to 10x**. We only found this because we diffed wrappers of the same ticker
-against each other. A developer building the natural "compare tokenized stock prices" dashboard will
-ship a product that systematically misprices every Ondo token by 10–95 bp and every fractionalised
-token by an order of magnitude.
-
-**Ask:** document `sharesMultiplier` prominently with a worked example, and state the invariant
-`adjusted_price = price / sharesMultiplier ≈ stockInfo.price`. Better: return `adjustedPrice` as a
-first-class field so the correct path is the default path.
-
-### 2. The same token reports different multipliers from different endpoints · **high**
-
-`NVDAx` reported `multiplier = 1` from `stock/detail/list/ai` and `sharesMultiplier = 1.0009180758`
-from `rwa/dynamic/ai`. The list endpoint carries a `lastUpdateTime` that lags the dynamic endpoint by
-days. Nothing warns you that one is stale, and both look authoritative.
-
-**Ask:** either converge them, or mark the list endpoint's copy explicitly as a cached snapshot.
-
-### 3. Some multipliers are simply wrong, with no error signal · **high**
-
-Observed 2026-09-20:
-
-| Token | quoted | `sharesMultiplier` | implied | actual reference | error |
-|-------|-------:|-------------------:|--------:|-----------------:|------:|
-| `NFLXx` | 77.19 | 10.0 | 7.72 | 71.93 | **~10x** |
-| `TQQQx` | 72.41 | 2.009 | 36.05 | 72.14 | **~2x** |
-
-The corresponding Ondo wrappers were correct to <1 bp on the same tickers, so this is per-wrapper
-metadata corruption, not a reference issue. We had to build a validation layer that rejects
-multipliers implying suspiciously clean ratios against the peer median.
-
-**Ask:** server-side sanity check. If `price / multiplier` deviates from `stockInfo.price` by >5 %,
-flag it in the payload rather than serving it silently.
-
-### 4. Invalid contract addresses return `200 OK` with `success: true` · **medium**
-
-```
-GET …/rwa/dynamic/ai?chainId=56&contractAddress=0xdeadbeef…
-→ 200 {"code":"000000","message":null,"data":null,"success":true}
-```
-
-`success: true` with `data: null` for an address that does not exist. Any client that checks
-`success` before `data` — which is what the field name invites — will silently treat a bad address as
-an empty result. We lost time here.
-
-**Ask:** return `success: false` with a resolvable error code for unknown assets.
-
-### 5. Quoted price carries no liquidity context · **high**
-
-`tokenInfo.price` for thin wrappers is a last-trade print that can be arbitrarily stale. Live
-examples: `MSTRx` quoting 9.6 % below its reference, `ORCLx` 11 % above, `TSMx` 9.9 % below — on
-mega-caps, where real basis of that size cannot exist.
-
-A "find the cheapest wrapper" feature built on this field routes users straight into the stalest
-pool. There is no `lastTradeTime`, no depth, and no bid/ask — so a client cannot tell a live price
-from a three-day-old one. We had to synthesise staleness by polling and diffing.
-
-**Ask:** expose `lastTradeTime` and a depth or liquidity measure on `tokenInfo`. This is the highest-
-value single field you could add.
-
-### 6. `kline` returns volume as `"0"` · **medium**
-
-Every candle from `dex/market/token/kline/ai` returned `"0"` in the volume slot, across tickers and
-intervals. Either it is unpopulated or the slot means something else. Volume is load-bearing for
-liquidity scoring and backtests, so we had to source it elsewhere.
-
-### 7. Undocumented required headers · **low, but a hard stop**
-
-Requests need `Accept-Encoding: identity` and a `User-Agent`. We found this only inside a published
-Skill's source, not in the API reference. Without them a developer hits opaque failures with nothing
-to search for.
+1. **Document `sharesMultiplier`, and return an `adjustedPrice`.** It is the single field that
+   decides whether a tokenized-stock product is right or wrong, and it is undocumented. (§ Pitfalls 1)
+2. **Put liquidity on the price.** `lastTradeTime` and depth on `tokenInfo`. Without them, half of
+   all xStock quotes on BSC are indistinguishable from real prices. (§ Pitfalls 2, § Tokenized stocks)
+3. **`success: false` when there is no data.** It cost us time twice in two days. (§ Pitfalls 4)
+4. **Serve the Web3 API from its own hostname.** `www.binance.com` is DNS-blocked on common
+   resolvers in at least one eligible country. (§ Onboarding)
+5. **A documented HTTP quote endpoint.** Executable quotes are only reachable through a signed-in
+   wallet CLI, so no backend can show one. (§ AI stack)
 
 ---
 
-## Tokenized-stock specifics worth calling out
+## Onboarding
 
-`statusInfo.reasonCode` distinguishing `TRADING` from corporate-action halts (earnings, dividends,
-splits, mergers) is excellent and has no equivalent on other chains we have built against. It is the
-difference between a toy and something that can hold a position safely. **Lead with this in the docs
-— it is a genuine differentiator that is currently buried.**
+**What worked: no key to start.** Every RWA read endpoint is public. We validated the whole product
+thesis against live production data before writing product code or registering. That is an
+unusually low activation energy and the single best thing about this surface — most chains cost a
+day on credentials first.
 
-The `type` field cleanly separating Ondo (1) / xStocks (2) / bStocks (3) is the right primitive.
-It deserves to be named in the documentation, because issuer family determines whether a token
-accrues distributions — which changes how it must be priced.
+**What broke: the API host is unresolvable on some networks.** From our build machine in Nigeria,
+every call began failing instantly with `Could not resolve host: www.binance.com`, while everything
+else resolved. The machine's resolvers (the router and `114.114.114.114`) answer **NXDOMAIN** for the
+domain; Cloudflare `1.1.1.1` and Google `8.8.8.8` resolve it, and the API answers `200` once reached.
 
-## Capabilities we wanted and could not find
+Because the OS alternates between resolvers, it presents as *intermittent* failure. Our collector
+silently produced empty cycles for hours at a time, which we first misread as the laptop sleeping; a
+large share of 35 hours of collection gaps traces back to it. The Web3 API's docs live on
+`web3.binance.com`, but its data is served from `www.binance.com` — the hostname most likely to be
+filtered by DNS blocking aimed at the consumer exchange. The Agentic Wallet CLI inherits the same
+problem.
 
-1. `lastTradeTime` + depth on `tokenInfo` — see pitfall 5.
-2. A first-class `adjustedPrice` — see pitfall 1.
-3. **Historical `sharesMultiplier`.** There is no way to fetch the multiplier as of a past timestamp,
-   which makes historical basis analysis impossible to do correctly. We can only build history
-   forward from the day we started collecting.
-4. A dividend / corporate-action *calendar* (forward-looking), not just current status.
-5. Batch dynamic lookup. 37 tickers × 3 wrappers = 111 sequential calls per snapshot.
+> **Ask:** serve the Web3 API from a dedicated hostname (e.g. `api.web3.binance.com`).
+> **Our workaround:** the client resolves through public DNS when `ASSAY_DNS` is set, and the public
+> site calls Binance from a serverless function in Frankfurt, so neither depends on the visitor's
+> resolver.
 
-## Onboarding and documentation
-
-The Skills Hub repo (`binance/binance-skills-hub`) turned out to be better API documentation than the
-API reference — the `binance-tokenized-securities-info` skill contains the endpoint list, required
-headers and response shapes in one readable file. **Link it from the docs landing page.** We found it
-by accident via search, and it saved hours.
-
----
-
-## Addendum — 2026-09-20, after running the sanity layer across the whole market
-
-Having built the validation layer, we ran it over every multi-wrapper ticker on BSC (84 tickers,
-194 wrapper quotes). The result is worth reporting directly to the team:
-
-**22 of the 43 xStock quotes on BNB Chain — 51 % — fail basic price sanity.** Every single
-rejection across the entire corpus is an xStock. No Ondo wrapper and no bStock wrapper trips either
-guard.
-
-Observed deviations from the adjusted consensus, after correcting for `sharesMultiplier`:
-
-| Wrapper | deviation | Wrapper | deviation |
-|---------|----------:|---------|----------:|
-| `GMEx`  | **+855 %** | `UBERx` | −87.9 % |
-| `BACx`  | **+771 %** | `CSCOx` | −87.7 % |
-| `AMDx`  | **+616 %** | `MRVLx` | −86.6 % |
-| `NVOx`  | +13.8 %   | `IBMx`  | −85.6 % |
-| `ORCLx` | +11.0 %   | `TSMx`  | −9.9 %  |
-
-A quote showing `GMEx` at nearly ten times its own reference price is being served through the same
-field, with the same shape and no warning flag, as a healthy `NVDAon` quote that is accurate to
-within 1 bp. Any application that reads `tokenInfo.price` and compares wrappers — which is the
-obvious thing to build — will surface these as extraordinary arbitrage opportunities.
-
-This is the strongest possible argument for the two capabilities requested above:
-`lastTradeTime` and a depth measure on `tokenInfo`. With either one, a developer could filter these
-out in a single line. Without them, every integrator has to rediscover this problem independently and
-build a statistical sanity layer before they can safely show a user a price.
-
-**Suggested redesign:** serve a `priceQuality` or `stale` flag on `tokenInfo`, computed server-side
-against the issuer's own reference. You already have `stockInfo.price` in the same payload, so the
-comparison costs nothing — and it would prevent a whole class of applications from shipping broken.
+**Required headers are undocumented.** Requests need `Accept-Encoding: identity` and a `User-Agent`.
+We found this only inside a published skill's source. Without them you hit opaque failures with
+nothing to search for.
 
 ---
 
-## Addendum — 2026-09-21, after a full session cycle
+## Documentation
 
-### 8. `marketStatus` publishes extended sessions with `openState: true` · **high**
+**The Skills Hub is better API documentation than the API reference.** The
+`binance-tokenized-securities-info` skill has the endpoint list, required headers and response
+shapes in one readable file. We found it by accident through search and it saved hours.
 
-Overnight, the venue moved through `closed` → `overnight` → `premarket`. In both extended
-sessions the payload reports `openState: true`:
+> **Ask:** link the Skills Hub from the API docs landing page, and treat each skill's `SKILL.md`
+> as a first-class reference page.
+
+**The field that matters most has no documentation.** See `sharesMultiplier` below. The `type` field
+(1 = Ondo, 2 = xStocks, 3 = bStocks) is also unnamed, though issuer family decides whether a token
+accrues distributions — which changes how it must be priced. One skill notes that *"older versions of
+it only know `type=1` (Ondo)"*, so even Binance's own tooling has drifted on this.
+
+**The session model is undocumented.** `marketStatus` takes at least `closed`, `overnight`,
+`premarket`, `afterhours` and a regular-session value. None are listed, and which ones mean "the
+underlying stock is trading" has to be inferred. (§ Pitfalls 3)
+
+---
+
+## API pitfalls — highest impact first
+
+### 1. `sharesMultiplier` is undocumented, and it decides everything · critical
+
+It encodes two different things at once:
+
+- **distribution accrual** — Ondo total-return tokens ratchet it upward as dividends reinvest;
+- **fractionalization and splits** — observed range on BSC **0.0667 → 10.03**.
+
+So the obvious implementation — comparing quoted prices across wrappers — is not slightly wrong; it
+is **wrong by up to 10x**. Across 84 multi-wrapper tickers, dividing by the multiplier takes Ondo's
+basis error against the underlying from a **533bp worst case to 5.3bp**. `SPYon` looks 95bp
+expensive and is at fair value to within 0.1bp. Every one of those phantom premiums would be shown
+to users by a naive dashboard as real.
+
+It also corrupts execution, not just display: on 29 Sep, `SPYB`'s token was **$5.31 cheaper** than
+`SPYon`'s, yet $1,000 of `SPYon` bought **more SPY**. A router that compares token prices picks the
+wrong one.
+
+> **Ask:** document it with a worked example and the invariant
+> `price / sharesMultiplier ≈ stockInfo.price`. Better: return `adjustedPrice` so the correct path is
+> the default one.
+
+### 2. A quoted price carries no liquidity context · high
+
+`tokenInfo.price` for a thin wrapper is a last-trade print that can be arbitrarily stale: `MSTRx`
+9.6% below its reference, `ORCLx` 11% above, `TSMx` 9.9% below — on mega-caps, where real basis
+that size cannot exist. There is no `lastTradeTime`, no depth and no bid/ask, so a client cannot
+tell a live price from a days-old one. We had to synthesize staleness by polling and diffing.
+
+Live, unguarded, our own best-execution router recommended `NVDAx` and `SPYx` as 33bp and 60bp
+"cheaper" — both on pools with a handful of traders. (§ Tokenized stocks has the market-wide count.)
+
+> **Ask:** `lastTradeTime` and a depth or liquidity measure on `tokenInfo`. The highest-value single
+> addition to this API.
+
+### 3. Extended sessions report `openState: true` · high
 
 ```json
 {"marketStatus":"premarket","openState":true,"reasonCode":null,
  "nextOpen":"2026-09-21T13:31:00Z","nextClose":"2026-09-21T13:29:00Z"}
 ```
 
-`openState: true` at 08:47 UTC, nearly five hours before the US market opens. Any client that
-reads `openState` as "regular hours are running" — which is what the field name suggests — will
-treat a premarket quote as a live one. We did exactly that, and mislabelled 26 of our first
-209 session samples before catching it.
+`openState: true` at 08:47 UTC, nearly five hours before the US open. Anyone reading `openState` as
+"the market is open" — which the name invites — treats a premarket quote as live. We did, and
+mislabelled 26 of our first 209 session samples. `nextClose` preceding `nextOpen` is also correct
+(premarket closes two minutes before the regular session) but reads as corrupt without explanation.
 
-Note also that `nextClose` (13:29) precedes `nextOpen` (13:31). That is internally consistent
-once you work out that the premarket session closes two minutes before the regular one opens,
-but nothing in the payload says so, and the naive reading is that the data is corrupt.
+> **Ask:** document every `marketStatus` value, and add `referencePriceLive: boolean` — the only
+> question an integrator actually has.
 
-**Ask:** document the full set of `marketStatus` values and state plainly which ones mean the
-underlying tape is live. Better, add an explicit `referencePriceLive` boolean, since that is the
-only question an integrator actually needs answered.
+### 4. Missing data returns `success: true` · high
 
-### 9. A failed status read is indistinguishable from a quiet market · **high**
+```
+GET …/rwa/dynamic/ai?chainId=56&contractAddress=0xdeadbeef…
+→ 200 {"code":"000000","data":null,"success":true}
+```
 
-Twenty-five consecutive status calls returned `data: null` with `success: true` and HTTP 200.
-Because nothing threw, our error counter stayed at zero and the cycles looked healthy. We had
-recorded a fabricated market regime for fifty minutes of history.
+A client that checks `success` treats a bad address as an empty result. Worse, 25 consecutive
+market-status reads came back `data: null` with `success: true` — nothing threw, our error counter
+stayed at zero, and we recorded a fabricated market regime for fifty minutes.
 
-This is pitfall #4 again, but the consequence is worse than an empty result: the null was
-silently laundered into a legitimate-looking session state. We now record `unknown` explicitly
-and count the read as an error.
+> **Ask:** `success: false` with a resolvable error code whenever `data` is null.
 
-**Ask:** this single behaviour has now cost us time twice in two days. `success` should be false
-when there is no data.
+### 5. Some multipliers are simply wrong · high
+
+| Token | quoted | `sharesMultiplier` | implied | reference | error |
+|---|---:|---:|---:|---:|---:|
+| `NFLXx` | 77.19 | 10.0 | 7.72 | 71.93 | **~10x** |
+| `TQQQx` | 72.41 | 2.009 | 36.05 | 72.14 | **~2x** |
+
+The Ondo wrappers on the same tickers were right to within 1bp, so this is per-wrapper metadata
+corruption. We reject a multiplier when dividing by it moves the price *away* from the benchmark.
+
+> **Ask:** flag a payload whose `price / sharesMultiplier` is more than 5% from `stockInfo.price`.
+> You already hold both numbers in the same response.
+
+### 6. The same token reports different multipliers from different endpoints · medium
+
+`NVDAx` showed `multiplier = 1` from `stock/detail/list/ai` and `1.0009180758` from
+`rwa/dynamic/ai`. The list copy lags by days and nothing marks it as cached. Both look
+authoritative.
+
+> **Ask:** converge them, or label the list copy as a snapshot with its as-of time.
+
+### 7. No history for the one field that needs it · medium
+
+There is no way to get `sharesMultiplier` as of a past time, so historical basis cannot be computed
+correctly — only collected forward. Any gap in collection is permanent. Combined with pitfall 1,
+this made collector uptime the critical path of our whole build.
+
+### 8. `kline` volume is always `"0"` · low
+
+Every candle from `dex/market/token/kline/ai` returned `"0"` in the volume slot, across tickers and
+intervals. Volume is load-bearing for liquidity scoring and backtesting, so we could not use it.
 
 ---
 
-## Addendum — 2026-09-28, the API host is unresolvable on some networks in eligible regions
+## AI stack
 
-### 10. `www.binance.com` returns NXDOMAIN on common resolvers · **high**
+**Skills Hub.** Excellent as documentation (above). Installing skills worked first time, and they
+compose: our own `assay` skill declares `binance-agentic-wallet` as a dependency and hands execution
+to it.
 
-The hackathon is open to builders in Nigeria. From our build machine there, every API call
-began failing instantly with `Could not resolve host: www.binance.com`, while GitHub and
-everything else resolved normally. The machine's resolvers (the router plus
-`114.114.114.114`) answer **NXDOMAIN** for the domain; Cloudflare `1.1.1.1` and Google
-`8.8.8.8` resolve it fine, and the API itself answers `200` once reached.
+**Agentic Wallet — what is good.** The skill's guidance is unusually careful and we adopted it
+wholesale: an `orderId` is not a fill, poll to a terminal state, never report success early, never
+downgrade a conditional order to a market order. We built Assay so that it only ever *prices* a
+swap and leaves executing it to the wallet skill, precisely so that guidance stays in force.
 
-Because the OS alternates between resolvers, this presents as *intermittent* failure — our
-collector silently produced empty cycles for hours at a time, which we initially misread
-as laptop sleep. In our uptime record, a large share of 35 hours of gaps is attributable
-to this.
+**Agentic Wallet — what blocked us.**
 
-The Web3 API is a developer product whose documentation lives on `web3.binance.com`, but
-whose data endpoints are served from `www.binance.com` — the one hostname most likely to
-be blocked by regional DNS filtering aimed at the consumer exchange.
+- **An executable quote needs a signed-in wallet.** `market-order quote` is the only documented way
+  to learn what a swap would actually fill at, and it runs through a CLI built around the user's own
+  wallet session, paired via the Binance app. A backend cannot show an executable quote, so our public
+  site can only rank wrappers on indicative last-trade prices — exactly the prices pitfall 2 says not
+  to trust. Our agent skill gets executable quotes; our website cannot.
+- **It depends on `www.binance.com`** and so fails the same way on DNS-filtered networks, with no
+  resolver override.
+- **Tokenized-stock support differs by issuer.** The skill notes that limit orders fail with
+  `Ondo-related tokens cannot be traded`, so behaviour depends on which wrapper you picked — the same
+  choice Assay exists to make well. We found this in the skill text, not in any API reference.
 
-**Ask:** serve the Web3 API from a dedicated hostname (e.g. `api.web3.binance.com`) that is
-not the consumer exchange's domain. **Workaround we shipped:** the client resolves through
-public DNS when `ASSAY_DNS` is set, and the public site calls Binance from a serverless
-function in Frankfurt, so neither depends on the visitor's resolver.
+> **Ask:** an unauthenticated (or API-key) HTTP quote endpoint, rate-limited. It would let every
+> tokenized-stock front end show what a trade will really cost, not what the last trade was.
+
+---
+
+## Tokenized-stock specifics
+
+**Half of all xStock quotes on BSC fail basic price sanity.** Running our validation layer across
+every multi-wrapper ticker (84 tickers, 194 quotes), **22 of 43 xStock quotes — 51% — were rejected.**
+Every rejection in the corpus was an xStock; no Ondo or bStock wrapper tripped either guard.
+
+| Wrapper | deviation | Wrapper | deviation |
+|---|---:|---|---:|
+| `GMEx` | **+855%** | `UBERx` | −87.9% |
+| `BACx` | **+771%** | `CSCOx` | −87.7% |
+| `AMDx` | **+616%** | `MRVLx` | −86.6% |
+| `NVOx` | +13.8% | `IBMx` | −85.6% |
+| `ORCLx` | +11.0% | `TSMx` | −9.9% |
+
+`GMEx` at nearly ten times its own reference is served through the same field, with the same shape
+and no warning, as an `NVDAon` quote accurate to within 1bp. Every integrator has to rediscover this
+and build a statistical sanity layer before safely showing a user a price.
+
+**What is excellent and under-sold.** `statusInfo.reasonCode` distinguishing `TRADING` from
+corporate-action halts (earnings, dividends, splits, mergers) has no equivalent on other chains we
+have built against. It is the difference between a toy and something that can hold a position
+safely. **Lead with it in the docs.** Having the on-chain price and the underlying reference in one
+`rwa/dynamic/ai` payload is likewise exactly right, and saved us an integration.
+
+**The reference is not frozen outside market hours.** We designed an "off-hours mark" around the
+assumption that `stockInfo.price` freezes at the close. It does not — on NVDA it changed 78 times
+across 89 premarket samples. Useful, but undocumented, and it changes what an off-hours product can
+honestly claim.
+
+---
+
+## Redesign suggestions
+
+1. **Make the correct price the default.** Return `adjustedPrice = price / sharesMultiplier` next to
+   `price`. Most integrators will then never ship the 10x bug.
+2. **Serve a `priceQuality` flag on `tokenInfo`**, computed server-side against `stockInfo.price` you
+   already hold: `ok`, `stale`, `thin`, `metadata_suspect`.
+3. **Replace `openState` with explicit booleans:** `tokenTradable` and `referencePriceLive`. Today one
+   field is asked to answer both questions, and answers only the first.
+4. **Group wrappers by underlying.** One call, `GET /rwa/underlying/NVDA`, returning every wrapper of
+   a stock across issuers with multipliers — the view every multi-issuer product rebuilds by hand.
+5. **Batch `rwa/dynamic`.** Our full-market sweep is 231 calls; one batched call would do.
+
+## Requested capabilities
+
+1. `lastTradeTime` and depth or liquidity on `tokenInfo`.
+2. A first-class `adjustedPrice`.
+3. Historical `sharesMultiplier` (as-of queries).
+4. An unauthenticated or API-key HTTP quote endpoint for executable swap quotes.
+5. A forward corporate-action calendar (dividends, splits, earnings), not just current status.
+6. Batch dynamic lookup, and a by-underlying lookup.
+7. A dedicated API hostname outside `www.binance.com`.

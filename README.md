@@ -2,84 +2,146 @@
 
 **The real price of a tokenized stock.**
 
-**Live:** deployed on Vercel — prices fetched live from Binance on every visit.
+**Live → [assay-woad.vercel.app](https://assay-woad.vercel.app)** · priced from Binance on every visit
 
-BNB Hack: Tokenized Stocks Edition · submissions lock 11 Oct 2026, 12:00 UTC.
+Built for BNB Hack: Tokenized Stocks Edition. [Developer Experience Report →](DEVEX.md)
 
 ---
 
-On BNB Smart Chain there are **667 tokenized equity tokens covering 512 unique tickers**. Thirty-seven
-mega-caps — NVDA, TSLA, AAPL, MSFT, SPY, QQQ, MSTR, COIN — carry three different wrappers at once,
-from three issuers, at three different prices.
+## The problem
 
-None of those prices are comparable, because each token carries a `sharesMultiplier`: how many
-underlying shares one token represents. It drifts upward as dividends reinvest, and jumps on splits
-and fractionalisation. Observed range on BSC: **0.0667 to 10.03**.
+On BNB Smart Chain the same stock trades as up to three tokens from three issuers — Ondo (`NVDAon`),
+xStocks (`NVDAx`), bStocks (`NVDAB`) — at three different prices. There are **667 tokenized stock
+tokens on BSC covering 512 tickers**; 37 mega-caps carry all three.
 
-So the obvious product — compare the prices, show the cheapest — is wrong. Sometimes by 10x.
+Those prices are not comparable. Each token carries a `sharesMultiplier` — how many real shares it
+represents — that drifts upward as dividends reinvest and jumps on splits and fractionalization.
+Observed range on BSC: **0.0667 to 10.03**. And a quoted price says nothing about whether anyone is
+actually trading at it.
 
-Assay computes one dividend-adjusted reference price per ticker, scores how much each wrapper can be
-trusted, and says which part of an apparent premium is real:
+So the obvious product — compare the prices, buy the cheapest — is wrong. Sometimes by 10x.
 
-> *NVDAon looks 18 bp rich. 17 bp of that is accrued distribution. 1 bp is real.*
+## What Assay found, on live data
 
-Measured across 84 live tickers, the adjustment takes worst-case basis error from **533 bp to 5.3 bp**.
+**Most apparent premiums are not real.** Dividing by the multiplier takes Ondo's basis error against
+the underlying stock from a **533bp worst case to 5.3bp**, across 84 tickers. `SPYon` looks 95bp
+expensive; it is at fair value to within 0.1bp.
+
+> *NVDAon looks 17bp rich. All 17bp is accrued dividends held inside the multiplier. The real basis is ~0.*
+
+**Half of one issuer's prices are unusable.** 22 of 43 xStock quotes on BSC — **51%** — fail basic
+price sanity: `GMEx` at +855% of its reference, `UBERx` at −88%, served through the same field as
+prices accurate to 1bp.
+
+**The cheaper token can buy less stock.** `SPYB`'s token was **$5.31 cheaper** than `SPYon`'s, yet
+$1,000 of `SPYon` bought more SPY. A router comparing token prices picks the wrong one.
+
+## What it does
+
+- **One reference price per stock** — trust-weighted across every wrapper, with a confidence band.
+- **Every apparent premium split in two** — the part that is only the multiplier, and the part that
+  is real.
+- **A trust score per wrapper** — liquidity, freshness, metadata agreement. Halted, stale, corrupt
+  and outlier quotes are rejected, with the reason shown.
+- **Best execution** — "buy $500 of NVDA" ranked by *real shares received*, not token price. Thin
+  wrappers are never recommended on a stale print.
+- **An agent skill** that composes with Binance's Agentic Wallet: Assay decides what to buy on
+  executable quotes, the wallet buys it after the user confirms.
+- **A public scorecard** that grades Assay against the alternatives at every US market open.
+
+## Is it better than just picking one issuer?
+
+At each US open, Assay scores every estimate a user could have formed just before it — including
+the ones that might beat it — against the price that actually printed. Four opens, 466 scored
+tickers, as of 29 Sep ([live](https://assay-woad.vercel.app/#/scorecard)):
+
+| estimator | mean error | median | n |
+|---|---:|---:|---:|
+| **assay** — the full engine | **24.5bp** | 14.2bp | 466 |
+| only Ondo — always use one issuer | 24.9bp | 14.4bp | 466 |
+| venue reference — Binance's own pre-open price | 38.1bp | 23.5bp | 466 |
+| adjusted median — multipliers, no trust | 472bp | 17.6bp | 466 |
+| raw median — compare token prices | 554bp | 37.2bp | 466 |
+
+Honest reading: Assay beats the venue's own reference by 36%, and the naive methods by ~20x. Against
+"always use Ondo" it leads narrowly, and four opens is a small sample. Its real advantage there is
+that it doesn't need to know in advance which issuer to trust — it works that out, and adapts the day
+that issuer halts, goes stale or ships a bad multiplier.
 
 ## How it runs
 
 ```
-browser ── /api/* ──> Vercel function (fra1) ──> Binance Web3 RWA API     live prices
+browser ── /api/* ──> Vercel function (Frankfurt) ──> Binance Web3 RWA API     live prices
                             │
-                            └──> data branch (raw.githubusercontent) ──>   recorded history,
-                                         ▲                                  scorecard, coverage
-collector (laptop / Oracle) ── publish ──┘
+                            └──> data branch ──>  recorded history, scorecard, coverage
+                                     ▲
+collector ── every 2 min ── publish ─┘            550k observations since 20 Sep
 ```
 
-Live prices need no memory, so they are computed on demand, statelessly, through the same
-engine the tests pin. The scorecard and basis history need memory, so they are recorded by
-the collector and published to the `data` branch every 20 minutes. If the collector stops,
-the site keeps serving live prices and says how old its recorded history is.
+Live prices need no memory, so they are computed on demand, statelessly, through the same engine
+the tests pin. The scorecard and basis history need memory, so a collector records them and
+publishes to the [`data`](https://github.com/techbone/assay/tree/data) branch. If the collector
+stops, the site keeps serving live prices and says how old its recorded history is.
 
-## Status
+The function runs in Frankfurt because Binance's Web3 API excludes the US, which is Vercel's default
+region.
 
-| Milestone | State |
-|-----------|-------|
-| M0 Foundation | **done** |
-| M1 Reference engine | **done** — normalize, validate, trust, assay, decompose |
-| M2 Collector (24/7) | **done** — deployed on Fly.io, 76k+ observations |
-| M3 Web reports | in progress — API + UI live locally |
-| M4 Off-hours scorecard · M5 Execution · M6 Agent · M7 Submission | queued |
+## Use it from an agent
 
-**82 regression tests, all green.**
+```bash
+npx skills add techbone/assay/skills/assay
+```
 
-See [MILESTONES.md](MILESTONES.md) for the live tracker and [ARCHITECTURE.md](ARCHITECTURE.md) for design.
-[DEVEX.md](DEVEX.md) is the Developer Experience Report, written continuously.
+Then ask your agent *"buy $500 of NVDA on BSC"*. The [Assay skill](skills/assay/SKILL.md) pulls the
+candidate wrappers from Assay, gets an executable quote for each from the Binance Agentic Wallet,
+converts tokens to real shares, and hands the winner to the wallet skill — which runs its own
+security checks and asks you to confirm. Assay never executes a trade.
 
-## Run
+Or from a terminal:
+
+```bash
+npm run buy -- NVDA 500
+```
+
+## Verify the claims
+
+Every number above is reproducible. The regression suite pins them to live data captured during the
+build:
 
 ```bash
 npm install
-npm test          # 82 regression tests against live-captured fixtures
-npm run typecheck
-npm run collect   # start the 24/7 collector
-npm run api       # read API + built site on :8787
-npm run web       # UI dev server on :5173 (proxies /api)
-npm run web:build # build the site so the API serves it
-npm run health    # collection coverage and gaps
-npm run analyze   # corpus statistics
-npm run vercel-build && ASSAY_DNS=1.1.1.1,8.8.8.8 npm run vercel:local
-                  # the exact Vercel artifact, served locally
+npm test               # 119 tests
 ```
+
+- `tests/engine.test.ts` — the phantom premium on 8 tickers, corrupt `NFLXx`/`TQQQx` multipliers
+- `tests/corpus.test.ts` — the 533bp → 5.3bp result and the 51% xStock rejection, across 84 tickers
+- `tests/route.test.ts` — the `SPYB`/`SPYon` multiplier trap and the thin-wrapper guard
+- `tests/scorecard.test.ts`, `tests/live.test.ts`, `tests/collector.test.ts` — the rest
+
+## Run it
+
+```bash
+npm run station        # collector + local API + publishing, one terminal
+npm run web            # UI dev server on :5173
+npm run buy -- SPY 1000
+npm run scorecard      # the leaderboard from local data
+npm run vercel-build && npm run vercel:local   # the exact Vercel build, locally
+```
+
+On a network that blocks `binance.com` at DNS level, set `ASSAY_DNS=1.1.1.1,8.8.8.8`.
 
 ## Layout
 
 ```
-src/binance/     typed client for the Binance Web3 RWA API (public, no key)
-src/reference/   the engine: normalize, validate, trust, assay, decompose
-src/store/       append-only SQLite; raw observations stay recomputable
-src/collector/   24/7 poller, concurrency-pooled, incremental writes
-src/api/         read layer + plain node:http server
-web/             Vite + React UI
-scripts/         snapshot capture, corpus analysis, health, reclassify
-tests/           31 golden cases + 13 corpus invariants + 17 collector/pool
+src/reference/   the engine — normalize, validate, trust, assay, decompose
+src/route/       best execution; Binance Agentic Wallet quotes
+src/live/        the serverless API — live pricing, recorded-data relay
+src/scorecard/   scoring every estimator at each US open
+src/collector/   the recorder; src/store/ its append-only SQLite
+skills/assay/    the agent skill
+vercel/          Build Output for Vercel, and a local runner for it
+web/             the site (Vite + React)
 ```
+
+[ARCHITECTURE.md](ARCHITECTURE.md) has the design, [DEVEX.md](DEVEX.md) the Developer Experience
+Report.
