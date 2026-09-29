@@ -23,7 +23,8 @@
     "publish": "./scripts/publish.sh",
     "export": "tsx scripts/export.ts",
     "vercel-build": "node vercel/build.mjs",
-    "vercel:local": "node vercel/local.mjs"
+    "vercel:local": "node vercel/local.mjs",
+    "buy": "tsx scripts/buy.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.5",
