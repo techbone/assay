@@ -166,3 +166,44 @@ describe("Scorecard open-event detection", () => {
     expect(o).toMatchObject({ events: 0, tickers: 0, summary: [] });
   });
 });
+
+describe("Scorecard — what counts as an open", () => {
+  const run = async (steps: Array<[string | null, number]>) => {
+    const store = new AssayStore(":memory:");
+    const client = new MockClient();
+    const c = new Collector(client as unknown as BinanceRwaClient, store);
+    for (const [status, ts] of steps) {
+      client.status = status as string;
+      if (status === null) client.marketStatus = async () => null as never;
+      else client.marketStatus = async () => ({ marketStatus: status, openState: true, reasonCode: null, reasonMsg: null } as never);
+      await c.runCycle(ts);
+    }
+    return new Scorecard(store).openEvents();
+  };
+  const MIN = 60_000;
+
+  /**
+   * Observed 29 Sep: mid-session, a status read returned nothing, then "open" again. The
+   * old rule scored that as two fresh opens, 90 minutes into the session.
+   */
+  it("a mid-session status blip is not an open", async () => {
+    const events = await run([
+      ["closed", 0], ["open", 2 * MIN], ["open", 4 * MIN],
+      [null, 6 * MIN], ["open", 8 * MIN], ["open", 10 * MIN],
+    ]);
+    expect(events).toHaveLength(1);
+    expect(events[0]!.openTs).toBe(2 * MIN);
+  });
+
+  it("skips unknown cycles to find the real pre-open mark", async () => {
+    const events = await run([["premarket", 0], [null, 2 * MIN], ["open", 4 * MIN]]);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ markTs: 0, openTs: 4 * MIN, previousRegime: "premarket" });
+  });
+
+  it("does not score an open that a collection gap straddles", async () => {
+    // Collector down for 35 minutes across the bell: the first regular-hours cycle is not the open.
+    const events = await run([["premarket", 0], ["open", 35 * MIN]]);
+    expect(events).toHaveLength(0);
+  });
+});

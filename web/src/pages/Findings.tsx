@@ -11,6 +11,14 @@ export function Findings() {
   const assay = o?.summary.find((x) => x.estimator === "assay");
   const venue = o?.summary.find((x) => x.estimator === "venue_ref");
   const beat = assay && venue ? `${((1 - assay.maeBp / venue.maeBp) * 100).toFixed(0)}%` : "—";
+  const ondo = o?.summary.find((x) => x.estimator === "only_Ondo");
+  // Stated from the data, whichever way it falls - this claim flipped once already.
+  const vsOndo = !assay || !ondo ? ""
+    : Math.abs(assay.maeBp - ondo.maeBp) < 1
+      ? `Against always using Ondo it is level (${assay.maeBp.toFixed(1)} vs ${ondo.maeBp.toFixed(1)} bp)${assay.p90Bp < ondo.p90Bp ? ", with smaller worst-case misses" : ""}.`
+      : assay.maeBp < ondo.maeBp
+        ? `It also beats always using Ondo, by ${(ondo.maeBp - assay.maeBp).toFixed(1)} bp.`
+        : `Always using Ondo is ${(assay.maeBp - ondo.maeBp).toFixed(1)} bp better on average.`;
 
   return (
     <Page>
@@ -58,8 +66,8 @@ export function Findings() {
           <div className="big">{beat}</div>
           <h3>More accurate at the open than Binance's own reference</h3>
           <p>At every US open, Assay is scored against every alternative on the price that actually prints. Its
-            average error is {beat} lower than the venue's own pre-open reference{o ? `, over ${o.events} opens and ${o.tickers} stocks` : ""}. Against
-            always using Ondo it leads narrowly — a small sample, stated as such.</p>
+            average error is {beat} lower than the venue's own pre-open reference{o ? `, over ${o.events} opens and ${o.tickers} stocks` : ""}. {vsOndo}
+            A small sample, stated as such.</p>
           <div className="ev"><a href={href.scorecard}>Scorecard →</a><a href={file("src/scorecard/score.ts")} target="_blank" rel="noreferrer">Method →</a></div>
         </div>
       </div>

@@ -62,35 +62,25 @@ quotes, not settled trades.
 ## Is it better than just picking one issuer?
 
 At each US open, Assay scores every estimate a user could have formed just before it — including
-the ones that might beat it — against the price that actually printed. Four opens, 466 scored
+the ones that might beat it — against the price that actually printed. Four opens, 467 scored
 tickers, as of 29 Sep ([live](https://assay-woad.vercel.app/#/scorecard)):
 
-| estimator | mean error | median | n |
+| estimator | mean error | 90th percentile | n |
 |---|---:|---:|---:|
-| **assay** — the full engine | **24.5bp** | 14.2bp | 466 |
-| only Ondo — always use one issuer | 24.9bp | 14.4bp | 466 |
-| venue reference — Binance's own pre-open price | 38.1bp | 23.5bp | 466 |
-| adjusted median — multipliers, no trust | 472bp | 17.6bp | 466 |
-| raw median — compare token prices | 554bp | 37.2bp | 466 |
+| only Ondo — always use one issuer | 24.2bp | 67.9bp | 467 |
+| **assay** — the full engine | **24.4bp** | **62.6bp** | 467 |
+| venue reference — Binance's own pre-open price | 36.5bp | 90.2bp | 467 |
+| adjusted median — multipliers, no trust | 475bp | 128.5bp | 467 |
+| raw median — compare token prices | 556bp | 313.8bp | 467 |
 
-Honest reading: Assay beats the venue's own reference by 36%, and the naive methods by ~20x. Against
-"always use Ondo" it leads narrowly, and four opens is a small sample. Its real advantage there is
-that it doesn't need to know in advance which issuer to trust — it works that out, and adapts the day
-that issuer halts, goes stale or ships a bad multiplier.
+Honest reading: Assay beats Binance's own pre-open reference by a third, and naive price comparison
+by ~20x. Against "always use Ondo" it is level — 0.2bp behind on average, with smaller worst-case
+misses — and four opens is a small sample. Its advantage there is that it does not need to know in
+advance which issuer to trust: it works that out from the data, and keeps working on the day that
+issuer halts, goes stale or ships a bad multiplier.
 
-## The site
-
-| Page | What it shows |
-|---|---|
-| [Markets](https://assay-woad.vercel.app) | Every stock with more than one token, ranked by phantom premium, searchable |
-| [A stock](https://assay-woad.vercel.app/#/t/SPY) | Each token's screen price, shares per token, price per real share, trust — and what part of any premium is real |
-| [Best execution](https://assay-woad.vercel.app/#/buy/SPY) | Which token buys the most real stock for your money |
-| [Scorecard](https://assay-woad.vercel.app/#/scorecard) | Assay against every alternative at each US market open |
-| [Findings](https://assay-woad.vercel.app/#/findings) | Each headline number, linked to the test or script that reproduces it |
-
-![A stock page: SPYon looks 94.7 bp expensive, and all of it is reinvested dividends](docs/screenshots/stock.png)
-
-Light and dark themes follow your system setting.
+Only real opens are scored: the pre-open estimate and the opening price must be recorded within ten
+minutes of each other, and a mid-session status glitch never counts as a new open.
 
 ## How it runs
 

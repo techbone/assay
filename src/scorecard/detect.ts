@@ -23,6 +23,9 @@ const toQuote = (r: ObsRow): RawQuote => ({
   ticksSinceChange: r.ticks_since_change,
 });
 
+/** Pre-open mark and opening cycle must be at least this close to be scored as an open. */
+export const MAX_BRACKET_MS = 10 * 60_000;
+
 export interface OpenEventScores {
   openTs: number;
   markTs: number;
@@ -36,21 +39,29 @@ export class Scorecard {
   private get db() { return this.store.db; }
 
   /**
-   * Cycles where the regular session begins: the first collected cycle in `rth` whose
-   * predecessor was any other regime. A gap in collection that straddles an open makes
-   * that open unscoreable, and it is simply absent rather than approximated.
+   * US market opens that can be scored honestly.
+   *
+   * An open is the first regular-hours cycle whose last *known* session was a closed one
+   * (overnight, premarket, closed, afterhours, offhours). `unknown` cycles - a status read
+   * that returned nothing - carry no information and are skipped: treating them as a
+   * session let a mid-day status blip followed by "regular hours" count as a fresh open,
+   * scored against a price the market had been trading at for 90 minutes.
+   *
+   * The pre-open mark and the opening cycle must also sit within `MAX_BRACKET_MS` of each
+   * other. If collection was down across the open, the first regular-hours cycle can be
+   * long after the bell, and scoring against it would not be scoring the open at all.
    */
   openEvents(): Array<{ openTs: number; markTs: number; previousRegime: MarketRegime }> {
     const cycles = this.db
-      .prepare(`SELECT DISTINCT ts, regime FROM observation ORDER BY ts`)
+      .prepare(`SELECT DISTINCT ts, regime FROM observation WHERE regime != 'unknown' ORDER BY ts`)
       .all() as Array<{ ts: number; regime: MarketRegime }>;
 
     const out: Array<{ openTs: number; markTs: number; previousRegime: MarketRegime }> = [];
     for (let i = 1; i < cycles.length; i++) {
       const cur = cycles[i]!, prev = cycles[i - 1]!;
-      if (cur.regime === "rth" && prev.regime !== "rth") {
-        out.push({ openTs: cur.ts, markTs: prev.ts, previousRegime: prev.regime });
-      }
+      if (cur.regime !== "rth" || prev.regime === "rth") continue;
+      if (cur.ts - prev.ts > MAX_BRACKET_MS) continue;
+      out.push({ openTs: cur.ts, markTs: prev.ts, previousRegime: prev.regime });
     }
     return out;
   }

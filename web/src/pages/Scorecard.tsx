@@ -32,7 +32,8 @@ export function Scorecard() {
             Every time the US market opens, the price that prints becomes checkable. Just before each
             open, Assay records every estimate a person could have formed — including the ones that might
             beat it — and scores them all against the opening price. Lower is better. Nothing is
-            back-fitted.
+            back-fitted, and only real opens count: the estimate and the opening price must be
+            recorded within ten minutes of each other.
           </p>
         </div>
       </div>
@@ -58,7 +59,15 @@ export function Scorecard() {
               <div className="card stat"><div className="stat-label">Market opens scored</div><div className="stat-value num">{o.events}</div><div className="stat-note">{o.tickers} stocks each</div></div>
               <div className="card stat"><div className="stat-label">Assay's average error</div><div className="stat-value num">{assay ? `${assay.maeBp.toFixed(1)} bp` : "—"}</div><div className="stat-note">vs the opening price</div></div>
               <div className="card stat"><div className="stat-label">vs Binance's own reference</div><div className="stat-value num">{assay && venue ? `${((1 - assay.maeBp / venue.maeBp) * 100).toFixed(0)}% lower` : "—"}</div><div className="stat-note">{venue ? `${venue.maeBp.toFixed(1)} bp average error` : ""}</div></div>
-              <div className="card stat"><div className="stat-label">vs always using Ondo</div><div className="stat-value num">{assay && ondo ? `${(ondo.maeBp - assay.maeBp).toFixed(1)} bp` : "—"}</div><div className="stat-note">narrow lead — small sample</div></div>
+              <div className="card stat">
+                <div className="stat-label">vs always using Ondo</div>
+                <div className="stat-value num">
+                  {!assay || !ondo ? "—" : Math.abs(assay.maeBp - ondo.maeBp) < 1 ? "Level" : assay.maeBp < ondo.maeBp ? `${(ondo.maeBp - assay.maeBp).toFixed(1)} bp better` : `${(assay.maeBp - ondo.maeBp).toFixed(1)} bp behind`}
+                </div>
+                <div className="stat-note">
+                  {assay && ondo ? `${assay.maeBp.toFixed(1)} vs ${ondo.maeBp.toFixed(1)} bp average error` : ""}
+                </div>
+              </div>
             </div>
 
             <section className="section" style={{ marginTop: 32 }}>
