@@ -6,8 +6,6 @@
 
 Built for BNB Hack: Tokenized Stocks Edition. [Developer Experience Report →](DEVEX.md)
 
-[![CI](https://github.com/techbone/assay/actions/workflows/ci.yml/badge.svg)](https://github.com/techbone/assay/actions/workflows/ci.yml)
-
 ![Assay: SPY's three tokens, adjusted to the price per real share](docs/screenshots/home.png)
 
 ---
@@ -145,7 +143,7 @@ npm test               # 126 tests
 - `tests/present.test.ts` — unit tokens never reported as premiums; "trusted" means the same everywhere
 - `tests/scorecard.test.ts`, `tests/live.test.ts`, `tests/collector.test.ts` — the rest
 
-CI runs the typecheck, the suite and the Vercel build on every push.
+`npm run typecheck` checks the engine, API and site; `npm run vercel-build` builds the exact deploy.
 
 ## Run it
 

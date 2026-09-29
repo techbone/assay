@@ -100,5 +100,4 @@ npm run scorecard     # the leaderboard, from local data
 ```
 
 `https://assay-woad.vercel.app/api/health` reports whether the site can reach Binance and how old
-the collector's recorded history is. The `ci` workflow runs typecheck, the test suite and the
-Vercel build on every push.
+the collector's recorded history is.
